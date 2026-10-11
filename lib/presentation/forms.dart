@@ -130,31 +130,6 @@ Future<Json?> quickFood(BuildContext context) async {
   }
 }
 
-Json entryForProduct(
-  Record product,
-  double amount,
-  String portionName, {
-  String? portionId,
-}) {
-  final p = product.data;
-  final base = Nutrition.fromJson(
-    Map<String, dynamic>.from(p['nutrition'] as Map),
-  );
-  final unit = BaseUnit.values.byName(p['unit'] as String);
-  return {
-    'product_id': product.id,
-    'product_version': product.version,
-    'name': p['name'],
-    'brand': p['brand'],
-    'base': base.toJson(),
-    'nutrition': portionNutrition(base, unit, unit, amount).toJson(),
-    'amount': amount,
-    'unit': unit.name,
-    'portion_name': portionName,
-    'portion_id': portionId,
-  };
-}
-
 Future<Json?> selectPortion(
   BuildContext context,
   Record product, {
@@ -174,12 +149,8 @@ Future<Json?> selectPortion(
       (set) {
         final value = double.tryParse(amount.text.replaceAll(',', '.')) ?? 0;
         final grams = value * (selected?.amount ?? 1);
-        final kcal =
-            Nutrition.fromJson(
-              Map<String, dynamic>.from(p['nutrition'] as Map),
-            ).kcal *
-            grams /
-            100;
+        final base = Nutrition.fromJson(Map<String, dynamic>.from(p['nutrition'] as Map));
+        final kcal = base.kcal * grams / 100;
         return [
           Text('${p['brand'] ?? ''} · на 100 $baseLabel'),
           const SizedBox(height: 12),
@@ -212,6 +183,7 @@ Future<Json?> selectPortion(
             '${number(grams)} $baseLabel · ${number(kcal, 0)} ккал',
             style: Theme.of(context).textTheme.titleMedium,
           ),
+          Text('Б ${number(base.protein! * grams / 100)} · Ж ${number(base.fat! * grams / 100)} · У ${number(base.carbs! * grams / 100)} г'),
         ];
       },
       () => entryForProduct(

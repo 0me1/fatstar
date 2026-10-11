@@ -89,7 +89,9 @@ begin
       d->>'unit' not in ('gram','milliliter') or d->>'unit' is null or
       not public.valid_nutrition(d->'nutrition',true) or
       jsonb_typeof(d->'portions') is distinct from 'array' or
-      jsonb_typeof(d->'active') is distinct from 'boolean' then return false; end if;
+      jsonb_typeof(d->'active') is distinct from 'boolean' or
+      (d->'brand' is not null and d->'brand'<>'null'::jsonb and (jsonb_typeof(d->'brand')<>'string' or length(d->>'brand')>200)) or
+      jsonb_array_length(d->'portions')>128 then return false; end if;
     for p in select value from jsonb_array_elements(d->'portions') loop
       pid := (p->>'id')::uuid;
       if pid is null or pid=any(ids) or coalesce(length(trim(p->>'name')),0) not between 1 and 100 or
@@ -101,6 +103,7 @@ begin
     if coalesce(length(trim(d->>'name')),0) not between 1 and 200 or
       d->>'meal' is null or d->>'meal' not in ('breakfast','lunch','dinner','snack') or
       not public.valid_nutrition(d->'nutrition',false) or
+      d->>'unit' is null or d->>'unit' not in ('gram','milliliter','quick') or
       jsonb_typeof(d->'amount') is distinct from 'number' or
       not ((d->>'amount')::numeric > 0 and (d->>'amount')::numeric <= 100000) then return false; end if;
     if d->'base' is not null and d->'base'<>'null'::jsonb and not public.valid_nutrition(d->'base',true) then return false; end if;

@@ -63,6 +63,9 @@ void validateRecord(Record record) {
   switch (record.kind) {
     case 'product':
       _name(d['name']);
+      if (d['brand'] != null && (d['brand'] is! String || (d['brand'] as String).length > 200)) {
+        throw ArgumentError('Бренд должен быть текстом до 200 символов');
+      }
       if (!['gram', 'milliliter'].contains(d['unit'])) {
         throw ArgumentError('Неверная единица');
       }
@@ -70,6 +73,9 @@ void validateRecord(Record record) {
         Map<String, dynamic>.from(d['nutrition'] as Map),
       ).validate(product: true);
       final portions = d['portions'] as List;
+      if (portions.length > 128 || d['active'] is! bool) {
+        throw ArgumentError('Проверьте статус и список порций');
+      }
       final ids = <String>{};
       for (final raw in portions) {
         final p = Portion.fromJson(Map<String, dynamic>.from(raw as Map));
@@ -91,7 +97,8 @@ void validateRecord(Record record) {
       Nutrition.fromJson(
         Map<String, dynamic>.from(d['nutrition'] as Map),
       ).validate();
-      if (decimal(d['amount']) <= 0 || !decimal(d['amount']).isFinite) {
+      if (decimal(d['amount']) <= 0 || decimal(d['amount']) > 100000 || !decimal(d['amount']).isFinite ||
+          !['gram', 'milliliter', 'quick'].contains(d['unit'])) {
         throw ArgumentError('Неверное количество');
       }
       if (d['base'] != null) {
@@ -101,6 +108,11 @@ void validateRecord(Record record) {
       }
     case 'goal':
       _date(d['effective_from']);
+      if (!BmrFormula.values.any((v) => v.name == d['formula']) ||
+          !WeightGoal.values.any((v) => v.name == d['goal']) ||
+          !['auto', 'manual'].contains(d['mode'])) {
+        throw ArgumentError('Неизвестная формула или режим цели');
+      }
       final n = Nutrition.fromJson(
         Map<String, dynamic>.from(d['nutrition'] as Map),
       );
@@ -120,7 +132,7 @@ void validateRecord(Record record) {
         throw ArgumentError('Неверный продукт');
       }
       if (record.kind == 'portion' &&
-          (decimal(d['amount']) <= 0 || !decimal(d['amount']).isFinite)) {
+          (decimal(d['amount']) <= 0 || decimal(d['amount']) > 100000 || !decimal(d['amount']).isFinite)) {
         throw ArgumentError('Неверная порция');
       }
     case 'settings':
@@ -148,3 +160,43 @@ void _date(Object? v) {
 Nutrition entryNutrition(Record entry) => Nutrition.fromJson(
   Map<String, dynamic>.from(entry.data['nutrition'] as Map),
 );
+
+Json entryForProduct(
+  Record product,
+  double amount,
+  String portionName, {
+  String? portionId,
+}) {
+  final p = product.data;
+  final base = Nutrition.fromJson(
+    Map<String, dynamic>.from(p['nutrition'] as Map),
+  );
+  final unit = BaseUnit.values.byName(p['unit'] as String);
+  return {
+    'product_id': product.id,
+    'product_version': product.version,
+    'name': p['name'],
+    'brand': p['brand'],
+    'base': base.toJson(),
+    'nutrition': portionNutrition(base, unit, unit, amount).toJson(),
+    'amount': amount,
+    'unit': unit.name,
+    'portion_name': portionName,
+    'portion_id': portionId,
+  };
+}
+
+
+Record? goalForDay(Iterable<Record> records, DateTime day) {
+  final goals = records.where((r) => r.kind == 'goal' && !r.deleted &&
+    (r.data['effective_from'] as String).compareTo(dayKey(day)) <= 0).toList();
+  goals.sort((a, b) {
+    final date = (b.data['effective_from'] as String).compareTo(a.data['effective_from'] as String);
+    if (date != 0) return date;
+    final at = DateTime.tryParse(a.data['recorded_at'] as String? ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+    final bt = DateTime.tryParse(b.data['recorded_at'] as String? ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+    final timestamp = bt.compareTo(at);
+    return timestamp != 0 ? timestamp : b.id.compareTo(a.id);
+  });
+  return goals.isEmpty ? null : goals.first;
+}

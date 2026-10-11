@@ -71,6 +71,7 @@ class _CalorieDiaryAppState extends ConsumerState<CalorieDiaryApp>
   Widget build(BuildContext context) {
     final c = ref.watch(diaryProvider);
     return MaterialApp(
+      key: ValueKey(c.accountGeneration),
       title: 'Calorie Diary',
       debugShowCheckedModeBanner: false,
       locale: const Locale('ru'),

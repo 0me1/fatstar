@@ -8,7 +8,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: verify-${{ github.ref }}
+  group: verify-${{ github.sha }}
   cancel-in-progress: true
 jobs:
   flutter:
@@ -33,7 +33,7 @@ jobs:
         run: |
           git add android pubspec.lock lib test integration_test
           if ! git diff --cached --quiet; then
-            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'chore: retain Android scaffold, lockfile and Dart formatting'
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'chore: retain Android scaffold, lockfile and Dart formatting [skip ci]'
             git push
           fi
       - run: dart format --output=none --set-exit-if-changed lib test integration_test
@@ -91,6 +91,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+          cache: gradle
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.7'

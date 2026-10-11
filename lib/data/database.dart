@@ -8,21 +8,22 @@ import '../domain/repository.dart';
 
 /// Drift custom SQL: the versioned document schema requires no generated code.
 class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
+  static const tables = {'product': 'products', 'entry': 'diary_entries',
+    'goal': 'goal_versions', 'weight': 'weight_entries', 'favorite': 'favorites',
+    'portion': 'portion_preferences', 'settings': 'user_settings'};
   DiaryDatabase(File file) : super(NativeDatabase.createInBackground(file));
   DiaryDatabase.memory() : super(NativeDatabase.memory());
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
   @override
   Iterable<TableInfo<Table, Object?>> get allTables => const [];
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => const [];
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    onCreate: (_) async {
-      await customStatement('''CREATE TABLE records (
-        kind TEXT NOT NULL, id TEXT NOT NULL, data TEXT NOT NULL,
-        version INTEGER NOT NULL, deleted INTEGER NOT NULL DEFAULT 0,
-        local_only INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(kind,id))''');
+    onCreate: (_) => transaction(() async {
+      await _createAggregateTables();
+      await _createRecordsView();
       await customStatement('''CREATE TABLE outbox (
         sequence INTEGER PRIMARY KEY AUTOINCREMENT, operation_id TEXT UNIQUE NOT NULL,
         kind TEXT NOT NULL, record_id TEXT NOT NULL, expected_version INTEGER NOT NULL,
@@ -34,12 +35,37 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       await customStatement(
         'CREATE TABLE metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL)',
       );
-    },
+    }),
+    onUpgrade: (_, from, to) => transaction(() async {
+      if (from == 1 && to == 2) {
+        await _createAggregateTables();
+        for (final pair in tables.entries) {
+          await customStatement('INSERT INTO ${pair.value}(id,data,version,deleted,local_only) SELECT id,data,version,deleted,local_only FROM records WHERE kind=?', [pair.key]);
+        }
+        await customStatement('DROP TABLE records');
+        await _createRecordsView();
+      } else {
+        throw StateError('Неподдерживаемая миграция $from → $to. База не удалена.');
+      }
+    }),
     beforeOpen: (_) async {
       await customStatement('PRAGMA foreign_keys = ON');
       await customStatement('PRAGMA journal_mode = WAL');
     },
   );
+
+  Future<void> _createAggregateTables() async {
+    for (final table in tables.values) {
+      await customStatement('CREATE TABLE $table (id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)), version INTEGER NOT NULL, deleted INTEGER NOT NULL DEFAULT 0 CHECK(deleted IN (0,1)), local_only INTEGER NOT NULL DEFAULT 0 CHECK(local_only IN (0,1)))');
+    }
+    await customStatement("CREATE INDEX diary_date_meal ON diary_entries(json_extract(data,'\$.day'),json_extract(data,'\$.meal'),deleted)");
+    await customStatement("CREATE INDEX goal_effective_date ON goal_versions(json_extract(data,'\$.effective_from'))");
+    await customStatement("CREATE INDEX weight_date ON weight_entries(json_extract(data,'\$.day'))");
+  }
+
+  Future<void> _createRecordsView() => customStatement('CREATE VIEW records AS ${tables.entries.map((pair) => "SELECT '${pair.key}' AS kind,id,data,version,deleted,local_only FROM ${pair.value}").join(' UNION ALL ')}');
+
+  String _table(String kind) => tables[kind] ?? (throw ArgumentError('Неизвестный тип записи'));
 
   Future<List<Record>> records({String? kind, bool deleted = false}) async {
     final rows = await customSelect(
@@ -71,9 +97,8 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
   }
 
   Future<void> _write(Record record) => customStatement(
-    'INSERT OR REPLACE INTO records(kind,id,data,version,deleted,local_only) VALUES(?,?,?,?,?,?)',
+    'INSERT OR REPLACE INTO ${_table(record.kind)}(id,data,version,deleted,local_only) VALUES(?,?,?,?,?)',
     [
-      record.kind,
       record.id,
       jsonEncode(record.data),
       record.version,
@@ -146,8 +171,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         if (remote != null) {
           await _write(remote);
         } else {
-          await customStatement('DELETE FROM records WHERE kind=? AND id=?', [
-            operation['kind'],
+          await customStatement('DELETE FROM ${_table(operation['kind'] as String)} WHERE id=?', [
             operation['record_id'],
           ]);
         }

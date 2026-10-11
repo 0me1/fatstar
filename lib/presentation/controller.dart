@@ -21,6 +21,7 @@ class DiaryController extends ChangeNotifier {
   List<Json> operations = [];
   String? userId;
   bool loading = true;
+  int accountGeneration = 0;
   String? failure;
   DateTime day = DateTime.now();
   StreamSubscription<AuthState>? _auth;
@@ -49,6 +50,7 @@ class DiaryController extends ChangeNotifier {
   Future<void> _activate(String? id) async {
     if (_disposed || (userId == id && !loading)) return;
     loading = true;
+    accountGeneration++;
     notifyListeners();
     await sync?.dispose();
     sync = null;
@@ -94,27 +96,7 @@ class DiaryController extends ChangeNotifier {
   List<Record> of(String kind) => records.where((r) => r.kind == kind).toList();
   List<Record> get entries =>
       of('entry').where((r) => r.data['day'] == dayKey(day)).toList();
-  Record? get goal {
-    final goals =
-        of('goal')
-            .where(
-              (r) =>
-                  (r.data['effective_from'] as String).compareTo(dayKey(day)) <=
-                  0,
-            )
-            .toList()
-          ..sort((a, b) {
-            final date = (b.data['effective_from'] as String).compareTo(
-              a.data['effective_from'] as String,
-            );
-            return date != 0
-                ? date
-                : (b.data['recorded_at'] as String? ?? '').compareTo(
-                    a.data['recorded_at'] as String? ?? '',
-                  );
-          });
-    return goals.isEmpty ? null : goals.first;
-  }
+  Record? get goal => goalForDay(records, day);
 
   String get theme => of('settings').isEmpty
       ? 'dark'
@@ -132,7 +114,7 @@ class DiaryController extends ChangeNotifier {
   }) async {
     final result = await db!.save(
       Record(
-        id: previous?.id ?? const Uuid().v4(),
+        id: previous?.id ?? _newId(kind, data),
         kind: kind,
         data: data,
         version: previous?.version ?? 0,
@@ -178,6 +160,11 @@ class DiaryController extends ChangeNotifier {
 
   Record? lastPortion(String productId) =>
       of('portion').where((r) => r.data['product_id'] == productId).firstOrNull;
+  String _newId(String kind, Json data) => switch (kind) {
+    'favorite' || 'portion' => const Uuid().v5(Uuid.NAMESPACE_URL, '$userId/$kind/${data['product_id']}'),
+    'settings' => const Uuid().v5(Uuid.NAMESPACE_URL, '$userId/settings'),
+    _ => const Uuid().v4(),
+  };
   Future<void> addEntries(List<Json> values, Meal meal) async {
     final current = db!;
     await current.transaction(() async {
@@ -192,7 +179,7 @@ class DiaryController extends ChangeNotifier {
               .firstOrNull;
           await current.save(
             Record(
-              id: existing?.id ?? const Uuid().v4(),
+              id: existing?.id ?? _newId('portion', data),
               kind: 'portion',
               version: existing?.version ?? 0,
               data: {
@@ -232,7 +219,8 @@ class DiaryController extends ChangeNotifier {
     await sync?.dispose();
     await client.auth.signOut(scope: SignOutScope.local);
     needsPassword = false;
-    await _activate(null);
+    _switchQueue = _switchQueue.then((_) => _activate(null));
+    await _switchQueue;
   }
 
   @override
