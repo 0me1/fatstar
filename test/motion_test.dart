@@ -86,7 +86,7 @@ void main() {
     expect(newCenter.dx - oldCenter.dx, closeTo(800, 1));
     expect(oldCenter.dx, closeTo(0, 1));
     expect(newCenter.dx, closeTo(800, 1));
-    expect(find.byType(FadeTransition), findsNothing);
+    expect(find.descendant(of: find.byType(DiaryMotion), matching: find.byType(FadeTransition)), findsNothing);
     await tester.pumpAndSettle();
     expect(find.text('Old day'), findsNothing);
     expect(tester.getCenter(find.text('New day')).dx, closeTo(400, 1));

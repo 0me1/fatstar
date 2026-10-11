@@ -81,7 +81,7 @@ class _FoodAddButtonState extends State<FoodAddButton> {
           onPressed: enabled ? handleTap : null,
           style: IconButton.styleFrom(
             backgroundColor: Colors.transparent,
-            foregroundColor: const Color(0xFF252827),
+            foregroundColor: Color.lerp(const Color(0xFF252827), colors.onPrimary, fill),
             disabledBackgroundColor: colors.onSurface.withValues(alpha: 0.12),
             disabledForegroundColor: colors.onSurface.withValues(alpha: 0.38),
             minimumSize: const Size(52, 52),
