@@ -47,6 +47,7 @@ class SyncEngine {
   String? error;
   DateTime? lastSuccess;
   int _failures = 0;
+  bool get isRunning => _running;
 
   void start() {
     _stopped = false;
@@ -63,6 +64,7 @@ class SyncEngine {
     _running = true;
     _timer?.cancel();
     try {
+      changed();
       final blocked = <String>{};
       for (final operation in await db.operations()) {
         if (_stopped) return;

@@ -9,6 +9,7 @@ import '../data/backup.dart';
 import '../domain/records.dart';
 import 'controller.dart';
 import 'forms.dart';
+import 'motion.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -63,7 +64,7 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   trailing: IconButton(
                     tooltip: 'Повторить синхронизацию',
-                    icon: const Icon(Icons.sync),
+                    icon: SyncStatus(running: c.sync?.isRunning ?? false, failed: c.sync?.error != null, succeeded: c.sync?.lastSuccess != null),
                     onPressed: () => c.sync?.run(),
                   ),
                 ),

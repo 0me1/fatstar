@@ -12,6 +12,7 @@ import 'goals.dart';
 import 'settings.dart';
 import 'auth_errors.dart';
 import 'food_add_button.dart';
+import 'motion.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -231,7 +232,6 @@ class DiaryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = ref.watch(diaryProvider);
-    var horizontalDrag = 0.0;
     final total = NutritionTotal(c.entries.map(entryNutrition));
     final goal = c.goal == null
         ? null
@@ -246,6 +246,9 @@ class DiaryScreen extends ConsumerWidget {
               : DateFormat('d MMMM', 'ru').format(c.day),
         ),
         actions: [
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Center(child: SyncStatus(running: c.sync?.isRunning ?? false,
+              failed: c.sync?.error != null, succeeded: c.sync?.lastSuccess != null))),
           IconButton(
             tooltip: 'Предыдущий день',
             onPressed: () =>
@@ -276,25 +279,9 @@ class DiaryScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: GestureDetector(
-        key: const ValueKey('diary-day-swipe'),
-        behavior: HitTestBehavior.opaque,
-        onHorizontalDragStart: (_) => horizontalDrag = 0,
-        onHorizontalDragUpdate: (details) => horizontalDrag += details.delta.dx,
-        onHorizontalDragEnd: (details) {
-          final velocity = details.primaryVelocity ?? 0;
-          if (horizontalDrag.abs() < 64 && velocity.abs() < 300) return;
-          final direction = horizontalDrag.abs() >= 64
-              ? horizontalDrag
-              : velocity;
-          c.selectDay(
-            DateTime(
-              c.day.year,
-              c.day.month,
-              c.day.day + (direction > 0 ? -1 : 1),
-            ),
-          );
-        },
+      body: DiaryMotion(
+        day: c.day,
+        selectDay: c.selectDay,
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -318,8 +305,8 @@ class DiaryScreen extends ConsumerWidget {
                       children: [
                         Column(
                           children: [
-                            Text(
-                              number(total.kcal, 0),
+                            MotionNumber(
+                              value: total.kcal,
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const Text('Съедено'),
@@ -332,34 +319,17 @@ class DiaryScreen extends ConsumerWidget {
                             alignment: Alignment.center,
                             children: [
                               SizedBox.expand(
-                                child: CircularProgressIndicator(
-                                  value: goal == null
-                                      ? 0
-                                      : (total.kcal / goal.kcal).clamp(
-                                          0.0,
-                                          1.0,
-                                        ),
-                                  strokeWidth: 8,
-                                  backgroundColor: Theme.of(
-                                    context,
-                                  ).colorScheme.outlineVariant,
-                                  semanticsLabel: 'Прогресс калорий',
-                                ),
+                                child: GoalPulse(
+                                  reached: goal != null && total.kcal >= goal.kcal && total.kcal <= goal.kcal * 1.02,
+                                  child: MotionProgress(circular: true, label: 'Прогресс калорий',
+                                    value: goal == null || goal.kcal == 0 ? 0 : (total.kcal / goal.kcal).clamp(0.0, 1.0))),
                               ),
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
-                                    goal == null
-                                        ? '—'
-                                        : number(
-                                            (goal.kcal - total.kcal).abs(),
-                                            0,
-                                          ),
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.headlineMedium,
-                                  ),
+                                  if (goal == null) const Text('—') else MotionNumber(
+                                    value: (goal.kcal - total.kcal).abs(),
+                                    style: Theme.of(context).textTheme.headlineMedium),
                                   Text(
                                     goal == null
                                         ? 'Цель не задана'
@@ -461,10 +431,12 @@ class DiaryScreen extends ConsumerWidget {
                       onTap: () => add(context, meal),
                       onLongPress: () => copyMeal(context, c, meal),
                     ),
+                    MotionRows(key: ValueKey('entries/${dayKey(c.day)}/${meal.name}'), children: [
                     for (final e in c.entries.where(
                       (e) => e.data['meal'] == meal.name,
                     ))
                       ListTile(
+                        key: ValueKey(e.id),
                         title: Text(e.data['name'] as String),
                         subtitle: Text(
                           '${number(e.data['amount'] as num)} ${e.data['unit'] == 'gram'
@@ -529,6 +501,7 @@ class DiaryScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
+                    ]),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: TextButton.icon(
@@ -560,19 +533,15 @@ class DiaryScreen extends ConsumerWidget {
         children: [
           Text(name, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 8),
-          LinearProgressIndicator(
+          MotionProgress(circular: false,
             value: target == null || target == 0
                 ? 0
                 : (value / target).clamp(0.0, 1.0),
-            minHeight: 6,
-            borderRadius: BorderRadius.circular(8),
           ),
           const SizedBox(height: 8),
-          Text(
-            '${complete ? '' : '≥ '}${number(value, 0)} / ${number(target, 0)} г',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          MotionNumber(value: value, prefix: complete ? '' : '≥ ',
+            suffix: ' / ${number(target, 0)} г',
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700)),
         ],
       ),
     ),
@@ -592,6 +561,8 @@ class DiaryScreen extends ConsumerWidget {
     if (date == null || !context.mounted) return;
     final source = await showModalBottomSheet<Meal>(
       context: context,
+  showDragHandle: true,
+  sheetAnimationStyle: sheetMotion(context),
       builder: (context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [

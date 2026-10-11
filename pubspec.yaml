@@ -1,7 +1,7 @@
 name: calorie_diary
 description: Offline-first calorie diary with a shared catalog.
 publish_to: none
-version: 1.0.1+2
+version: 1.0.2+3
 environment:
   sdk: '>=3.9.0 <4.0.0'
 dependencies:
@@ -31,3 +31,9 @@ dev_dependencies:
   flutter_lints: 5.0.0
 flutter:
   uses-material-design: true
+  fonts:
+    - family: Rubik
+      fonts:
+        - asset: assets/fonts/Rubik.ttf
+  assets:
+    - assets/fonts/OFL-Rubik.txt

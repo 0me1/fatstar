@@ -73,6 +73,8 @@ class _CalorieDiaryAppState extends ConsumerState<CalorieDiaryApp>
     return MaterialApp(
       key: ValueKey(c.accountGeneration),
       title: 'Calorie Diary',
+      themeAnimationDuration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 300),
+      themeAnimationCurve: Curves.easeInOut,
       debugShowCheckedModeBanner: false,
       locale: const Locale('ru'),
       supportedLocales: const [Locale('ru')],
@@ -122,11 +124,13 @@ ThemeData diaryTheme(Brightness brightness) {
       );
   return ThemeData(
     useMaterial3: true,
+    fontFamily: 'Rubik',
     colorScheme: scheme,
     scaffoldBackgroundColor: dark
         ? const Color(0xFF151B1A)
         : const Color(0xFFF5F8F8),
-    appBarTheme: const AppBarTheme(centerTitle: false, elevation: 0),
+    appBarTheme: AppBarTheme(centerTitle: false, elevation: 0,
+      titleTextStyle: TextStyle(color: scheme.onSurface, fontFamily: 'Rubik', fontSize: 28, fontWeight: FontWeight.w900)),
     cardTheme: CardThemeData(
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 6),
@@ -145,8 +149,8 @@ ThemeData diaryTheme(Brightness brightness) {
       style: FilledButton.styleFrom(minimumSize: const Size(48, 52)),
     ),
     textTheme: const TextTheme(
-      headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
-      titleLarge: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+      headlineMedium: TextStyle(fontSize: 32, fontWeight: FontWeight.w900),
+      titleLarge: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
       titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
     ),
   );

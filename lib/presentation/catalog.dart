@@ -6,6 +6,7 @@ import '../domain/nutrition.dart';
 import '../domain/records.dart';
 import 'controller.dart';
 import 'forms.dart';
+import 'motion.dart';
 import 'food_add_button.dart';
 
 class CatalogScreen extends ConsumerStatefulWidget {
@@ -28,7 +29,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
     super.dispose();
   }
 
-  Future<void> choose(Record p, {bool quick = false}) async {
+  Future<bool> choose(Record p, {bool quick = false}) async {
     final last = ref.read(diaryProvider).lastPortion(p.id);
     final validLast =
         last != null &&
@@ -50,7 +51,11 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
             p,
             initial: validLast ? savedAmount : null,
           );
-    if (data != null && mounted) setState(() => selected.add(data));
+    if (data != null && mounted) {
+      setState(() => selected.add(data));
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -258,18 +263,17 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                           trailing: widget.meal != null
                               ? FoodAddButton(
                                   tooltip: 'Добавить последнюю порцию',
-                                  onPressed: p.data['active'] == false
+                                  onAdd: p.data['active'] == false
                                       ? null
                                       : () => choose(p, quick: true),
                                 )
                               : IconButton(
                                   tooltip: 'Избранное',
                                   onPressed: () => c.favorite(p),
-                                  icon: Icon(
-                                    favorites.contains(p.id)
-                                        ? Icons.star
-                                        : Icons.star_border,
-                                  ),
+                                  icon: MotionSwap(scale: true, child: Icon(
+                                    favorites.contains(p.id) ? Icons.star : Icons.star_border,
+                                    key: ValueKey(favorites.contains(p.id)),
+                                    color: favorites.contains(p.id) ? const Color(0xFFFFC857) : null)),
                                 ),
                         );
                       },
@@ -286,7 +290,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                         onPressed: selected.isEmpty
                             ? null
                             : () => showSelected(),
-                        child: Text('${selected.length} выбрано'),
+                        child: MotionSwap(scale: true, child: Text('${selected.length} выбрано', key: ValueKey(selected.length))),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -325,6 +329,8 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
   Future<void> showSelected() async {
     await showModalBottomSheet<void>(
       context: context,
+  showDragHandle: true,
+  sheetAnimationStyle: sheetMotion(context),
       isScrollControlled: true,
       builder: (context) => StatefulBuilder(
         builder: (context, update) => SafeArea(
@@ -546,6 +552,8 @@ Future<void> productDetails(
   );
   await showModalBottomSheet<void>(
     context: context,
+  showDragHandle: true,
+  sheetAnimationStyle: sheetMotion(context),
     useSafeArea: true,
     builder: (context) => ListView(
       shrinkWrap: true,
@@ -664,6 +672,8 @@ Future<void> productHistory(
     if (!context.mounted) return;
     await showModalBottomSheet<void>(
       context: context,
+  showDragHandle: true,
+  sheetAnimationStyle: sheetMotion(context),
       isScrollControlled: true,
       useSafeArea: true,
       builder: (context) => SizedBox(
