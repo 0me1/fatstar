@@ -1,3 +1,4 @@
+import 'fonts.dart';
 import 'nutrition.dart';
 
 typedef Json = Map<String, dynamic>;
@@ -141,6 +142,9 @@ void validateRecord(Record record) {
         throw ArgumentError('Неверная порция');
       }
     case 'settings':
+      if (d['font'] != null && !diaryFonts.containsKey(d['font'])) {
+        throw ArgumentError('Неизвестный шрифт');
+      }
       if (!['dark', 'light', 'system'].contains(d['theme'])) {
         throw ArgumentError('Неверная тема');
       }

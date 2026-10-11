@@ -81,8 +81,8 @@ class _CalorieDiaryAppState extends ConsumerState<CalorieDiaryApp>
       locale: const Locale('ru'),
       supportedLocales: const [Locale('ru')],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      theme: diaryTheme(Brightness.light),
-      darkTheme: diaryTheme(Brightness.dark),
+      theme: diaryTheme(Brightness.light, font: c.font),
+      darkTheme: diaryTheme(Brightness.dark, font: c.font),
       themeMode: switch (c.theme) {
         'light' => ThemeMode.light,
         'system' => ThemeMode.system,
@@ -112,7 +112,7 @@ class _CalorieDiaryAppState extends ConsumerState<CalorieDiaryApp>
   }
 }
 
-ThemeData diaryTheme(Brightness brightness) {
+ThemeData diaryTheme(Brightness brightness, {String font = 'Rubik'}) {
   final dark = brightness == Brightness.dark;
   final scheme =
       ColorScheme.fromSeed(
@@ -126,7 +126,7 @@ ThemeData diaryTheme(Brightness brightness) {
       );
   return ThemeData(
     useMaterial3: true,
-    fontFamily: 'Rubik',
+    fontFamily: font,
     colorScheme: scheme,
     scaffoldBackgroundColor: dark
         ? const Color(0xFF151B1A)
@@ -136,7 +136,7 @@ ThemeData diaryTheme(Brightness brightness) {
       elevation: 0,
       titleTextStyle: TextStyle(
         color: scheme.onSurface,
-        fontFamily: 'Rubik',
+        fontFamily: font,
         fontSize: 28,
         fontWeight: FontWeight.w900,
       ),

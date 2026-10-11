@@ -13,6 +13,7 @@ import 'settings.dart';
 import 'auth_errors.dart';
 import 'food_add_button.dart';
 import 'motion.dart';
+import 'meal_section.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -412,7 +413,9 @@ class DiaryScreen extends ConsumerWidget {
                 children: [
                   for (final meal in Meal.values) ...[
                     if (meal != Meal.breakfast) const Divider(height: 1),
-                    ListTile(
+                    MealSection(key: ValueKey('meal/${dayKey(c.day)}/${meal.name}'),
+                      hasEntries: c.entries.any((e) => e.data['meal'] == meal.name),
+                      header: (expanded, toggle) => ListTile(
                       minVerticalPadding: 24,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -442,7 +445,7 @@ class DiaryScreen extends ConsumerWidget {
                         ),
                       ),
                       title: Text(
-                        '${meal.label} →',
+                        '${meal.label} ${expanded ? '⌃' : '⌄'}',
                         style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(fontWeight: FontWeight.w700),
                       ),
@@ -453,16 +456,28 @@ class DiaryScreen extends ConsumerWidget {
                         tooltip: 'Добавить в ${meal.label.toLowerCase()}',
                         onPressed: () => add(context, meal),
                       ),
-                      onTap: () => add(context, meal),
+                      onTap: toggle,
                       onLongPress: () => copyMeal(context, c, meal),
                     ),
+                    child: Column(children: [
                     MotionRows(
                       key: ValueKey('entries/${dayKey(c.day)}/${meal.name}'),
                       children: [
                         for (final e in c.entries.where(
                           (e) => e.data['meal'] == meal.name,
                         ))
-                          ListTile(
+                          Dismissible(key: ValueKey(e.id), direction: DismissDirection.endToStart,
+                            background: Container(color: Theme.of(context).colorScheme.error,
+                              alignment: Alignment.centerRight, padding: const EdgeInsets.only(right: 24),
+                              child: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.onError)),
+                            confirmDismiss: (_) async {
+                              try {
+                                await c.remove(e);
+                                if (context.mounted) undo(context, c, e);
+                              } catch (error) { if (context.mounted) message(context, error); }
+                              return false;
+                            },
+                            child: ListTile(
                             key: ValueKey(e.id),
                             title: Text(e.data['name'] as String),
                             subtitle: Text(
@@ -528,6 +543,7 @@ class DiaryScreen extends ConsumerWidget {
                               ],
                             ),
                           ),
+                          ),
                       ],
                     ),
                     Padding(
@@ -537,6 +553,8 @@ class DiaryScreen extends ConsumerWidget {
                         icon: const Icon(Icons.copy_outlined, size: 18),
                         label: const Text('Копировать с другого дня'),
                       ),
+                    ),
+                    ]),
                     ),
                   ],
                 ],

@@ -10,6 +10,7 @@ import '../data/database.dart';
 import '../data/sync.dart';
 import '../domain/nutrition.dart';
 import '../domain/records.dart';
+import '../domain/fonts.dart';
 
 final diaryProvider = ChangeNotifierProvider<DiaryController>(
   (ref) => DiaryController(),
@@ -107,6 +108,10 @@ class DiaryController extends ChangeNotifier {
   String get theme => of('settings').isEmpty
       ? 'dark'
       : of('settings').first.data['theme'] as String;
+  String get font {
+    final value = of('settings').firstOrNull?.data['font'];
+    return value is String && diaryFonts.containsKey(value) ? value : 'Rubik';
+  }
   void selectDay(DateTime value) {
     final selected = DateTime(value.year, value.month, value.day);
     final now = DateTime.now();

@@ -1,7 +1,7 @@
 name: calorie_diary
 description: Offline-first calorie diary with a shared catalog.
 publish_to: none
-version: 1.0.3+4
+version: 1.0.4+5
 environment:
   sdk: '>=3.9.0 <4.0.0'
 dependencies:
@@ -35,5 +35,33 @@ flutter:
     - family: Rubik
       fonts:
         - asset: assets/fonts/Rubik.ttf
+    - family: Comfortaa
+      fonts:
+        - asset: assets/fonts/Comfortaa.ttf
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope.ttf
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/Nunito.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat.ttf
+    - family: Exo2
+      fonts:
+        - asset: assets/fonts/Exo2.ttf
+    - family: Onest
+      fonts:
+        - asset: assets/fonts/Onest.ttf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto.ttf
   assets:
     - assets/fonts/OFL-Rubik.txt
+    - assets/fonts/OFL-Comfortaa.txt
+    - assets/fonts/OFL-Manrope.txt
+    - assets/fonts/OFL-Nunito.txt
+    - assets/fonts/OFL-Montserrat.txt
+    - assets/fonts/OFL-Exo2.txt
+    - assets/fonts/OFL-Onest.txt
+    - assets/fonts/OFL-Roboto.txt
