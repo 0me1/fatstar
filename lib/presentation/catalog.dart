@@ -62,7 +62,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
       final id = e.data['product_id'] as String?;
       if (id != null) {
         frequency[id] = (frequency[id] ?? 0) + 1;
-        final day = e.data['day'] as String;
+        final day = e.data['recorded_at'] as String? ?? e.data['day'] as String;
         if ((recent[id] ?? '').compareTo(day) < 0) recent[id] = day;
       }
     }

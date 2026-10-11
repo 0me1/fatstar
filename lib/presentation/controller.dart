@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,12 +26,17 @@ class DiaryController extends ChangeNotifier {
   String? failure;
   DateTime day = DateTime.now();
   StreamSubscription<AuthState>? _auth;
+  StreamSubscription<List<ConnectivityResult>>? _network;
   Future<void> _switchQueue = Future.value();
   bool _disposed = false;
   SupabaseClient get client => Supabase.instance.client;
 
   Future<void> initialize() async {
     await _auth?.cancel();
+    await _network?.cancel();
+    _network = Connectivity().onConnectivityChanged.listen((results) {
+      if (!results.contains(ConnectivityResult.none)) unawaited(sync?.run());
+    });
     _switchQueue = _switchQueue.then(
       (_) => _activate(client.auth.currentUser?.id),
     );
@@ -161,15 +167,15 @@ class DiaryController extends ChangeNotifier {
   Record? lastPortion(String productId) =>
       of('portion').where((r) => r.data['product_id'] == productId).firstOrNull;
   String _newId(String kind, Json data) => switch (kind) {
-    'favorite' || 'portion' => const Uuid().v5(Uuid.NAMESPACE_URL, '$userId/$kind/${data['product_id']}'),
-    'settings' => const Uuid().v5(Uuid.NAMESPACE_URL, '$userId/settings'),
+    'favorite' || 'portion' => const Uuid().v5(Namespace.url.value, '$userId/$kind/${data['product_id']}'),
+    'settings' => const Uuid().v5(Namespace.url.value, '$userId/settings'),
     _ => const Uuid().v4(),
   };
   Future<void> addEntries(List<Json> values, Meal meal) async {
     final current = db!;
     await current.transaction(() async {
       for (final data in values) {
-        final entry = {...data, 'day': dayKey(day), 'meal': meal.name};
+        final entry = {...data, 'day': dayKey(day), 'meal': meal.name, 'recorded_at': DateTime.now().toUtc().toIso8601String()};
         await current.save(
           Record(id: const Uuid().v4(), kind: 'entry', data: entry),
         );
@@ -227,6 +233,7 @@ class DiaryController extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     _auth?.cancel();
+    _network?.cancel();
     final engine = sync;
     final database = db;
     unawaited(() async {
