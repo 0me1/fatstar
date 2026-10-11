@@ -20,7 +20,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.fatstar.calorie_diary"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
@@ -50,8 +49,7 @@ android {
             manifestPlaceholders["allowCleartext"] = "true"
         }
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // A production keystore must be supplied through CI secrets.
             signingConfig = signingConfigs.getByName("diaryRelease")
         }
     }

@@ -71,7 +71,7 @@ class SyncEngine {
           blocked.add(key);
           continue;
         }
-        final response = await remote.apply(operation);
+        final response = await remote.apply(operation).timeout(const Duration(seconds: 15));
         if (_stopped) return;
         if (response['status'] == 'conflict') {
           await db.conflict(
@@ -91,7 +91,7 @@ class SyncEngine {
       }
       var cursor = await db.cursor();
       while (!_stopped) {
-        final page = await remote.changes(cursor);
+        final page = await remote.changes(cursor).timeout(const Duration(seconds: 15));
         if (_stopped) return;
         final next = page['cursor'] as int;
         if (next < cursor) throw StateError('Сервер вернул неверный курсор');

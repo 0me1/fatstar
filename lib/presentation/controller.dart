@@ -29,6 +29,8 @@ class DiaryController extends ChangeNotifier {
   SupabaseClient get client => Supabase.instance.client;
 
   Future<void> initialize() async {
+    await _auth?.cancel();
+    _switchQueue = _switchQueue.then((_) => _activate(client.auth.currentUser?.id));
     _auth = client.auth.onAuthStateChange.listen((event) {
       if (event.event == AuthChangeEvent.passwordRecovery) {
         needsPassword = true;
@@ -37,7 +39,7 @@ class DiaryController extends ChangeNotifier {
       final id = event.session?.user.id;
       _switchQueue = _switchQueue.then((_) => _activate(id));
     });
-    await _activate(client.auth.currentUser?.id);
+    await _switchQueue;
   }
 
   bool needsPassword = false;
@@ -139,7 +141,7 @@ class DiaryController extends ChangeNotifier {
     if (latest == null || latest.version != original.version + 1) {
       throw StateError('После этой операции запись изменилась. Отмена не перезаписала новую правку.');
     }
-    await db!.save(original.copy(version: latest?.version ?? 0));
+    await db!.save(original.copy(version: latest.version));
     await reload();
     unawaited(sync?.run());
   }
@@ -179,6 +181,8 @@ class DiaryController extends ChangeNotifier {
                 'product_id': data['product_id'],
                 'amount': data['amount'],
                 'portion_name': data['portion_name'],
+                'portion_id': data['portion_id'],
+                'unit': data['unit'],
               },
             ),
           );

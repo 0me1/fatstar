@@ -473,7 +473,9 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
             ? macroPercent(kcal, p, f, carbs)
             : Nutrition(kcal, p, f, carbs);
       n.validate(product: true);
-      if (macros == 'Граммы') explanation += ' Энергия из БЖУ: ${number(p * 4 + carbs * 4 + f * 9, 0)} ккал (ориентир 4/4/9).';
+      if (macros == 'Граммы') {
+        explanation += ' Энергия из БЖУ: ${number(p * 4 + carbs * 4 + f * 9, 0)} ккал (ориентир 4/4/9).';
+      }
       final result = {'effective_from': dayKey(date), 'recorded_at': DateTime.now().toUtc().toIso8601String(), 'nutrition': n.toJson(), 'mode': mode, 'formula': formula.name, 'sex': sex.name, 'goal': goal.name,
         'activity': activity, 'weight': weight, 'desired_weight': desired, 'height': height, 'age': age, 'body_fat': bodyFat,
         'weekly_kg': weekly, 'kcal': kcal, 'protein': p, 'fat': f, 'carbs': carbs, 'macro_mode': macros, 'explanation': explanation};

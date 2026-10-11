@@ -42,7 +42,9 @@ def user(email):
     status, _ = request('/rest/v1/allowed_users', {'user_id': uid}, privileged=True)
     assert status == 201
     status, session = request('/auth/v1/token?grant_type=password', {'email': email, 'password': password})
-    assert status == 200
+    if status != 200:
+        detail = session.get('msg') or session.get('error_description') or session.get('message') or session.get('error')
+        raise RuntimeError(f'Fixture sign-in failed HTTP {status}: {detail}')
     return uid, session['access_token']
 
 def rpc(token, kind, rid, data, version=0, operation=None, deleted=False):
