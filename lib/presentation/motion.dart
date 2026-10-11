@@ -124,8 +124,9 @@ class _GoalPulseState extends State<GoalPulse>
     super.didUpdateWidget(oldWidget);
     if (!oldWidget.reached &&
         widget.reached &&
-        !MediaQuery.disableAnimationsOf(context))
+        !MediaQuery.disableAnimationsOf(context)) {
       controller.forward(from: 0);
+    }
   }
 
   @override
@@ -170,8 +171,9 @@ class _DiaryMotionState extends State<DiaryMotion>
   @override
   void didUpdateWidget(covariant DiaryMotion oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!DateUtils.isSameDay(oldWidget.day, widget.day))
+    if (!DateUtils.isSameDay(oldWidget.day, widget.day)) {
       direction = widget.day.isAfter(oldWidget.day) ? 1 : -1;
+    }
   }
 
   @override
@@ -304,11 +306,12 @@ class _MotionRowsState extends State<MotionRows> with TickerProviderStateMixin {
       if (!keys.contains(row.child.key) && !row.leaving) {
         row.leaving = true;
         row.controller.reverse().then((_) {
-          if (mounted && row.leaving)
+          if (mounted && row.leaving) {
             setState(() {
               rows.remove(row);
               row.controller.dispose();
             });
+          }
         });
       }
     }
@@ -324,8 +327,9 @@ class _MotionRowsState extends State<MotionRows> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery.disableAnimationsOf(context))
+    if (MediaQuery.disableAnimationsOf(context)) {
       return Column(children: widget.children);
+    }
     return Column(
       children: rows
           .map(

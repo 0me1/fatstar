@@ -28,7 +28,7 @@ class _FoodAddButtonState extends State<FoodAddButton> {
   }
 
   @override
-  Future<void> activate() async {
+  Future<void> handleTap() async {
     unawaited(HapticFeedback.selectionClick());
     if (widget.onAdd == null) {
       widget.onPressed?.call();
@@ -69,7 +69,7 @@ class _FoodAddButtonState extends State<FoodAddButton> {
         duration: motionDuration(context, 110),
         child: IconButton.filled(
           tooltip: widget.tooltip,
-          onPressed: enabled ? activate : null,
+          onPressed: enabled ? handleTap : null,
           style: IconButton.styleFrom(
             backgroundColor: Colors.white,
             foregroundColor: const Color(0xFF252827),
