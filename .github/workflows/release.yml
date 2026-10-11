@@ -60,14 +60,7 @@ jobs:
         with:
           api-level: 35
           arch: x86_64
-          script: |
-            adb install build/app/outputs/flutter-apk/app-release.apk
-            adb shell am start -W -n com.fatstar.calorie_diary/.MainActivity
-            adb shell uiautomator dump /sdcard/window.xml
-            adb pull /sdcard/window.xml /tmp/window.xml
-            python3 -c 'from pathlib import Path; s=Path("/tmp/window.xml").read_text(); assert "Calorie Diary" in s and "Войти" in s'
-            adb logcat -d -s AndroidRuntime:E > build/app/outputs/flutter-apk/android-crashes.txt
-            test ! -s build/app/outputs/flutter-apk/android-crashes.txt
+          script: python3 scripts/check_release.py
       - uses: actions/upload-artifact@v5
         with:
           name: calorie-diary-signed-release
