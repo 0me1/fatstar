@@ -41,6 +41,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     },
   );
 
+  @override
   Future<List<Record>> records({String? kind, bool deleted = false}) async {
     final rows = await customSelect(
       'SELECT * FROM records WHERE (? IS NULL OR kind = ?) AND (? = 1 OR deleted = 0)',
@@ -62,6 +63,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     localOnly: r.read<int>('local_only') == 1,
   );
 
+  @override
   Future<Record?> find(String kind, String id) async {
     final row = await customSelect(
       'SELECT * FROM records WHERE kind=? AND id=?',
@@ -82,6 +84,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     ],
   );
 
+  @override
   Future<Record> save(Record value) => transaction(() async {
     validateRecord(value);
     final previous = await find(value.kind, value.id);
