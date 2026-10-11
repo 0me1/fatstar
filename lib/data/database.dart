@@ -8,9 +8,15 @@ import '../domain/repository.dart';
 
 /// Drift custom SQL: the versioned document schema requires no generated code.
 class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
-  static const tables = {'product': 'products', 'entry': 'diary_entries',
-    'goal': 'goal_versions', 'weight': 'weight_entries', 'favorite': 'favorites',
-    'portion': 'portion_preferences', 'settings': 'user_settings'};
+  static const tables = {
+    'product': 'products',
+    'entry': 'diary_entries',
+    'goal': 'goal_versions',
+    'weight': 'weight_entries',
+    'favorite': 'favorites',
+    'portion': 'portion_preferences',
+    'settings': 'user_settings',
+  };
   DiaryDatabase(File file) : super(NativeDatabase.createInBackground(file));
   DiaryDatabase.memory() : super(NativeDatabase.memory());
   @override
@@ -40,12 +46,17 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       if (from == 1 && to == 2) {
         await _createAggregateTables();
         for (final pair in tables.entries) {
-          await customStatement('INSERT INTO ${pair.value}(id,data,version,deleted,local_only) SELECT id,data,version,deleted,local_only FROM records WHERE kind=?', [pair.key]);
+          await customStatement(
+            'INSERT INTO ${pair.value}(id,data,version,deleted,local_only) SELECT id,data,version,deleted,local_only FROM records WHERE kind=?',
+            [pair.key],
+          );
         }
         await customStatement('DROP TABLE records');
         await _createRecordsView();
       } else {
-        throw StateError('Неподдерживаемая миграция $from → $to. База не удалена.');
+        throw StateError(
+          'Неподдерживаемая миграция $from → $to. База не удалена.',
+        );
       }
     }),
     beforeOpen: (_) async {
@@ -56,17 +67,29 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
 
   Future<void> _createAggregateTables() async {
     for (final table in tables.values) {
-      await customStatement('CREATE TABLE $table (id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)), version INTEGER NOT NULL, deleted INTEGER NOT NULL DEFAULT 0 CHECK(deleted IN (0,1)), local_only INTEGER NOT NULL DEFAULT 0 CHECK(local_only IN (0,1)))');
+      await customStatement(
+        'CREATE TABLE $table (id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)), version INTEGER NOT NULL, deleted INTEGER NOT NULL DEFAULT 0 CHECK(deleted IN (0,1)), local_only INTEGER NOT NULL DEFAULT 0 CHECK(local_only IN (0,1)))',
+      );
     }
-    await customStatement("CREATE INDEX diary_date_meal ON diary_entries(json_extract(data,'\$.day'),json_extract(data,'\$.meal'),deleted)");
-    await customStatement("CREATE INDEX goal_effective_date ON goal_versions(json_extract(data,'\$.effective_from'))");
-    await customStatement("CREATE INDEX weight_date ON weight_entries(json_extract(data,'\$.day'))");
+    await customStatement(
+      "CREATE INDEX diary_date_meal ON diary_entries(json_extract(data,'\$.day'),json_extract(data,'\$.meal'),deleted)",
+    );
+    await customStatement(
+      "CREATE INDEX goal_effective_date ON goal_versions(json_extract(data,'\$.effective_from'))",
+    );
+    await customStatement(
+      "CREATE INDEX weight_date ON weight_entries(json_extract(data,'\$.day'))",
+    );
   }
 
-  Future<void> _createRecordsView() => customStatement('CREATE VIEW records AS ${tables.entries.map((pair) => "SELECT '${pair.key}' AS kind,id,data,version,deleted,local_only FROM ${pair.value}").join(' UNION ALL ')}');
+  Future<void> _createRecordsView() => customStatement(
+    'CREATE VIEW records AS ${tables.entries.map((pair) => "SELECT '${pair.key}' AS kind,id,data,version,deleted,local_only FROM ${pair.value}").join(' UNION ALL ')}',
+  );
 
-  String _table(String kind) => tables[kind] ?? (throw ArgumentError('Неизвестный тип записи'));
+  String _table(String kind) =>
+      tables[kind] ?? (throw ArgumentError('Неизвестный тип записи'));
 
+  @override
   Future<List<Record>> records({String? kind, bool deleted = false}) async {
     final rows = await customSelect(
       'SELECT * FROM records WHERE (? IS NULL OR kind = ?) AND (? = 1 OR deleted = 0)',
@@ -173,9 +196,10 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         if (remote != null) {
           await _write(remote);
         } else {
-          await customStatement('DELETE FROM ${_table(operation['kind'] as String)} WHERE id=?', [
-            operation['record_id'],
-          ]);
+          await customStatement(
+            'DELETE FROM ${_table(operation['kind'] as String)} WHERE id=?',
+            [operation['record_id']],
+          );
         }
         if (keepLocal && local != null) {
           await save(local.copy(version: remote?.version ?? 0));

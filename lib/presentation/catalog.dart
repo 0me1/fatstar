@@ -107,14 +107,30 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
       canPop: widget.meal == null || selected.isEmpty || saving,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
-        final discard = await showDialog<bool>(context: context, builder: (ctx) => AlertDialog(
+        final discard = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
           title: const Text('Убрать выбранные продукты?'),
-          content: const Text('Нажмите «Готово», чтобы сохранить их в дневнике.'),
-          actions: [TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Остаться')),
-            FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Убрать и выйти'))]));
+            content: const Text(
+              'Нажмите «Готово», чтобы сохранить их в дневнике.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Остаться'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Убрать и выйти'),
+              ),
+            ],
+          ),
+        );
         if (discard == true && mounted) {
           setState(selected.clear);
-          WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) Navigator.pop(context); });
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) Navigator.pop(context);
+          });
         }
       },
       child: Scaffold(
@@ -174,7 +190,8 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                           child: ChoiceChip(
                             label: Text(pair.$2),
                             selected: filter == pair.$1,
-                            onSelected: (_) => setState(() => filter = pair.$1),
+                              onSelected: (_) =>
+                                  setState(() => filter = pair.$1),
                           ),
                         ),
                     ],
@@ -267,7 +284,9 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                 child: Row(
                   children: [
                     TextButton(
-                      onPressed: selected.isEmpty ? null : () => showSelected(),
+                        onPressed: selected.isEmpty
+                            ? null
+                            : () => showSelected(),
                       child: Text('${selected.length} выбрано'),
                     ),
                     const SizedBox(width: 12),
@@ -300,7 +319,8 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
             ),
         ],
       ),
-    ));
+      ),
+    );
   }
 
   Future<void> showSelected() async {
@@ -522,7 +542,9 @@ Future<void> productDetails(
   DiaryController c,
   Record p,
 ) async {
-  final nutrition = Nutrition.fromJson(Map<String, dynamic>.from(p.data['nutrition'] as Map));
+  final nutrition = Nutrition.fromJson(
+    Map<String, dynamic>.from(p.data['nutrition'] as Map),
+  );
   await showModalBottomSheet<void>(
     context: context,
     useSafeArea: true,
@@ -530,7 +552,9 @@ Future<void> productDetails(
       shrinkWrap: true,
       padding: const EdgeInsets.all(20),
       children: [
-        Text('На 100 ${p.data['unit'] == 'gram' ? 'г' : 'мл'}: ${number(nutrition.kcal, 0)} ккал · Б ${number(nutrition.protein)} · Ж ${number(nutrition.fat)} · У ${number(nutrition.carbs)} г'),
+        Text(
+          'На 100 ${p.data['unit'] == 'gram' ? 'г' : 'мл'}: ${number(nutrition.kcal, 0)} ккал · Б ${number(nutrition.protein)} · Ж ${number(nutrition.fat)} · У ${number(nutrition.carbs)} г',
+        ),
         Text(
           p.data['name'] as String,
           style: Theme.of(context).textTheme.titleLarge,

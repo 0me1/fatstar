@@ -149,7 +149,9 @@ Future<Json?> selectPortion(
       (set) {
         final value = double.tryParse(amount.text.replaceAll(',', '.')) ?? 0;
         final grams = value * (selected?.amount ?? 1);
-        final base = Nutrition.fromJson(Map<String, dynamic>.from(p['nutrition'] as Map));
+        final base = Nutrition.fromJson(
+          Map<String, dynamic>.from(p['nutrition'] as Map),
+        );
         final kcal = base.kcal * grams / 100;
         return [
           Text('${p['brand'] ?? ''} · на 100 $baseLabel'),
@@ -183,7 +185,9 @@ Future<Json?> selectPortion(
             '${number(grams)} $baseLabel · ${number(kcal, 0)} ккал',
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          Text('Б ${number(base.protein! * grams / 100)} · Ж ${number(base.fat! * grams / 100)} · У ${number(base.carbs! * grams / 100)} г'),
+          Text(
+            'Б ${number(base.protein! * grams / 100)} · Ж ${number(base.fat! * grams / 100)} · У ${number(base.carbs! * grams / 100)} г',
+          ),
         ];
       },
       () => entryForProduct(
