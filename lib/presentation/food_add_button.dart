@@ -16,14 +16,17 @@ class FoodAddButton extends StatelessWidget {
       tooltip: tooltip,
       onPressed: onPressed,
       style: IconButton.styleFrom(
-        backgroundColor: colors.primary,
-        foregroundColor: colors.onPrimary,
+        backgroundColor: Colors.white,
+        foregroundColor: const Color(0xFF252827),
         disabledBackgroundColor: colors.onSurface.withValues(alpha: 0.12),
         disabledForegroundColor: colors.onSurface.withValues(alpha: 0.38),
-        minimumSize: const Size(48, 48),
+        minimumSize: const Size(52, 52),
+        side: Theme.of(context).brightness == Brightness.light
+            ? const BorderSide(color: Color(0xFFCFDBD8))
+            : BorderSide.none,
         shape: const CircleBorder(),
       ),
-      icon: const Icon(Icons.add_rounded, size: 30),
+      icon: const Icon(Icons.add_rounded, size: 34),
     );
   }
 }
