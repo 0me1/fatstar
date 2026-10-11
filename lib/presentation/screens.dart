@@ -60,7 +60,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         recoveryRequestedAt = DateTime.now();
         await c.client.auth.resetPasswordForEmail(
           email.text.trim(),
-          redirectTo: 'com.fatstar.calorie_diary://auth/recovery',
+          redirectTo: 'com.fatstar.caloriediary://auth/recovery',
         ).timeout(const Duration(seconds: 20));
         if (mounted) {
           message(

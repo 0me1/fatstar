@@ -22,7 +22,7 @@ Flutter 3.35.7 / Dart 3.9, Riverpod, Drift/SQLite, Supabase Auth/PostgreSQL, Mat
 
 ## Настройка нового Supabase
 
-Создайте проект по [инструкции](docs/SUPABASE_SETUP_RU.md). Отключите публичную регистрацию, настройте email/password и почту, добавьте redirect `com.fatstar.calorie_diary://auth/recovery`.
+Создайте проект по [инструкции](docs/SUPABASE_SETUP_RU.md). Отключите публичную регистрацию, настройте email/password и почту, добавьте redirect `com.fatstar.caloriediary://auth/recovery`.
 
 После применения миграций пригласите два email в Auth. Через административный SQL Editor добавьте их Auth UUID:
 

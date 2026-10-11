@@ -12,6 +12,10 @@ app.set(android+'label', 'Calorie Diary')
 app.set(android+'allowBackup', 'false')
 app.set(android+'usesCleartextTraffic', '${allowCleartext}')
 activity = app.find('activity')
+# Migrate the invalid underscore scheme from earlier builds.
+for data in activity.findall('intent-filter/data'):
+    if data.get(android+'scheme') == 'com.fatstar.calorie_diary':
+        data.set(android+'scheme', 'com.fatstar.caloriediary')
 deep_link_meta = next((x for x in activity.findall('meta-data')
                       if x.get(android+'name') == 'flutter_deeplinking_enabled'), None)
 if deep_link_meta is None:
@@ -19,12 +23,12 @@ if deep_link_meta is None:
                                   {android+'name': 'flutter_deeplinking_enabled'})
 # Supabase's app_links handler owns the auth callback; Flutter routing must not consume it.
 deep_link_meta.set(android+'value', 'false')
-if not any(x.find('data') is not None and x.find('data').get(android+'scheme') == 'com.fatstar.calorie_diary' for x in activity.findall('intent-filter')):
+if not any(x.find('data') is not None and x.find('data').get(android+'scheme') == 'com.fatstar.caloriediary' for x in activity.findall('intent-filter')):
     filt = ET.SubElement(activity, 'intent-filter')
     ET.SubElement(filt, 'action', {android+'name': 'android.intent.action.VIEW'})
     ET.SubElement(filt, 'category', {android+'name': 'android.intent.category.DEFAULT'})
     ET.SubElement(filt, 'category', {android+'name': 'android.intent.category.BROWSABLE'})
-    ET.SubElement(filt, 'data', {android+'scheme': 'com.fatstar.calorie_diary', android+'host': 'auth'})
+    ET.SubElement(filt, 'data', {android+'scheme': 'com.fatstar.caloriediary', android+'host': 'auth'})
 tree.write(p, encoding='unicode', xml_declaration=True)
 p = Path('android/app/build.gradle.kts')
 s = p.read_text()
