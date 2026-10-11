@@ -130,7 +130,12 @@ Future<Json?> quickFood(BuildContext context) async {
   }
 }
 
-Json entryForProduct(Record product, double amount, String portionName, {String? portionId}) {
+Json entryForProduct(
+  Record product,
+  double amount,
+  String portionName, {
+  String? portionId,
+}) {
   final p = product.data;
   final base = Nutrition.fromJson(
     Map<String, dynamic>.from(p['nutrition'] as Map),
@@ -213,7 +218,7 @@ Future<Json?> selectPortion(
         product,
         parseNumber(amount.text) * (selected?.amount ?? 1),
         selected?.name ?? baseLabel,
-          portionId: selected?.id,
+        portionId: selected?.id,
       ),
     );
   } finally {
