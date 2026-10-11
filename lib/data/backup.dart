@@ -4,15 +4,31 @@ import '../domain/records.dart';
 import 'database.dart';
 
 class BackupPreview {
-  const BackupPreview(this.records, this.newCount, this.sameCount, this.conflicts);
+  const BackupPreview(
+    this.records,
+    this.newCount,
+    this.sameCount,
+    this.conflicts,
+  );
   final List<Record> records;
   final int newCount, sameCount;
   final List<Record> conflicts;
 }
 
-String _digest(Record r) => sha256.convert(utf8.encode(jsonEncode(_canonical({
-  'kind': r.kind, 'id': r.id, 'data': r.data, 'deleted': r.deleted,
-})))).toString();
+String _digest(Record r) => sha256
+    .convert(
+      utf8.encode(
+        jsonEncode(
+          _canonical({
+            'kind': r.kind,
+            'id': r.id,
+            'data': r.data,
+            'deleted': r.deleted,
+          }),
+        ),
+      ),
+    )
+    .toString();
 Object? _canonical(Object? v) {
   if (v is Map) {
     final keys = v.keys.cast<String>().toList()..sort();
@@ -26,15 +42,22 @@ class BackupService {
   BackupService(this.db);
   final DiaryDatabase db;
   Future<String> export() async => jsonEncode({
-    'format': 'calorie-diary', 'version': 1,
+    'format': 'calorie-diary',
+    'version': 1,
     'created_at': DateTime.now().toUtc().toIso8601String(),
-    'records': (await db.records(deleted: true)).map((r) => r.toJson()).toList(),
+    'records': (await db.records(
+      deleted: true,
+    )).map((r) => r.toJson()).toList(),
   });
 
   Future<BackupPreview> preview(String source) async {
-    if (utf8.encode(source).length > 20 * 1024 * 1024) throw const FormatException('Файл больше 20 МБ');
+    if (utf8.encode(source).length > 20 * 1024 * 1024)
+      throw const FormatException('Файл больше 20 МБ');
     final j = jsonDecode(source);
-    if (j is! Map || j['format'] != 'calorie-diary' || j['version'] != 1 || j['records'] is! List) {
+    if (j is! Map ||
+        j['format'] != 'calorie-diary' ||
+        j['version'] != 1 ||
+        j['records'] is! List) {
       throw const FormatException('Неподдерживаемый формат резервной копии');
     }
     final values = <Record>[];
@@ -42,7 +65,8 @@ class BackupService {
     for (final raw in j['records'] as List) {
       final r = Record.fromJson(Map<String, dynamic>.from(raw as Map));
       validateRecord(r);
-      if (!seen.add('${r.kind}:${r.id}')) throw const FormatException('Повторяющийся UUID');
+      if (!seen.add('${r.kind}:${r.id}'))
+        throw const FormatException('Повторяющийся UUID');
       values.add(r);
     }
     var fresh = 0, same = 0;

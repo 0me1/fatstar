@@ -14,14 +14,27 @@ class SupabaseRemote implements SyncRemote {
   SupabaseRemote(this.client);
   final SupabaseClient client;
   @override
-  Future<Json> apply(Json op) async => Map<String, dynamic>.from(await client.rpc('apply_operation', params: {
-    'p_operation_id': op['operation_id'], 'p_kind': op['kind'],
-    'p_id': op['record_id'], 'p_expected': op['expected_version'],
-    'p_record': jsonDecode(op['payload'] as String),
-  }) as Map);
+  Future<Json> apply(Json op) async => Map<String, dynamic>.from(
+    await client.rpc(
+          'apply_operation',
+          params: {
+            'p_operation_id': op['operation_id'],
+            'p_kind': op['kind'],
+            'p_id': op['record_id'],
+            'p_expected': op['expected_version'],
+            'p_record': jsonDecode(op['payload'] as String),
+          },
+        )
+        as Map,
+  );
   @override
   Future<Json> changes(int cursor) async => Map<String, dynamic>.from(
-    await client.rpc('pull_changes', params: {'p_cursor': cursor, 'p_limit': 200}) as Map);
+    await client.rpc(
+          'pull_changes',
+          params: {'p_cursor': cursor, 'p_limit': 200},
+        )
+        as Map,
+  );
 }
 
 class SyncEngine {
@@ -39,7 +52,11 @@ class SyncEngine {
     _stopped = false;
     unawaited(run());
   }
-  void stop() { _stopped = true; _timer?.cancel(); }
+
+  void stop() {
+    _stopped = true;
+    _timer?.cancel();
+  }
 
   Future<void> run() async {
     if (_running || _stopped) return;
@@ -57,11 +74,19 @@ class SyncEngine {
         final response = await remote.apply(operation);
         if (_stopped) return;
         if (response['status'] == 'conflict') {
-          await db.conflict(operation, Map<String, dynamic>.from(response['record'] as Map? ?? {}),
-            'На сервере появилась другая версия');
+          await db.conflict(
+            operation,
+            Map<String, dynamic>.from(response['record'] as Map? ?? {}),
+            'На сервере появилась другая версия',
+          );
           blocked.add(key);
         } else {
-          await db.acknowledge(operation, Record.fromJson(Map<String, dynamic>.from(response['record'] as Map)));
+          await db.acknowledge(
+            operation,
+            Record.fromJson(
+              Map<String, dynamic>.from(response['record'] as Map),
+            ),
+          );
         }
       }
       var cursor = await db.cursor();
@@ -70,23 +95,33 @@ class SyncEngine {
         if (_stopped) return;
         final next = page['cursor'] as int;
         if (next < cursor) throw StateError('Сервер вернул неверный курсор');
-        await db.applyPage((page['records'] as List).map((r) => Record.fromJson(Map<String, dynamic>.from(r as Map))).toList(), next);
+        await db.applyPage(
+          (page['records'] as List)
+              .map((r) => Record.fromJson(Map<String, dynamic>.from(r as Map)))
+              .toList(),
+          next,
+        );
         if (page['has_more'] != true) break;
-        if (next == cursor) throw StateError('Курсор синхронизации не продвигается');
+        if (next == cursor)
+          throw StateError('Курсор синхронизации не продвигается');
         cursor = next;
       }
       lastSuccess = DateTime.now();
       error = null;
       _failures = 0;
     } catch (e) {
-      error = e is AuthException ? 'Нужен повторный вход. Локальные данные сохранены.' :
-        'Синхронизация недоступна. Изменения сохранены на устройстве.';
+      error = e is AuthException
+          ? 'Нужен повторный вход. Локальные данные сохранены.'
+          : 'Синхронизация недоступна. Изменения сохранены на устройстве.';
       _failures++;
     } finally {
       _running = false;
       if (!_stopped) {
         changed();
-        final seconds = _failures == 0 ? 45 : min(300, 5 * pow(2, min(_failures, 5)).toInt()) + Random().nextInt(5);
+        final seconds = _failures == 0
+            ? 45
+            : min(300, 5 * pow(2, min(_failures, 5)).toInt()) +
+                  Random().nextInt(5);
         _timer = Timer(Duration(seconds: seconds), () => unawaited(run()));
       }
     }
@@ -94,6 +129,8 @@ class SyncEngine {
 
   Future<void> dispose() async {
     stop();
-    while (_running) { await Future<void>.delayed(const Duration(milliseconds: 25)); }
+    while (_running) {
+      await Future<void>.delayed(const Duration(milliseconds: 25));
+    }
   }
 }
