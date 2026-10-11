@@ -5,7 +5,7 @@ permissions:
   contents: read
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: production
     env:
       SUPABASE_URL: ${{ vars.SUPABASE_URL }}
@@ -16,7 +16,7 @@ jobs:
       DIARY_KEY_PASSWORD: ${{ secrets.DIARY_KEY_PASSWORD }}
       DIARY_KEYSTORE_PATH: /tmp/diary-release.jks
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -61,7 +61,7 @@ jobs:
             python3 -c 'from pathlib import Path; s=Path("/tmp/window.xml").read_text(); assert "Calorie Diary" in s and "Войти" in s'
             adb logcat -d -s AndroidRuntime:E > build/app/outputs/flutter-apk/android-crashes.txt
             test ! -s build/app/outputs/flutter-apk/android-crashes.txt
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: calorie-diary-signed-release
           path: build/app/outputs/flutter-apk/
