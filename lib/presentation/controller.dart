@@ -10,7 +10,9 @@ import '../data/sync.dart';
 import '../domain/nutrition.dart';
 import '../domain/records.dart';
 
-final diaryProvider = ChangeNotifierProvider<DiaryController>((ref) => DiaryController());
+final diaryProvider = ChangeNotifierProvider<DiaryController>(
+  (ref) => DiaryController(),
+);
 
 class DiaryController extends ChangeNotifier {
   DiaryDatabase? db;
@@ -37,6 +39,7 @@ class DiaryController extends ChangeNotifier {
     });
     await _activate(client.auth.currentUser?.id);
   }
+
   bool needsPassword = false;
 
   Future<void> _activate(String? id) async {
@@ -52,11 +55,16 @@ class DiaryController extends ChangeNotifier {
     userId = id;
     try {
       if (id != null) {
-        if (!uuidPattern.hasMatch(id)) throw StateError('Неверный идентификатор аккаунта');
+        if (!uuidPattern.hasMatch(id))
+          throw StateError('Неверный идентификатор аккаунта');
         final dir = await getApplicationSupportDirectory();
         db = DiaryDatabase(File('${dir.path}/diary_$id.sqlite'));
         await reload();
-        sync = SyncEngine(db!, SupabaseRemote(client), () => unawaited(reload()));
+        sync = SyncEngine(
+          db!,
+          SupabaseRemote(client),
+          () => unawaited(reload()),
+        );
         sync!.start();
       }
       failure = null;
@@ -79,18 +87,48 @@ class DiaryController extends ChangeNotifier {
   }
 
   List<Record> of(String kind) => records.where((r) => r.kind == kind).toList();
-  List<Record> get entries => of('entry').where((r) => r.data['day'] == dayKey(day)).toList();
+  List<Record> get entries =>
+      of('entry').where((r) => r.data['day'] == dayKey(day)).toList();
   Record? get goal {
-    final goals = of('goal').where((r) => (r.data['effective_from'] as String).compareTo(dayKey(day)) <= 0).toList()
-      ..sort((a, b) => (b.data['effective_from'] as String).compareTo(a.data['effective_from'] as String));
+    final goals =
+        of('goal')
+            .where(
+              (r) =>
+                  (r.data['effective_from'] as String).compareTo(dayKey(day)) <=
+                  0,
+            )
+            .toList()
+          ..sort(
+            (a, b) => (b.data['effective_from'] as String).compareTo(
+              a.data['effective_from'] as String,
+            ),
+          );
     return goals.isEmpty ? null : goals.first;
   }
-  String get theme => of('settings').isEmpty ? 'dark' : of('settings').first.data['theme'] as String;
-  void selectDay(DateTime value) { day = value; notifyListeners(); }
 
-  Future<Record> save(String kind, Json data, {Record? previous, bool localOnly = false}) async {
-    final result = await db!.save(Record(id: previous?.id ?? const Uuid().v4(), kind: kind,
-      data: data, version: previous?.version ?? 0, localOnly: previous?.localOnly ?? localOnly));
+  String get theme => of('settings').isEmpty
+      ? 'dark'
+      : of('settings').first.data['theme'] as String;
+  void selectDay(DateTime value) {
+    day = value;
+    notifyListeners();
+  }
+
+  Future<Record> save(
+    String kind,
+    Json data, {
+    Record? previous,
+    bool localOnly = false,
+  }) async {
+    final result = await db!.save(
+      Record(
+        id: previous?.id ?? const Uuid().v4(),
+        kind: kind,
+        data: data,
+        version: previous?.version ?? 0,
+        localOnly: previous?.localOnly ?? localOnly,
+      ),
+    );
     await reload();
     unawaited(sync?.run());
     return result;
@@ -112,7 +150,10 @@ class DiaryController extends ChangeNotifier {
   }
 
   Future<void> favorite(Record product) async {
-    final existing = (await db!.records(kind: 'favorite', deleted: true)).where((r) => r.data['product_id'] == product.id).firstOrNull;
+    final existing = (await db!.records(
+      kind: 'favorite',
+      deleted: true,
+    )).where((r) => r.data['product_id'] == product.id).firstOrNull;
     if (existing != null && !existing.deleted) {
       await remove(existing);
     } else {
@@ -120,17 +161,32 @@ class DiaryController extends ChangeNotifier {
     }
   }
 
-  Record? lastPortion(String productId) => of('portion').where((r) => r.data['product_id'] == productId).firstOrNull;
+  Record? lastPortion(String productId) =>
+      of('portion').where((r) => r.data['product_id'] == productId).firstOrNull;
   Future<void> addEntries(List<Json> values, Meal meal) async {
     final current = db!;
     await current.transaction(() async {
       for (final data in values) {
         final entry = {...data, 'day': dayKey(day), 'meal': meal.name};
-        await current.save(Record(id: const Uuid().v4(), kind: 'entry', data: entry));
+        await current.save(
+          Record(id: const Uuid().v4(), kind: 'entry', data: entry),
+        );
         if (data['product_id'] != null) {
-          final existing = (await current.records(kind: 'portion')).where((r) => r.data['product_id'] == data['product_id']).firstOrNull;
-          await current.save(Record(id: existing?.id ?? const Uuid().v4(), kind: 'portion',
-            version: existing?.version ?? 0, data: {'product_id': data['product_id'], 'amount': data['amount'], 'portion_name': data['portion_name']}));
+          final existing = (await current.records(kind: 'portion'))
+              .where((r) => r.data['product_id'] == data['product_id'])
+              .firstOrNull;
+          await current.save(
+            Record(
+              id: existing?.id ?? const Uuid().v4(),
+              kind: 'portion',
+              version: existing?.version ?? 0,
+              data: {
+                'product_id': data['product_id'],
+                'amount': data['amount'],
+                'portion_name': data['portion_name'],
+              },
+            ),
+          );
         }
       }
     });
@@ -138,8 +194,19 @@ class DiaryController extends ChangeNotifier {
     unawaited(sync?.run());
   }
 
-  Future<void> copyMeal(DateTime source, Meal sourceMeal, Meal targetMeal) async {
-    final values = of('entry').where((r) => r.data['day'] == dayKey(source) && r.data['meal'] == sourceMeal.name).map((r) => r.data).toList();
+  Future<void> copyMeal(
+    DateTime source,
+    Meal sourceMeal,
+    Meal targetMeal,
+  ) async {
+    final values = of('entry')
+        .where(
+          (r) =>
+              r.data['day'] == dayKey(source) &&
+              r.data['meal'] == sourceMeal.name,
+        )
+        .map((r) => r.data)
+        .toList();
     if (values.isEmpty) throw StateError('В выбранном приеме пищи нет записей');
     await addEntries(values, targetMeal);
   }

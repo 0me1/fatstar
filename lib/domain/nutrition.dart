@@ -59,7 +59,9 @@ class Nutrition {
   void validate({bool product = false}) {
     for (final value in [kcal, protein, fat, carbs]) {
       if (value != null && (!value.isFinite || value < 0 || value > 100000)) {
-        throw ArgumentError('КБЖУ должны быть конечными неотрицательными числами');
+        throw ArgumentError(
+          'КБЖУ должны быть конечными неотрицательными числами',
+        );
       }
     }
     if (product && [protein, fat, carbs].any((v) => v == null)) {
@@ -111,7 +113,9 @@ Nutrition portionNutrition(
 }
 
 enum BmrFormula { mifflin, harris, katch }
+
 enum BiologicalSex { male, female }
+
 enum WeightGoal { loss, maintain, gain, muscle }
 
 double bmr({
@@ -122,29 +126,49 @@ double bmr({
   required BiologicalSex sex,
   double? bodyFat,
 }) {
-  if (!weight.isFinite || weight < 20 || weight > 500 ||
-      !height.isFinite || height < 100 || height > 250 || age < 18 || age > 100) {
-    throw ArgumentError('Автоматический расчет доступен взрослым 18–100 лет; проверьте рост и вес');
+  if (!weight.isFinite ||
+      weight < 20 ||
+      weight > 500 ||
+      !height.isFinite ||
+      height < 100 ||
+      height > 250 ||
+      age < 18 ||
+      age > 100) {
+    throw ArgumentError(
+      'Автоматический расчет доступен взрослым 18–100 лет; проверьте рост и вес',
+    );
   }
   return switch (formula) {
-    BmrFormula.mifflin => 10 * weight + 6.25 * height - 5 * age +
-      (sex == BiologicalSex.male ? 5 : -161),
-    BmrFormula.harris => sex == BiologicalSex.male
-      ? 88.362 + 13.397 * weight + 4.799 * height - 5.677 * age
-      : 447.593 + 9.247 * weight + 3.098 * height - 4.330 * age,
+    BmrFormula.mifflin =>
+      10 * weight +
+          6.25 * height -
+          5 * age +
+          (sex == BiologicalSex.male ? 5 : -161),
+    BmrFormula.harris =>
+      sex == BiologicalSex.male
+          ? 88.362 + 13.397 * weight + 4.799 * height - 5.677 * age
+          : 447.593 + 9.247 * weight + 3.098 * height - 4.330 * age,
     BmrFormula.katch => _katch(weight, bodyFat),
   };
 }
 
 double _katch(double weight, double? bodyFat) {
   if (bodyFat == null || !bodyFat.isFinite || bodyFat <= 0 || bodyFat >= 70) {
-    throw ArgumentError('Для формулы нужен процент жира от 0 до 70 (не включая границы)');
+    throw ArgumentError(
+      'Для формулы нужен процент жира от 0 до 70 (не включая границы)',
+    );
   }
   return 370 + 21.6 * weight * (1 - bodyFat / 100);
 }
 
 class EnergyTarget {
-  const EnergyTarget(this.basal, this.tdee, this.adjustment, this.kcal, this.limited);
+  const EnergyTarget(
+    this.basal,
+    this.tdee,
+    this.adjustment,
+    this.kcal,
+    this.limited,
+  );
   final double basal, tdee, adjustment, kcal;
   final bool limited;
 }
@@ -155,9 +179,12 @@ EnergyTarget energyTarget({
   required WeightGoal goal,
   required double weeklyKg,
 }) {
-  if (!basal.isFinite || basal <= 0 ||
+  if (!basal.isFinite ||
+      basal <= 0 ||
       ![1.2, 1.375, 1.55, 1.725, 1.9].contains(activity) ||
-      !weeklyKg.isFinite || weeklyKg < 0 || weeklyKg > 2) {
+      !weeklyKg.isFinite ||
+      weeklyKg < 0 ||
+      weeklyKg > 2) {
     throw ArgumentError('Проверьте параметры цели');
   }
   final tdee = basal * activity;
@@ -168,22 +195,34 @@ EnergyTarget energyTarget({
     WeightGoal.maintain => 0.0,
     WeightGoal.gain || WeightGoal.muscle => math.min(desired, bound),
   };
-  return EnergyTarget(basal, tdee, signed, tdee + signed,
-    goal != WeightGoal.maintain && desired > bound);
+  return EnergyTarget(
+    basal,
+    tdee,
+    signed,
+    tdee + signed,
+    goal != WeightGoal.maintain && desired > bound,
+  );
 }
 
 Nutrition macroPercent(double kcal, double protein, double fat, double carbs) {
-  if (!kcal.isFinite || kcal <= 0 ||
+  if (!kcal.isFinite ||
+      kcal <= 0 ||
       [protein, fat, carbs].any((v) => !v.isFinite || v < 0) ||
       (protein + fat + carbs - 100).abs() > .001) {
     throw ArgumentError('Доли БЖУ должны составлять 100%');
   }
-  return Nutrition(kcal, kcal * protein / 400,
-    kcal * fat / 900, kcal * carbs / 400);
+  return Nutrition(
+    kcal,
+    kcal * protein / 400,
+    kcal * fat / 900,
+    kcal * carbs / 400,
+  );
 }
 
-String dayKey(DateTime date) => '${date.year.toString().padLeft(4, '0')}-'
-  '${date.month.toString().padLeft(2, '0')}-'
-  '${date.day.toString().padLeft(2, '0')}';
+String dayKey(DateTime date) =>
+    '${date.year.toString().padLeft(4, '0')}-'
+    '${date.month.toString().padLeft(2, '0')}-'
+    '${date.day.toString().padLeft(2, '0')}';
 
-String normalizeSearch(String text) => text.toLowerCase().replaceAll('ё', 'е').trim();
+String normalizeSearch(String text) =>
+    text.toLowerCase().replaceAll('ё', 'е').trim();
