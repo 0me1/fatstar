@@ -170,6 +170,8 @@ void main() {
     );
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.byType(Dismissible).first);
+    await tester.pumpAndSettle();
+    expect(tester.getCenter(find.byType(Dismissible).first).dy, lessThan(600));
     await tester.fling(
       find.byType(Dismissible).first,
       const Offset(-650, 0),
