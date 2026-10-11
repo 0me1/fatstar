@@ -43,10 +43,7 @@ class SettingsScreen extends ConsumerWidget {
                     ],
                     onChanged: (v) async {
                       try {
-                        await c.save('settings', {
-                          ...(c.of('settings').firstOrNull?.data ?? {}),
-                          'theme': v,
-                        }, previous: c.of('settings').firstOrNull);
+                        await c.saveSettings({'theme': v});
                       } catch (e) {
                         if (context.mounted) message(context, e);
                       }
@@ -65,7 +62,7 @@ class SettingsScreen extends ConsumerWidget {
                           trailing: font.key == c.font ? const Icon(Icons.check) : null,
                           onTap: () async {
                             try {
-                              await c.save('settings', {...(c.of('settings').firstOrNull?.data ?? {'theme': 'dark'}), 'font': font.key}, previous: c.of('settings').firstOrNull);
+                              await c.saveSettings({'font': font.key});
                               if (sheetContext.mounted) Navigator.pop(sheetContext);
                             } catch (e) { if (sheetContext.mounted) message(sheetContext, e); }
                           }),

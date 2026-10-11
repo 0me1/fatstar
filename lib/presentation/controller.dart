@@ -112,6 +112,10 @@ class DiaryController extends ChangeNotifier {
     final value = of('settings').firstOrNull?.data['font'];
     return value is String && diaryFonts.containsKey(value) ? value : 'Rubik';
   }
+  Future<void> saveSettings(Json patch) async {
+    final previous = of('settings').firstOrNull;
+    await save('settings', {...(previous?.data ?? {'theme': 'dark'}), ...patch}, previous: previous);
+  }
   void selectDay(DateTime value) {
     final selected = DateTime(value.year, value.month, value.day);
     final now = DateTime.now();
