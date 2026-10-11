@@ -12,6 +12,13 @@ app.set(android+'label', 'Calorie Diary')
 app.set(android+'allowBackup', 'false')
 app.set(android+'usesCleartextTraffic', '${allowCleartext}')
 activity = app.find('activity')
+deep_link_meta = next((x for x in activity.findall('meta-data')
+                      if x.get(android+'name') == 'flutter_deeplinking_enabled'), None)
+if deep_link_meta is None:
+    deep_link_meta = ET.SubElement(activity, 'meta-data',
+                                  {android+'name': 'flutter_deeplinking_enabled'})
+# Supabase's app_links handler owns the auth callback; Flutter routing must not consume it.
+deep_link_meta.set(android+'value', 'false')
 if not any(x.find('data') is not None and x.find('data').get(android+'scheme') == 'com.fatstar.calorie_diary' for x in activity.findall('intent-filter')):
     filt = ET.SubElement(activity, 'intent-filter')
     ET.SubElement(filt, 'action', {android+'name': 'android.intent.action.VIEW'})

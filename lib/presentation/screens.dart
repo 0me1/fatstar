@@ -10,6 +10,7 @@ import 'controller.dart';
 import 'forms.dart';
 import 'goals.dart';
 import 'settings.dart';
+import 'auth_errors.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -21,6 +22,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
   final email = TextEditingController(), password = TextEditingController();
   bool busy = false, visible = false;
   String? error;
+  DateTime? recoveryRequestedAt;
   @override
   void dispose() {
     email.dispose();
@@ -34,6 +36,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       error = null;
     });
     final c = ref.read(diaryProvider);
+    final action = c.needsPassword
+        ? AuthAction.password
+        : recovery ? AuthAction.recovery : AuthAction.login;
     try {
       if (c.needsPassword) {
         if (password.text.length < 8) {
@@ -43,14 +48,25 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         c.needsPassword = false;
         await c.reload();
       } else if (recovery) {
+        if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email.text.trim())) {
+          throw ArgumentError('Введите корректный email для восстановления доступа');
+        }
+        final requestedAt = recoveryRequestedAt;
+        if (requestedAt != null &&
+            DateTime.now().difference(requestedAt).inSeconds < 60) {
+          throw ArgumentError('Подождите минуту перед повторной отправкой. '
+              'Откройте самое новое письмо на телефоне с установленным приложением.');
+        }
+        recoveryRequestedAt = DateTime.now();
         await c.client.auth.resetPasswordForEmail(
           email.text.trim(),
           redirectTo: 'com.fatstar.calorie_diary://auth/recovery',
-        );
+        ).timeout(const Duration(seconds: 20));
         if (mounted) {
           message(
             context,
-            'Если адрес зарегистрирован, письмо восстановления отправлено',
+            'Если адрес зарегистрирован, письмо восстановления отправлено. '
+                'Откройте самое новое письмо на этом телефоне; ссылка одноразовая.',
           );
         }
       } else {
@@ -59,11 +75,10 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           password: password.text,
         );
       }
-    } catch (_) {
+    } catch (e) {
       if (mounted) {
         setState(
-          () => error =
-              'Не удалось выполнить вход. Проверьте данные, приглашение и подключение.',
+          () => error = authFailureMessage(e, action),
         );
       }
     } finally {
