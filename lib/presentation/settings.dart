@@ -50,7 +50,9 @@ class SettingsScreen extends ConsumerWidget {
                     },
                   ),
                 ),
-                ListTile(title: const Text('Шрифт'), subtitle: Text(diaryFonts[c.font]!),
+                ListTile(
+                  title: const Text('Шрифт'),
+                  subtitle: Text(diaryFonts[c.font]!),
                   trailing: const Icon(Icons.text_fields),
                   onTap: () => showModalBottomSheet<void>(context: context, useSafeArea: true,
                     showDragHandle: true, sheetAnimationStyle: sheetMotion(context),
