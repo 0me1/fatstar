@@ -161,25 +161,32 @@ Future<Json?> selectPortion(
           const SizedBox(height: 12),
           AnimatedContainer(
             duration: motionDuration(context, 180),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16),
-              color: selected == null ? Colors.transparent : Theme.of(context).colorScheme.primary.withValues(alpha: 0.12)),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: selected == null
+                  ? Colors.transparent
+                  : Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.12),
+            ),
             child: DropdownButtonFormField<String>(
-            initialValue: selected?.id ?? 'base',
-            decoration: const InputDecoration(labelText: 'Единица / порция'),
-            items: [
-              DropdownMenuItem(value: 'base', child: Text(baseLabel)),
-              ...raw.map(
-                (r) => DropdownMenuItem(
-                  value: r.id,
-                  child: Text('${r.name} = ${number(r.amount)} $baseLabel'),
+              initialValue: selected?.id ?? 'base',
+              decoration: const InputDecoration(labelText: 'Единица / порция'),
+              items: [
+                DropdownMenuItem(value: 'base', child: Text(baseLabel)),
+                ...raw.map(
+                  (r) => DropdownMenuItem(
+                    value: r.id,
+                    child: Text('${r.name} = ${number(r.amount)} $baseLabel'),
+                  ),
                 ),
-              ),
-            ],
-            onChanged: (id) => set(() {
-              selected = raw.where((r) => r.id == id).firstOrNull;
-              amount.text = selected == null ? '100' : '1';
-            }),
-          )),
+              ],
+              onChanged: (id) => set(() {
+                selected = raw.where((r) => r.id == id).firstOrNull;
+                amount.text = selected == null ? '100' : '1';
+              }),
+            ),
+          ),
           const SizedBox(height: 12),
           TextField(
             controller: amount,
@@ -188,11 +195,13 @@ Future<Json?> selectPortion(
             onChanged: (_) => set(() {}),
           ),
           const SizedBox(height: 16),
-          MotionSwap(child: Text(
-            '${number(grams)} $baseLabel · ${number(kcal, 0)} ккал',
-            key: ValueKey('$grams/${selected?.id}'),
-            style: Theme.of(context).textTheme.titleMedium,
-          )),
+          MotionSwap(
+            child: Text(
+              '${number(grams)} $baseLabel · ${number(kcal, 0)} ккал',
+              key: ValueKey('$grams/${selected?.id}'),
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+          ),
           Text(
             'Б ${number(base.protein! * grams / 100)} · Ж ${number(base.fat! * grams / 100)} · У ${number(base.carbs! * grams / 100)} г',
           ),

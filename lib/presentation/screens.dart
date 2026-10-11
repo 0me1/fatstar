@@ -246,9 +246,16 @@ class DiaryScreen extends ConsumerWidget {
               : DateFormat('d MMMM', 'ru').format(c.day),
         ),
         actions: [
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Center(child: SyncStatus(running: c.sync?.isRunning ?? false,
-              failed: c.sync?.error != null, succeeded: c.sync?.lastSuccess != null))),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Center(
+              child: SyncStatus(
+                running: c.sync?.isRunning ?? false,
+                failed: c.sync?.error != null,
+                succeeded: c.sync?.lastSuccess != null,
+              ),
+            ),
+          ),
           IconButton(
             tooltip: 'Предыдущий день',
             onPressed: () =>
@@ -320,16 +327,34 @@ class DiaryScreen extends ConsumerWidget {
                             children: [
                               SizedBox.expand(
                                 child: GoalPulse(
-                                  reached: goal != null && total.kcal >= goal.kcal && total.kcal <= goal.kcal * 1.02,
-                                  child: MotionProgress(circular: true, label: 'Прогресс калорий',
-                                    value: goal == null || goal.kcal == 0 ? 0 : (total.kcal / goal.kcal).clamp(0.0, 1.0))),
+                                  reached:
+                                      goal != null &&
+                                      total.kcal >= goal.kcal &&
+                                      total.kcal <= goal.kcal * 1.02,
+                                  child: MotionProgress(
+                                    circular: true,
+                                    label: 'Прогресс калорий',
+                                    value: goal == null || goal.kcal == 0
+                                        ? 0
+                                        : (total.kcal / goal.kcal).clamp(
+                                            0.0,
+                                            1.0,
+                                          ),
+                                  ),
+                                ),
                               ),
                               Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  if (goal == null) const Text('—') else MotionNumber(
-                                    value: (goal.kcal - total.kcal).abs(),
-                                    style: Theme.of(context).textTheme.headlineMedium),
+                                  if (goal == null)
+                                    const Text('—')
+                                  else
+                                    MotionNumber(
+                                      value: (goal.kcal - total.kcal).abs(),
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.headlineMedium,
+                                    ),
                                   Text(
                                     goal == null
                                         ? 'Цель не задана'
@@ -431,77 +456,80 @@ class DiaryScreen extends ConsumerWidget {
                       onTap: () => add(context, meal),
                       onLongPress: () => copyMeal(context, c, meal),
                     ),
-                    MotionRows(key: ValueKey('entries/${dayKey(c.day)}/${meal.name}'), children: [
-                    for (final e in c.entries.where(
-                      (e) => e.data['meal'] == meal.name,
-                    ))
-                      ListTile(
-                        key: ValueKey(e.id),
-                        title: Text(e.data['name'] as String),
-                        subtitle: Text(
-                          '${number(e.data['amount'] as num)} ${e.data['unit'] == 'gram'
-                              ? 'г'
-                              : e.data['unit'] == 'milliliter'
-                              ? 'мл'
-                              : 'запись'} · ${number(entryNutrition(e).kcal, 0)} ккал',
-                        ),
-                        onTap: () async {
-                          final data = await editEntry(context, e);
-                          if (data != null) {
-                            try {
-                              await c.save('entry', data, previous: e);
-                              if (context.mounted) undo(context, c, e);
-                            } catch (error) {
-                              if (context.mounted) message(context, error);
-                            }
-                          }
-                        },
-                        trailing: PopupMenuButton<String>(
-                          tooltip: 'Действия с записью',
-                          onSelected: (action) async {
-                            try {
-                              if (action == 'delete') {
-                                await c.remove(e);
-                                if (context.mounted) undo(context, c, e);
-                              }
-                              if (action == 'repeat') {
-                                await c.addEntries([e.data], meal);
-                              }
-                              if (action == 'copy' && context.mounted) {
-                                final date = await showDatePicker(
-                                  context: context,
-                                  initialDate: c.day,
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (date != null) {
-                                  await c.save('entry', {
-                                    ...e.data,
-                                    'day': dayKey(date),
-                                  });
+                    MotionRows(
+                      key: ValueKey('entries/${dayKey(c.day)}/${meal.name}'),
+                      children: [
+                        for (final e in c.entries.where(
+                          (e) => e.data['meal'] == meal.name,
+                        ))
+                          ListTile(
+                            key: ValueKey(e.id),
+                            title: Text(e.data['name'] as String),
+                            subtitle: Text(
+                              '${number(e.data['amount'] as num)} ${e.data['unit'] == 'gram'
+                                  ? 'г'
+                                  : e.data['unit'] == 'milliliter'
+                                  ? 'мл'
+                                  : 'запись'} · ${number(entryNutrition(e).kcal, 0)} ккал',
+                            ),
+                            onTap: () async {
+                              final data = await editEntry(context, e);
+                              if (data != null) {
+                                try {
+                                  await c.save('entry', data, previous: e);
+                                  if (context.mounted) undo(context, c, e);
+                                } catch (error) {
+                                  if (context.mounted) message(context, error);
                                 }
                               }
-                            } catch (error) {
-                              if (context.mounted) message(context, error);
-                            }
-                          },
-                          itemBuilder: (_) => const [
-                            PopupMenuItem(
-                              value: 'repeat',
-                              child: Text('Повторить'),
+                            },
+                            trailing: PopupMenuButton<String>(
+                              tooltip: 'Действия с записью',
+                              onSelected: (action) async {
+                                try {
+                                  if (action == 'delete') {
+                                    await c.remove(e);
+                                    if (context.mounted) undo(context, c, e);
+                                  }
+                                  if (action == 'repeat') {
+                                    await c.addEntries([e.data], meal);
+                                  }
+                                  if (action == 'copy' && context.mounted) {
+                                    final date = await showDatePicker(
+                                      context: context,
+                                      initialDate: c.day,
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2100),
+                                    );
+                                    if (date != null) {
+                                      await c.save('entry', {
+                                        ...e.data,
+                                        'day': dayKey(date),
+                                      });
+                                    }
+                                  }
+                                } catch (error) {
+                                  if (context.mounted) message(context, error);
+                                }
+                              },
+                              itemBuilder: (_) => const [
+                                PopupMenuItem(
+                                  value: 'repeat',
+                                  child: Text('Повторить'),
+                                ),
+                                PopupMenuItem(
+                                  value: 'copy',
+                                  child: Text('Копировать на дату'),
+                                ),
+                                PopupMenuItem(
+                                  value: 'delete',
+                                  child: Text('Удалить'),
+                                ),
+                              ],
                             ),
-                            PopupMenuItem(
-                              value: 'copy',
-                              child: Text('Копировать на дату'),
-                            ),
-                            PopupMenuItem(
-                              value: 'delete',
-                              child: Text('Удалить'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]),
+                          ),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: TextButton.icon(
@@ -533,15 +561,21 @@ class DiaryScreen extends ConsumerWidget {
         children: [
           Text(name, style: Theme.of(context).textTheme.bodySmall),
           const SizedBox(height: 8),
-          MotionProgress(circular: false,
+          MotionProgress(
+            circular: false,
             value: target == null || target == 0
                 ? 0
                 : (value / target).clamp(0.0, 1.0),
           ),
           const SizedBox(height: 8),
-          MotionNumber(value: value, prefix: complete ? '' : '≥ ',
+          MotionNumber(
+            value: value,
+            prefix: complete ? '' : '≥ ',
             suffix: ' / ${number(target, 0)} г',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700)),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700),
+          ),
         ],
       ),
     ),
@@ -561,8 +595,8 @@ class DiaryScreen extends ConsumerWidget {
     if (date == null || !context.mounted) return;
     final source = await showModalBottomSheet<Meal>(
       context: context,
-  showDragHandle: true,
-  sheetAnimationStyle: sheetMotion(context),
+      showDragHandle: true,
+      sheetAnimationStyle: sheetMotion(context),
       builder: (context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [

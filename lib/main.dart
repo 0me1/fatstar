@@ -73,7 +73,9 @@ class _CalorieDiaryAppState extends ConsumerState<CalorieDiaryApp>
     return MaterialApp(
       key: ValueKey(c.accountGeneration),
       title: 'Calorie Diary',
-      themeAnimationDuration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 300),
+      themeAnimationDuration: MediaQuery.disableAnimationsOf(context)
+          ? Duration.zero
+          : const Duration(milliseconds: 300),
       themeAnimationCurve: Curves.easeInOut,
       debugShowCheckedModeBanner: false,
       locale: const Locale('ru'),
@@ -129,8 +131,16 @@ ThemeData diaryTheme(Brightness brightness) {
     scaffoldBackgroundColor: dark
         ? const Color(0xFF151B1A)
         : const Color(0xFFF5F8F8),
-    appBarTheme: AppBarTheme(centerTitle: false, elevation: 0,
-      titleTextStyle: TextStyle(color: scheme.onSurface, fontFamily: 'Rubik', fontSize: 28, fontWeight: FontWeight.w900)),
+    appBarTheme: AppBarTheme(
+      centerTitle: false,
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        color: scheme.onSurface,
+        fontFamily: 'Rubik',
+        fontSize: 28,
+        fontWeight: FontWeight.w900,
+      ),
+    ),
     cardTheme: CardThemeData(
       elevation: 0,
       margin: const EdgeInsets.symmetric(vertical: 6),

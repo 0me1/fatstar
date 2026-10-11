@@ -64,7 +64,11 @@ class SettingsScreen extends ConsumerWidget {
                   ),
                   trailing: IconButton(
                     tooltip: 'Повторить синхронизацию',
-                    icon: SyncStatus(running: c.sync?.isRunning ?? false, failed: c.sync?.error != null, succeeded: c.sync?.lastSuccess != null),
+                    icon: SyncStatus(
+                      running: c.sync?.isRunning ?? false,
+                      failed: c.sync?.error != null,
+                      succeeded: c.sync?.lastSuccess != null,
+                    ),
                     onPressed: () => c.sync?.run(),
                   ),
                 ),

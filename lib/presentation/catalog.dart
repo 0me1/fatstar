@@ -270,10 +270,18 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                               : IconButton(
                                   tooltip: 'Избранное',
                                   onPressed: () => c.favorite(p),
-                                  icon: MotionSwap(scale: true, child: Icon(
-                                    favorites.contains(p.id) ? Icons.star : Icons.star_border,
-                                    key: ValueKey(favorites.contains(p.id)),
-                                    color: favorites.contains(p.id) ? const Color(0xFFFFC857) : null)),
+                                  icon: MotionSwap(
+                                    scale: true,
+                                    child: Icon(
+                                      favorites.contains(p.id)
+                                          ? Icons.star
+                                          : Icons.star_border,
+                                      key: ValueKey(favorites.contains(p.id)),
+                                      color: favorites.contains(p.id)
+                                          ? const Color(0xFFFFC857)
+                                          : null,
+                                    ),
+                                  ),
                                 ),
                         );
                       },
@@ -290,7 +298,13 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                         onPressed: selected.isEmpty
                             ? null
                             : () => showSelected(),
-                        child: MotionSwap(scale: true, child: Text('${selected.length} выбрано', key: ValueKey(selected.length))),
+                        child: MotionSwap(
+                          scale: true,
+                          child: Text(
+                            '${selected.length} выбрано',
+                            key: ValueKey(selected.length),
+                          ),
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -329,8 +343,8 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
   Future<void> showSelected() async {
     await showModalBottomSheet<void>(
       context: context,
-  showDragHandle: true,
-  sheetAnimationStyle: sheetMotion(context),
+      showDragHandle: true,
+      sheetAnimationStyle: sheetMotion(context),
       isScrollControlled: true,
       builder: (context) => StatefulBuilder(
         builder: (context, update) => SafeArea(
@@ -552,8 +566,8 @@ Future<void> productDetails(
   );
   await showModalBottomSheet<void>(
     context: context,
-  showDragHandle: true,
-  sheetAnimationStyle: sheetMotion(context),
+    showDragHandle: true,
+    sheetAnimationStyle: sheetMotion(context),
     useSafeArea: true,
     builder: (context) => ListView(
       shrinkWrap: true,
@@ -672,8 +686,8 @@ Future<void> productHistory(
     if (!context.mounted) return;
     await showModalBottomSheet<void>(
       context: context,
-  showDragHandle: true,
-  sheetAnimationStyle: sheetMotion(context),
+      showDragHandle: true,
+      sheetAnimationStyle: sheetMotion(context),
       isScrollControlled: true,
       useSafeArea: true,
       builder: (context) => SizedBox(
