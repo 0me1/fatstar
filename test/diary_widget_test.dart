@@ -32,8 +32,12 @@ void main() {
         expect(find.text('Цель не задана'), findsOneWidget);
         expect(find.text('Завтрак'), findsOneWidget);
         expect(find.text('Сожжено'), findsNothing);
-        final add = tester.widget<IconButton>(find.descendant(
-          of: find.byType(FoodAddButton).first, matching: find.byType(IconButton)));
+        final add = tester.widget<IconButton>(
+          find.descendant(
+            of: find.byType(FoodAddButton).first,
+            matching: find.byType(IconButton),
+          ),
+        );
         final foreground = add.style!.foregroundColor!.resolve({})!;
         final background = add.style!.backgroundColor!.resolve({})!;
         final a = foreground.computeLuminance();
@@ -43,19 +47,35 @@ void main() {
         await tester.tap(find.byTooltip('Следующий день'));
         await tester.pumpAndSettle();
         expect(DateUtils.isSameDay(c.day, DateTime.now()), isTrue);
-        expect(tester.widget<IconButton>(find.byTooltip('Следующий день')).onPressed,
-            isNull);
-        await tester.fling(find.byKey(const ValueKey('diary-day-swipe')),
-            const Offset(-240, 0), 800);
+        expect(
+          tester.widget<IconButton>(find.byTooltip('Следующий день')).onPressed,
+          isNull,
+        );
+        await tester.fling(
+          find.byKey(const ValueKey('diary-day-swipe')),
+          const Offset(-240, 0),
+          800,
+        );
         await tester.pumpAndSettle();
         expect(DateUtils.isSameDay(c.day, DateTime.now()), isTrue);
-        await tester.fling(find.byKey(const ValueKey('diary-day-swipe')),
-            const Offset(240, 0), 800);
+        await tester.fling(
+          find.byKey(const ValueKey('diary-day-swipe')),
+          const Offset(240, 0),
+          800,
+        );
         await tester.pumpAndSettle();
-        expect(DateUtils.isSameDay(c.day,
-            DateTime.now().subtract(const Duration(days: 1))), isTrue);
-        await tester.fling(find.byKey(const ValueKey('diary-day-swipe')),
-            const Offset(-240, 0), 800);
+        expect(
+          DateUtils.isSameDay(
+            c.day,
+            DateTime.now().subtract(const Duration(days: 1)),
+          ),
+          isTrue,
+        );
+        await tester.fling(
+          find.byKey(const ValueKey('diary-day-swipe')),
+          const Offset(-240, 0),
+          800,
+        );
         await tester.pumpAndSettle();
         expect(DateUtils.isSameDay(c.day, DateTime.now()), isTrue);
         c.selectDay(DateTime.now().add(const Duration(days: 1)));

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
 class FoodAddButton extends StatelessWidget {
-  const FoodAddButton({super.key, required this.tooltip, required this.onPressed});
+  const FoodAddButton({
+    super.key,
+    required this.tooltip,
+    required this.onPressed,
+  });
   final String tooltip;
   final VoidCallback? onPressed;
 
