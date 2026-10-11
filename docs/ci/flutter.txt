@@ -1,0 +1,6 @@
+Analyzing fatstar...                                            
+
+   info • 'NAMESPACE_URL' is deprecated and shouldn't be used. Please use the Namespace enum in enums.dart instead • lib/presentation/controller.dart:165:12 • deprecated_member_use
+   info • 'NAMESPACE_URL' is deprecated and shouldn't be used. Please use the Namespace enum in enums.dart instead • lib/presentation/controller.dart:168:40 • deprecated_member_use
+
+2 issues found. (ran in 7.6s)
