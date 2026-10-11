@@ -70,38 +70,56 @@ class _FoodAddButtonState extends State<FoodAddButton> {
           tween: Tween(begin: 0, end: confirmed ? 1 : 0),
           duration: motionDuration(context, confirmed ? 300 : 420),
           curve: Curves.easeInOutCubic,
-          builder: (context, fill, _) => SizedBox(width: 52, height: 52,
-            child: ClipOval(child: Stack(fit: StackFit.expand, children: [
-              const ColoredBox(color: Colors.white),
-              Align(alignment: Alignment.bottomCenter,
-                child: FractionallySizedBox(widthFactor: 1, heightFactor: fill,
-                  child: ColoredBox(color: colors.primary))),
-              IconButton.filled(
-          tooltip: widget.tooltip,
-          onPressed: enabled ? handleTap : null,
-          style: IconButton.styleFrom(
-            backgroundColor: Colors.transparent,
-            foregroundColor: const Color(0xFF252827),
-            disabledBackgroundColor: colors.onSurface.withValues(alpha: 0.12),
-            disabledForegroundColor: colors.onSurface.withValues(alpha: 0.38),
-            minimumSize: const Size(52, 52),
-            side: Theme.of(context).brightness == Brightness.light
-                ? const BorderSide(color: Color(0xFFCFDBD8))
-                : BorderSide.none,
-            shape: const CircleBorder(),
-          ),
-          icon: AnimatedSwitcher(
-            duration: motionDuration(context, 300),
-            transitionBuilder: (child, animation) => ScaleTransition(scale: animation,
-              child: FadeTransition(opacity: animation, child: child)),
-            child: Icon(
-              confirmed ? Icons.check_rounded : Icons.add_rounded,
-              key: ValueKey(confirmed),
-              size: 34,
-            ),
-          ),
+          builder: (context, fill, _) => SizedBox(
+            width: 52,
+            height: 52,
+            child: ClipOval(
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  const ColoredBox(color: Colors.white),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: FractionallySizedBox(
+                      widthFactor: 1,
+                      heightFactor: fill,
+                      child: ColoredBox(color: colors.primary),
+                    ),
+                  ),
+                  IconButton.filled(
+                    tooltip: widget.tooltip,
+                    onPressed: enabled ? handleTap : null,
+                    style: IconButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      foregroundColor: const Color(0xFF252827),
+                      disabledBackgroundColor: colors.onSurface.withValues(
+                        alpha: 0.12,
+                      ),
+                      disabledForegroundColor: colors.onSurface.withValues(
+                        alpha: 0.38,
+                      ),
+                      minimumSize: const Size(52, 52),
+                      side: Theme.of(context).brightness == Brightness.light
+                          ? const BorderSide(color: Color(0xFFCFDBD8))
+                          : BorderSide.none,
+                      shape: const CircleBorder(),
+                    ),
+                    icon: AnimatedSwitcher(
+                      duration: motionDuration(context, 300),
+                      transitionBuilder: (child, animation) => ScaleTransition(
+                        scale: animation,
+                        child: FadeTransition(opacity: animation, child: child),
+                      ),
+                      child: Icon(
+                        confirmed ? Icons.check_rounded : Icons.add_rounded,
+                        key: ValueKey(confirmed),
+                        size: 34,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ])),
+            ),
           ),
         ),
       ),
