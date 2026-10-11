@@ -29,8 +29,13 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
 
   Future<void> choose(Record p, {bool quick = false}) async {
     final last = ref.read(diaryProvider).lastPortion(p.id);
-    final validLast = last != null && last.data['unit'] == p.data['unit'] &&
-      (last.data['portion_id'] == null || (p.data['portions'] as List).any((raw) => raw['id'] == last.data['portion_id']));
+    final validLast =
+        last != null &&
+        last.data['unit'] == p.data['unit'] &&
+        (last.data['portion_id'] == null ||
+            (p.data['portions'] as List).any(
+              (raw) => raw['id'] == last.data['portion_id'],
+            ));
     final savedAmount = last == null ? null : decimal(last.data['amount']);
     final data = quick && last != null && validLast
         ? entryForProduct(
@@ -602,10 +607,16 @@ Future<void> productHistory(
   try {
     List<Json> raw;
     try {
-      raw = await c.client.from('product_versions').select().eq('product_id', p.id).order('version', ascending: false)
-        .timeout(const Duration(seconds: 8));
+      raw = await c.client
+          .from('product_versions')
+          .select()
+          .eq('product_id', p.id)
+          .order('version', ascending: false)
+          .timeout(const Duration(seconds: 8));
       for (final version in raw) {
-        await c.db!.cacheHistory(Record.fromJson(Map<String, dynamic>.from(version['record'] as Map)));
+        await c.db!.cacheHistory(
+          Record.fromJson(Map<String, dynamic>.from(version['record'] as Map)),
+        );
       }
     } catch (_) {
       raw = await c.db!.cachedHistory(p.id);
@@ -683,6 +694,6 @@ Future<void> productHistory(
         context,
         'История недоступна. Проверьте синхронизацию и подключение.',
       );
+    }
   }
-}
 }

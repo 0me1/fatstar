@@ -166,7 +166,7 @@ class GoalsScreen extends ConsumerWidget {
               ),
             ],
           ),
-      if (weights.isEmpty) const Text('Измерений пока нет'),
+          if (weights.isEmpty) const Text('Измерений пока нет'),
           for (final w in weights)
             ListTile(
               title: Text('${number(w.data['kg'] as num)} кг'),
@@ -262,12 +262,12 @@ Future<void> editWeight(
               firstDate: DateTime(2000),
               lastDate: DateTime.now(),
             );
-        if (d != null) set(() => date = d);
+            if (d != null) set(() => date = d);
           },
         ),
       ],
       () {
-      final data = {'kg': parseNumber(weight.text), 'day': dayKey(date)};
+        final data = {'kg': parseNumber(weight.text), 'day': dayKey(date)};
         validateRecord(
           Record(
             id: previous?.id ?? '00000000-0000-4000-8000-000000000000',
@@ -275,7 +275,7 @@ Future<void> editWeight(
             data: data,
           ),
         );
-      return data;
+        return data;
       },
     );
     if (data != null) await c.save('weight', data, previous: previous);
@@ -335,7 +335,7 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
         }, (v) => set(() => goal = WeightGoal.values.byName(v))),
         input('Исходный / расчетный вес, кг', fields['weight']!, numeric: true),
         input('Желаемый вес, кг', fields['desired_weight']!, numeric: true),
-      if (mode == 'auto') ...[
+        if (mode == 'auto') ...[
           input('Рост, см', fields['height']!, numeric: true),
           input('Возраст (полных лет)', fields['age']!, numeric: true),
           dropdown(
@@ -416,7 +416,7 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
               firstDate: DateTime.now().subtract(const Duration(days: 1)),
               lastDate: DateTime(2100),
             );
-        if (d != null) set(() => date = d);
+            if (d != null) set(() => date = d);
           },
         ),
         const Text(
@@ -432,18 +432,18 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
         final weekly = mode == 'auto'
             ? parseNumber(fields['weekly_kg']!.text)
             : 0.0;
-      double kcal;
-      String explanation;
-      var age = 0;
-      var height = 0.0;
-      double? bodyFat;
-      if (mode == 'auto') {
-        final ageValue = parseNumber(fields['age']!.text);
+        double kcal;
+        String explanation;
+        var age = 0;
+        var height = 0.0;
+        double? bodyFat;
+        if (mode == 'auto') {
+          final ageValue = parseNumber(fields['age']!.text);
           if (ageValue != ageValue.roundToDouble()) {
             throw ArgumentError('Возраст в полных годах');
           }
-        age = ageValue.toInt();
-        height = parseNumber(fields['height']!.text);
+          age = ageValue.toInt();
+          height = parseNumber(fields['height']!.text);
           bodyFat = formula == BmrFormula.katch
               ? parseNumber(fields['body_fat']!.text)
               : null;
@@ -461,28 +461,54 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
             goal: goal,
             weeklyKg: weekly,
           );
-        kcal = target.kcal;
+          kcal = target.kcal;
           explanation =
               '${formulaNames[formula.index]}: BMR ${number(basal, 0)} × $activity = TDEE ${number(target.tdee, 0)}. Поправка ${number(target.adjustment, 0)} ккал. ${target.limited ? 'Применено ограничение.' : ''}';
-      } else {
-        kcal = parseNumber(fields['kcal']!.text);
-        explanation = 'Ручная норма: ${number(kcal, 0)} ккал.';
-      }
+        } else {
+          kcal = parseNumber(fields['kcal']!.text);
+          explanation = 'Ручная норма: ${number(kcal, 0)} ккал.';
+        }
         final p = parseNumber(fields['protein']!.text),
             f = parseNumber(fields['fat']!.text),
             carbs = parseNumber(fields['carbs']!.text);
         final n = macros == 'Проценты'
             ? macroPercent(kcal, p, f, carbs)
             : Nutrition(kcal, p, f, carbs);
-      n.validate(product: true);
-      if (macros == 'Граммы') {
-        explanation += ' Энергия из БЖУ: ${number(p * 4 + carbs * 4 + f * 9, 0)} ккал (ориентир 4/4/9).';
-      }
-      final result = {'effective_from': dayKey(date), 'recorded_at': DateTime.now().toUtc().toIso8601String(), 'nutrition': n.toJson(), 'mode': mode, 'formula': formula.name, 'sex': sex.name, 'goal': goal.name,
-        'activity': activity, 'weight': weight, 'desired_weight': desired, 'height': height, 'age': age, 'body_fat': bodyFat,
-        'weekly_kg': weekly, 'kcal': kcal, 'protein': p, 'fat': f, 'carbs': carbs, 'macro_mode': macros, 'explanation': explanation};
-      validateRecord(Record(id: '00000000-0000-4000-8000-000000000000', kind: 'goal', data: result));
-      return result;
+        n.validate(product: true);
+        if (macros == 'Граммы') {
+          explanation +=
+              ' Энергия из БЖУ: ${number(p * 4 + carbs * 4 + f * 9, 0)} ккал (ориентир 4/4/9).';
+        }
+        final result = {
+          'effective_from': dayKey(date),
+          'recorded_at': DateTime.now().toUtc().toIso8601String(),
+          'nutrition': n.toJson(),
+          'mode': mode,
+          'formula': formula.name,
+          'sex': sex.name,
+          'goal': goal.name,
+          'activity': activity,
+          'weight': weight,
+          'desired_weight': desired,
+          'height': height,
+          'age': age,
+          'body_fat': bodyFat,
+          'weekly_kg': weekly,
+          'kcal': kcal,
+          'protein': p,
+          'fat': f,
+          'carbs': carbs,
+          'macro_mode': macros,
+          'explanation': explanation,
+        };
+        validateRecord(
+          Record(
+            id: '00000000-0000-4000-8000-000000000000',
+            kind: 'goal',
+            data: result,
+          ),
+        );
+        return result;
       },
     );
     if (data != null && context.mounted) {

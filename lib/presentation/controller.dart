@@ -30,7 +30,9 @@ class DiaryController extends ChangeNotifier {
 
   Future<void> initialize() async {
     await _auth?.cancel();
-    _switchQueue = _switchQueue.then((_) => _activate(client.auth.currentUser?.id));
+    _switchQueue = _switchQueue.then(
+      (_) => _activate(client.auth.currentUser?.id),
+    );
     _auth = client.auth.onAuthStateChange.listen((event) {
       if (event.event == AuthChangeEvent.passwordRecovery) {
         needsPassword = true;
@@ -101,7 +103,7 @@ class DiaryController extends ChangeNotifier {
                   0,
             )
             .toList()
-      ..sort((a, b) {
+          ..sort((a, b) {
             final date = (b.data['effective_from'] as String).compareTo(
               a.data['effective_from'] as String,
             );
@@ -110,7 +112,7 @@ class DiaryController extends ChangeNotifier {
                 : (b.data['recorded_at'] as String? ?? '').compareTo(
                     a.data['recorded_at'] as String? ?? '',
                   );
-      });
+          });
     return goals.isEmpty ? null : goals.first;
   }
 
