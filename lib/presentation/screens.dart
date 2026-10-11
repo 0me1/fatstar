@@ -38,7 +38,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final c = ref.read(diaryProvider);
     final action = c.needsPassword
         ? AuthAction.password
-        : recovery ? AuthAction.recovery : AuthAction.login;
+        : recovery
+        ? AuthAction.recovery
+        : AuthAction.login;
     try {
       if (c.needsPassword) {
         if (password.text.length < 8) {
@@ -48,25 +50,33 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         c.needsPassword = false;
         await c.reload();
       } else if (recovery) {
-        if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email.text.trim())) {
-          throw ArgumentError('Введите корректный email для восстановления доступа');
+        if (!RegExp(
+          r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
+        ).hasMatch(email.text.trim())) {
+          throw ArgumentError(
+            'Введите корректный email для восстановления доступа',
+          );
         }
         final requestedAt = recoveryRequestedAt;
         if (requestedAt != null &&
             DateTime.now().difference(requestedAt).inSeconds < 60) {
-          throw ArgumentError('Подождите минуту перед повторной отправкой. '
-              'Откройте самое новое письмо на телефоне с установленным приложением.');
+          throw ArgumentError(
+            'Подождите минуту перед повторной отправкой. '
+            'Откройте самое новое письмо на телефоне с установленным приложением.',
+          );
         }
         recoveryRequestedAt = DateTime.now();
-        await c.client.auth.resetPasswordForEmail(
-          email.text.trim(),
-          redirectTo: 'com.fatstar.caloriediary://auth/recovery',
-        ).timeout(const Duration(seconds: 20));
+        await c.client.auth
+            .resetPasswordForEmail(
+              email.text.trim(),
+              redirectTo: 'com.fatstar.caloriediary://auth/recovery',
+            )
+            .timeout(const Duration(seconds: 20));
         if (mounted) {
           message(
             context,
             'Если адрес зарегистрирован, письмо восстановления отправлено. '
-                'Откройте самое новое письмо на этом телефоне; ссылка одноразовая.',
+            'Откройте самое новое письмо на этом телефоне; ссылка одноразовая.',
           );
         }
       } else {
@@ -77,9 +87,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
       }
     } catch (e) {
       if (mounted) {
-        setState(
-          () => error = authFailureMessage(e, action),
-        );
+        setState(() => error = authFailureMessage(e, action));
       }
     } finally {
       if (mounted) setState(() => busy = false);
