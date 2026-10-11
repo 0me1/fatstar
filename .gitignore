@@ -11,3 +11,5 @@ android/key.properties
 .env*
 supabase/.temp/
 supabase/.branches/
+__pycache__/
+*.pyc

@@ -79,6 +79,7 @@ class DiaryDatabase extends GeneratedDatabase {
     'SELECT * FROM outbox ORDER BY sequence').get()).map((r) => r.data).toList();
 
   Future<void> acknowledge(Json operation, Record server) => transaction(() async {
+    await cacheHistory(server);
     await customStatement('DELETE FROM outbox WHERE operation_id=?', [operation['operation_id']]);
     final pending = await customSelect('SELECT 1 FROM outbox WHERE kind=? AND record_id=? LIMIT 1',
       variables: [Variable(server.kind), Variable(server.id)]).getSingleOrNull();
@@ -108,6 +109,7 @@ class DiaryDatabase extends GeneratedDatabase {
 
   Future<void> applyPage(List<Record> changes, int cursor) => transaction(() async {
     for (final server in changes) {
+      await cacheHistory(server);
       final pending = await customSelect('SELECT 1 FROM outbox WHERE kind=? AND record_id=? LIMIT 1',
         variables: [Variable(server.kind), Variable(server.id)]).getSingleOrNull();
       final current = await find(server.kind, server.id);
@@ -123,4 +125,16 @@ class DiaryDatabase extends GeneratedDatabase {
     final row = await customSelect("SELECT value FROM metadata WHERE key='cursor'").getSingleOrNull();
     return row == null ? 0 : int.parse(row.read<String>('value'));
   }
+
+  Future<void> cacheHistory(Record server) async {
+    if (server.kind != 'product') return;
+    final key = 'history:${server.id}:${server.version}';
+    final value = {'version': server.version, 'actor_id': server.data['updated_by'] ?? server.data['created_by'],
+      'created_at': server.data['updated_at'], 'record': server.toJson()};
+    await customStatement('INSERT OR REPLACE INTO metadata(key,value) VALUES(?,?)', [key, jsonEncode(value)]);
+  }
+
+  Future<List<Json>> cachedHistory(String productId) async => (await customSelect(
+    'SELECT value FROM metadata WHERE key LIKE ?', variables: [Variable('history:$productId:%')]).get())
+    .map((r) => jsonDecode(r.read<String>('value')) as Json).toList();
 }

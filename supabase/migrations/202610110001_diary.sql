@@ -17,7 +17,7 @@ create table public.private_records (
   primary key(owner_id,kind,id)
 );
 create index private_days on public.private_records(owner_id,kind,(data->>'day'));
-create unique index unique_goal_day on public.private_records(owner_id,(data->>'effective_from')) where kind='goal' and not deleted;
+create index goal_effective_days on public.private_records(owner_id,(data->>'effective_from')) where kind='goal' and not deleted;
 create unique index unique_favorite on public.private_records(owner_id,(data->>'product_id')) where kind='favorite' and not deleted;
 create unique index unique_portion_preference on public.private_records(owner_id,(data->>'product_id')) where kind='portion' and not deleted;
 create unique index unique_settings on public.private_records(owner_id) where kind='settings' and not deleted;
@@ -161,7 +161,7 @@ begin
   d := p_record->'data'; removed := (p_record->>'deleted')::boolean;
   if p_kind='product' then
     creator := coalesce(creator,actor); created := coalesce(created,now());
-    d := (d - 'created_by' - 'created_at' - 'updated_at') || jsonb_build_object('created_by',creator,'created_at',created,'updated_at',now());
+    d := (d - 'created_by' - 'created_at' - 'updated_at' - 'updated_by') || jsonb_build_object('created_by',creator,'created_at',created,'updated_at',now(),'updated_by',actor);
     insert into public.products(id,data,version,deleted,created_by,created_at,updated_at)
       values(p_id,d,current_version+1,removed,creator,created,now())
       on conflict(id) do update set data=excluded.data,version=excluded.version,deleted=excluded.deleted,updated_at=excluded.updated_at;

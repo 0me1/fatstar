@@ -132,7 +132,7 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
       final n = macros == 'Проценты' ? macroPercent(kcal, p, f, carbs) : Nutrition(kcal, p, f, carbs);
       n.validate(product: true);
       if (macros == 'Граммы') explanation += ' Энергия из БЖУ: ${number(p * 4 + carbs * 4 + f * 9, 0)} ккал (ориентир 4/4/9).';
-      final result = {'effective_from': dayKey(date), 'nutrition': n.toJson(), 'mode': mode, 'formula': formula.name, 'sex': sex.name, 'goal': goal.name,
+      final result = {'effective_from': dayKey(date), 'recorded_at': DateTime.now().toUtc().toIso8601String(), 'nutrition': n.toJson(), 'mode': mode, 'formula': formula.name, 'sex': sex.name, 'goal': goal.name,
         'activity': activity, 'weight': weight, 'desired_weight': desired, 'height': height, 'age': age, 'body_fat': bodyFat,
         'weekly_kg': weekly, 'kcal': kcal, 'protein': p, 'fat': f, 'carbs': carbs, 'macro_mode': macros, 'explanation': explanation};
       validateRecord(Record(id: '00000000-0000-4000-8000-000000000000', kind: 'goal', data: result));
@@ -141,8 +141,10 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
     if (data != null && context.mounted) {
       final sameDay = c.of('goal').where((r) => r.data['effective_from'] == data['effective_from']).firstOrNull;
       if (sameDay != null) {
-        message(context, 'На эту дату уже есть цель. Выберите новую дату, чтобы сохранить историю.');
-        return;
+        final accepted = await showDialog<bool>(context: context, builder: (ctx) => AlertDialog(title: const Text('Новая версия цели на эту дату?'),
+          content: const Text('Прежний расчет останется в истории. Для выбранной даты и последующих дней будет действовать новая версия.'),
+          actions: [TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Отмена')), FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Сохранить новую версию'))]));
+        if (accepted != true) return;
       }
       await c.save('goal', data);
     }

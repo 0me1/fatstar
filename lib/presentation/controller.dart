@@ -82,7 +82,10 @@ class DiaryController extends ChangeNotifier {
   List<Record> get entries => of('entry').where((r) => r.data['day'] == dayKey(day)).toList();
   Record? get goal {
     final goals = of('goal').where((r) => (r.data['effective_from'] as String).compareTo(dayKey(day)) <= 0).toList()
-      ..sort((a, b) => (b.data['effective_from'] as String).compareTo(a.data['effective_from'] as String));
+      ..sort((a, b) {
+        final date = (b.data['effective_from'] as String).compareTo(a.data['effective_from'] as String);
+        return date != 0 ? date : (b.data['recorded_at'] as String? ?? '').compareTo(a.data['recorded_at'] as String? ?? '');
+      });
     return goals.isEmpty ? null : goals.first;
   }
   String get theme => of('settings').isEmpty ? 'dark' : of('settings').first.data['theme'] as String;
@@ -106,6 +109,9 @@ class DiaryController extends ChangeNotifier {
 
   Future<void> restore(Record original) async {
     final latest = await db!.find(original.kind, original.id);
+    if (latest == null || latest.version != original.version + 1) {
+      throw StateError('После этой операции запись изменилась. Отмена не перезаписала новую правку.');
+    }
     await db!.save(original.copy(version: latest?.version ?? 0));
     await reload();
     unawaited(sync?.run());
@@ -155,7 +161,9 @@ class DiaryController extends ChangeNotifier {
   void dispose() {
     _disposed = true;
     _auth?.cancel();
-    unawaited(sync?.dispose().then((_) => db?.close()));
+    final engine = sync;
+    final database = db;
+    unawaited(() async { await engine?.dispose(); await database?.close(); }());
     super.dispose();
   }
 }
