@@ -160,43 +160,50 @@ class DiaryMotion extends StatefulWidget {
   State<DiaryMotion> createState() => _DiaryMotionState();
 }
 
-class _DiaryMotionState extends State<DiaryMotion>
-    with SingleTickerProviderStateMixin {
+class _DiaryMotionState extends State<DiaryMotion> with TickerProviderStateMixin {
   double drag = 0;
   int direction = 1;
-  late final bounce = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 260),
-  );
+  Widget? previous;
+  DateTime? previousDay;
+  late final bounce = AnimationController(vsync: this, duration: const Duration(milliseconds: 260));
+  late final slide = AnimationController(vsync: this, value: 1, duration: const Duration(milliseconds: 360));
+  @override
+  void initState() {
+    super.initState();
+    slide.addStatusListener((status) {
+      if (status == AnimationStatus.completed && mounted && previous != null) {
+        setState(() => previous = null);
+      }
+    });
+  }
   @override
   void didUpdateWidget(covariant DiaryMotion oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!DateUtils.isSameDay(oldWidget.day, widget.day)) {
       direction = widget.day.isAfter(oldWidget.day) ? 1 : -1;
+      if (MediaQuery.disableAnimationsOf(context)) {
+        previous = null;
+        slide.value = 1;
+      } else {
+        previous = oldWidget.child;
+        previousDay = oldWidget.day;
+        slide.forward(from: 0);
+      }
     }
   }
-
   @override
-  void dispose() {
-    bounce.dispose();
-    super.dispose();
-  }
-
+  void dispose() { bounce.dispose(); slide.dispose(); super.dispose(); }
   @override
   Widget build(BuildContext context) => GestureDetector(
-    key: const ValueKey('diary-day-swipe'),
-    behavior: HitTestBehavior.opaque,
+    key: const ValueKey('diary-day-swipe'), behavior: HitTestBehavior.opaque,
     onHorizontalDragStart: (_) => drag = 0,
     onHorizontalDragUpdate: (details) => drag += details.delta.dx,
     onHorizontalDragEnd: (details) {
+      if (slide.isAnimating) return;
       final velocity = details.primaryVelocity ?? 0;
       if (drag.abs() < 64 && velocity.abs() < 300) return;
       final delta = (drag.abs() >= 64 ? drag : velocity) > 0 ? -1 : 1;
-      final next = DateTime(
-        widget.day.year,
-        widget.day.month,
-        widget.day.day + delta,
-      );
+      final next = DateTime(widget.day.year, widget.day.month, widget.day.day + delta);
       final now = DateTime.now();
       if (next.isAfter(DateTime(now.year, now.month, now.day))) {
         if (!MediaQuery.disableAnimationsOf(context)) bounce.forward(from: 0);
@@ -204,44 +211,25 @@ class _DiaryMotionState extends State<DiaryMotion>
       }
       widget.selectDay(next);
     },
-    child: AnimatedBuilder(
-      animation: bounce,
-      builder: (context, child) => Transform.translate(
-        offset: Offset(-math.sin(bounce.value * math.pi) * 12, 0),
-        child: child,
-      ),
-      child: AnimatedSwitcher(
-        duration: motionDuration(context),
-        transitionBuilder: (child, animation) => FadeTransition(
-          opacity: animation,
-          child: SlideTransition(
-            position:
-                Tween<Offset>(
-                  begin: Offset(direction * 0.12, 0),
-                  end: Offset.zero,
-                ).animate(
-                  CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOutCubic,
-                  ),
-                ),
-            child: child,
-          ),
-        ),
-        layoutBuilder: (current, previous) => Stack(
-          children: [
-            ...previous.map(
-              (child) => IgnorePointer(child: ExcludeSemantics(child: child)),
-            ),
-            if (current != null) current,
-          ],
-        ),
-        child: KeyedSubtree(
-          key: ValueKey(dayKey(widget.day)),
-          child: widget.child,
-        ),
-      ),
-    ),
+    child: LayoutBuilder(builder: (context, constraints) => AnimatedBuilder(
+      animation: Listenable.merge([slide, bounce]),
+      builder: (context, _) {
+        final reduced = MediaQuery.disableAnimationsOf(context);
+        final progress = reduced ? 1.0 : Curves.easeInOutCubic.transform(slide.value);
+        final width = constraints.maxWidth;
+        return ClipRect(child: Transform.translate(
+          offset: Offset(reduced ? 0 : -math.sin(bounce.value * math.pi) * 12, 0),
+          child: Stack(fit: StackFit.expand, children: [
+            if (previous != null && progress < 1)
+              Transform.translate(offset: Offset(-direction * progress * width, 0),
+                child: IgnorePointer(child: ExcludeSemantics(child: KeyedSubtree(
+                  key: ValueKey(dayKey(previousDay!)), child: previous!)))),
+            Transform.translate(offset: Offset(direction * (1 - progress) * width, 0),
+              child: KeyedSubtree(key: ValueKey(dayKey(widget.day)), child: widget.child)),
+          ]),
+        ));
+      },
+    )),
   );
 }
 

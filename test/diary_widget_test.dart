@@ -39,7 +39,7 @@ void main() {
           ),
         );
         final foreground = add.style!.foregroundColor!.resolve({})!;
-        final background = add.style!.backgroundColor!.resolve({})!;
+        final background = Colors.white;
         final a = foreground.computeLuminance();
         final b = background.computeLuminance();
         final ratio = a > b ? (a + 0.05) / (b + 0.05) : (b + 0.05) / (a + 0.05);

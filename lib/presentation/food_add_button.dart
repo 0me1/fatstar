@@ -43,7 +43,7 @@ class _FoodAddButtonState extends State<FoodAddButton> {
       });
       reset?.cancel();
       if (added) {
-        reset = Timer(const Duration(milliseconds: 650), () {
+        reset = Timer(const Duration(milliseconds: 1150), () {
           if (mounted) setState(() => confirmed = false);
         });
       }
@@ -66,11 +66,21 @@ class _FoodAddButtonState extends State<FoodAddButton> {
       child: AnimatedScale(
         scale: pressed ? 0.92 : 1,
         duration: motionDuration(context, 110),
-        child: IconButton.filled(
+        child: TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: confirmed ? 1 : 0),
+          duration: motionDuration(context, confirmed ? 300 : 420),
+          curve: Curves.easeInOutCubic,
+          builder: (context, fill, _) => SizedBox(width: 52, height: 52,
+            child: ClipOval(child: Stack(fit: StackFit.expand, children: [
+              const ColoredBox(color: Colors.white),
+              Align(alignment: Alignment.bottomCenter,
+                child: FractionallySizedBox(widthFactor: 1, heightFactor: fill,
+                  child: ColoredBox(color: colors.primary))),
+              IconButton.filled(
           tooltip: widget.tooltip,
           onPressed: enabled ? handleTap : null,
           style: IconButton.styleFrom(
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.transparent,
             foregroundColor: const Color(0xFF252827),
             disabledBackgroundColor: colors.onSurface.withValues(alpha: 0.12),
             disabledForegroundColor: colors.onSurface.withValues(alpha: 0.38),
@@ -80,13 +90,18 @@ class _FoodAddButtonState extends State<FoodAddButton> {
                 : BorderSide.none,
             shape: const CircleBorder(),
           ),
-          icon: MotionSwap(
-            scale: true,
+          icon: AnimatedSwitcher(
+            duration: motionDuration(context, 300),
+            transitionBuilder: (child, animation) => ScaleTransition(scale: animation,
+              child: FadeTransition(opacity: animation, child: child)),
             child: Icon(
               confirmed ? Icons.check_rounded : Icons.add_rounded,
               key: ValueKey(confirmed),
               size: 34,
             ),
+          ),
+              ),
+            ])),
           ),
         ),
       ),
