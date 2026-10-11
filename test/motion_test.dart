@@ -57,7 +57,9 @@ void main() {
     expect(find.byIcon(Icons.check_rounded), findsOneWidget);
     await tester.pump(const Duration(milliseconds: 700));
     expect(find.byIcon(Icons.check_rounded), findsOneWidget);
-    final fill = tester.widget<FractionallySizedBox>(find.byType(FractionallySizedBox));
+    final fill = tester.widget<FractionallySizedBox>(
+      find.byType(FractionallySizedBox),
+    );
     expect(fill.heightFactor, 1);
     await tester.pump(const Duration(milliseconds: 500));
     await tester.pumpAndSettle();
@@ -76,20 +78,44 @@ void main() {
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });
-  testWidgets('day pages slide side by side without fading or overlapping', (tester) async {
-    Widget page(String label) => SizedBox.expand(child: Center(child: Text(label)));
-    await tester.pumpWidget(host(DiaryMotion(day: DateTime(2026, 10, 9), selectDay: (_) {}, child: page('Old day'))));
-    await tester.pumpWidget(host(DiaryMotion(day: DateTime(2026, 10, 10), selectDay: (_) {}, child: page('New day'))));
+  testWidgets('day pages slide side by side without fading or overlapping', (
+    tester,
+  ) async {
+    Widget page(String label) =>
+        SizedBox.expand(child: Center(child: Text(label)));
+    await tester.pumpWidget(
+      host(
+        DiaryMotion(
+          day: DateTime(2026, 10, 9),
+          selectDay: (_) {},
+          child: page('Old day'),
+        ),
+      ),
+    );
+    await tester.pumpWidget(
+      host(
+        DiaryMotion(
+          day: DateTime(2026, 10, 10),
+          selectDay: (_) {},
+          child: page('New day'),
+        ),
+      ),
+    );
     await tester.pump(const Duration(milliseconds: 180));
     final oldCenter = tester.getCenter(find.text('Old day'));
     final newCenter = tester.getCenter(find.text('New day'));
     expect(newCenter.dx - oldCenter.dx, closeTo(800, 1));
     expect(oldCenter.dx, closeTo(0, 1));
     expect(newCenter.dx, closeTo(800, 1));
-    expect(find.descendant(of: find.byType(DiaryMotion), matching: find.byType(FadeTransition)), findsNothing);
+    expect(
+      find.descendant(
+        of: find.byType(DiaryMotion),
+        matching: find.byType(FadeTransition),
+      ),
+      findsNothing,
+    );
     await tester.pumpAndSettle();
     expect(find.text('Old day'), findsNothing);
     expect(tester.getCenter(find.text('New day')).dx, closeTo(400, 1));
   });
-
 }
