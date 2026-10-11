@@ -45,7 +45,7 @@ class SettingsScreen extends ConsumerWidget {
                       try {
                         await c.saveSettings({'theme': v});
                       } catch (e) {
-                        if (context.mounted) message(context, e);
+                        if (context.mounted) { message(context, e); }
                       }
                     },
                   ),
@@ -65,8 +65,8 @@ class SettingsScreen extends ConsumerWidget {
                           onTap: () async {
                             try {
                               await c.saveSettings({'font': font.key});
-                              if (sheetContext.mounted) Navigator.pop(sheetContext);
-                            } catch (e) { if (sheetContext.mounted) message(sheetContext, e); }
+                              if (sheetContext.mounted) { Navigator.pop(sheetContext); }
+                            } catch (e) { if (sheetContext.mounted) { message(sheetContext, e); } }
                           }),
                     ]))),
               ],
@@ -176,7 +176,7 @@ class SettingsScreen extends ConsumerWidget {
                 try {
                   await c.signOut();
                 } catch (e) {
-                  if (context.mounted) message(context, e);
+                  if (context.mounted) { message(context, e); }
                 }
               }
             },
@@ -223,7 +223,7 @@ class SettingsScreen extends ConsumerWidget {
       await c.reload();
       await c.sync?.run();
     } catch (e) {
-      if (context.mounted) message(context, e);
+      if (context.mounted) { message(context, e); }
     }
   }
 
@@ -246,7 +246,7 @@ class SettingsScreen extends ConsumerWidget {
         if (await file.exists()) await file.delete();
       }
     } catch (e) {
-      if (context.mounted) message(context, 'Не удалось экспортировать: $e');
+      if (context.mounted) { message(context, 'Не удалось экспортировать: $e'); }
     }
   }
 
@@ -288,10 +288,10 @@ class SettingsScreen extends ConsumerWidget {
         await BackupService(c.db!).merge(preview);
         await c.reload();
         await c.sync?.run();
-        if (context.mounted) message(context, 'Импорт завершен');
+        if (context.mounted) { message(context, 'Импорт завершен'); }
       }
     } catch (e) {
-      if (context.mounted) message(context, 'Импорт отменен: $e');
+      if (context.mounted) { message(context, 'Импорт отменен: $e'); }
     }
   }
 }
