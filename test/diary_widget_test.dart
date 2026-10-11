@@ -48,7 +48,14 @@ void main() {
         await tester.pumpAndSettle();
         expect(DateUtils.isSameDay(c.day, DateTime.now()), isTrue);
         expect(
-          tester.widget<IconButton>(find.ancestor(of: find.byTooltip('Следующий день'), matching: find.byType(IconButton))).onPressed,
+          tester
+              .widget<IconButton>(
+                find.ancestor(
+                  of: find.byTooltip('Следующий день'),
+                  matching: find.byType(IconButton),
+                ),
+              )
+              .onPressed,
           isNull,
         );
         await tester.fling(
