@@ -118,4 +118,13 @@ void main() {
     expect(find.text('Old day'), findsNothing);
     expect(tester.getCenter(find.text('New day')).dx, closeTo(400, 1));
   });
+  testWidgets('incoming page retains its state when outgoing page is removed', (tester) async {
+    await tester.pumpWidget(host(DiaryMotion(day: DateTime(2026, 10, 9), selectDay: (_) {}, child: const SizedBox.expand())));
+    await tester.pumpWidget(host(DiaryMotion(day: DateTime(2026, 10, 10), selectDay: (_) {}, child: const Center(child: TextField(key: ValueKey('new-input'))))));
+    await tester.pump(const Duration(milliseconds: 180));
+    final incomingState = tester.state(find.byKey(const ValueKey('new-input')));
+    await tester.pumpAndSettle();
+    expect(identical(incomingState, tester.state(find.byKey(const ValueKey('new-input')))), isTrue);
+  });
+
 }

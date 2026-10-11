@@ -251,6 +251,7 @@ class _DiaryMotionState extends State<DiaryMotion>
                 children: [
                   if (previous != null && progress < 1)
                     Transform.translate(
+                      key: ValueKey('page/${dayKey(previousDay!)}'),
                       offset: Offset(-direction * progress * width, 0),
                       child: IgnorePointer(
                         child: ExcludeSemantics(
@@ -262,6 +263,7 @@ class _DiaryMotionState extends State<DiaryMotion>
                       ),
                     ),
                   Transform.translate(
+                    key: ValueKey('page/${dayKey(widget.day)}'),
                     offset: Offset(direction * (1 - progress) * width, 0),
                     child: KeyedSubtree(
                       key: ValueKey(dayKey(widget.day)),
