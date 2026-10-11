@@ -1,0 +1,33 @@
+project_id = "calorie-diary"
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 17
+[db.migrations]
+enabled = true
+[db.seed]
+enabled = false
+[studio]
+enabled = false
+[inbucket]
+enabled = true
+port = 54324
+[storage]
+enabled = false
+[auth]
+enabled = true
+site_url = "com.fatstar.calorie_diary://auth/recovery"
+additional_redirect_urls = ["com.fatstar.calorie_diary://auth/recovery"]
+jwt_expiry = 3600
+enable_signup = false
+[auth.email]
+enable_signup = false
+enable_confirmations = true
+[analytics]
+enabled = false
