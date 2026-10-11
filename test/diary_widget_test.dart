@@ -134,16 +134,38 @@ void main() {
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });
-  testWidgets('left swipe deletes only the food row and undo restores it', (tester) async {
-    final c = DiaryController()..db = DiaryDatabase.memory()..userId = '00000000-0000-4000-8000-000000000001'..loading = false;
-    await c.save('entry', {'name': 'Swipe food', 'day': dayKey(c.day), 'meal': 'breakfast', 'amount': 1, 'unit': 'quick',
-      'nutrition': {'kcal': 100, 'protein': null, 'fat': null, 'carbs': null}});
+  testWidgets('left swipe deletes only the food row and undo restores it', (
+    tester,
+  ) async {
+    final c = DiaryController()
+      ..db = DiaryDatabase.memory()
+      ..userId = '00000000-0000-4000-8000-000000000001'
+      ..loading = false;
+    await c.save('entry', {
+      'name': 'Swipe food',
+      'day': dayKey(c.day),
+      'meal': 'breakfast',
+      'amount': 1,
+      'unit': 'quick',
+      'nutrition': {'kcal': 100, 'protein': null, 'fat': null, 'carbs': null},
+    });
     final day = dayKey(c.day);
-    await tester.pumpWidget(ProviderScope(overrides: [diaryProvider.overrideWith((ref) => c)],
-      child: MaterialApp(theme: diaryTheme(Brightness.dark), home: const DiaryScreen())));
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [diaryProvider.overrideWith((ref) => c)],
+        child: MaterialApp(
+          theme: diaryTheme(Brightness.dark),
+          home: const DiaryScreen(),
+        ),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.ensureVisible(find.byType(Dismissible).first);
-    await tester.fling(find.byType(Dismissible).first, const Offset(-650, 0), 1000);
+    await tester.fling(
+      find.byType(Dismissible).first,
+      const Offset(-650, 0),
+      1000,
+    );
     await tester.pumpAndSettle();
     expect(c.entries, isEmpty);
     expect(dayKey(c.day), day);
@@ -155,5 +177,4 @@ void main() {
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });
-
 }
