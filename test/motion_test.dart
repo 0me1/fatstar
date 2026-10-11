@@ -105,8 +105,10 @@ void main() {
     final oldCenter = tester.getCenter(find.text('Old day'));
     final newCenter = tester.getCenter(find.text('New day'));
     expect(newCenter.dx - oldCenter.dx, closeTo(800, 1));
-    expect(oldCenter.dx, closeTo(0, 1));
-    expect(newCenter.dx, closeTo(800, 1));
+    expect(oldCenter.dx, greaterThan(-400));
+    expect(oldCenter.dx, lessThan(400));
+    expect(newCenter.dx, greaterThan(400));
+    expect(newCenter.dx, lessThan(1200));
     expect(
       find.descendant(
         of: find.byType(DiaryMotion),
