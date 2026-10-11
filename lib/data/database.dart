@@ -4,9 +4,10 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:uuid/uuid.dart';
 import '../domain/records.dart';
+import '../domain/repository.dart';
 
 /// Drift custom SQL: the versioned document schema requires no generated code.
-class DiaryDatabase extends GeneratedDatabase {
+class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
   DiaryDatabase(File file) : super(NativeDatabase.createInBackground(file));
   DiaryDatabase.memory() : super(NativeDatabase.memory());
   @override

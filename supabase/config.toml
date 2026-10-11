@@ -27,7 +27,9 @@ additional_redirect_urls = ["com.fatstar.calorie_diary://auth/recovery"]
 jwt_expiry = 3600
 enable_signup = false
 [auth.email]
-enable_signup = false
+# CLI 2.53.6 maps this to GOTRUE_EXTERNAL_EMAIL_ENABLED.
+# Global auth.enable_signup=false still prevents public signup.
+enable_signup = true
 enable_confirmations = true
 [analytics]
 enabled = false
