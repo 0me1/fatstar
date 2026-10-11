@@ -11,6 +11,7 @@ import 'forms.dart';
 import 'goals.dart';
 import 'settings.dart';
 import 'auth_errors.dart';
+import 'food_add_button.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -230,6 +231,7 @@ class DiaryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = ref.watch(diaryProvider);
+    var horizontalDrag = 0.0;
     final total = NutritionTotal(c.entries.map(entryNutrition));
     final goal = c.goal == null
         ? null
@@ -247,7 +249,7 @@ class DiaryScreen extends ConsumerWidget {
           IconButton(
             tooltip: 'Предыдущий день',
             onPressed: () =>
-                c.selectDay(c.day.subtract(const Duration(days: 1))),
+                c.selectDay(DateTime(c.day.year, c.day.month, c.day.day - 1)),
             icon: const Icon(Icons.chevron_left),
           ),
           IconButton(
@@ -257,7 +259,7 @@ class DiaryScreen extends ConsumerWidget {
                 context: context,
                 initialDate: c.day,
                 firstDate: DateTime(2000),
-                lastDate: DateTime(2100),
+                lastDate: DateTime.now(),
               );
               if (day != null) c.selectDay(day);
             },
@@ -265,12 +267,26 @@ class DiaryScreen extends ConsumerWidget {
           ),
           IconButton(
             tooltip: 'Следующий день',
-            onPressed: () => c.selectDay(c.day.add(const Duration(days: 1))),
+            onPressed: dayKey(c.day) == dayKey(DateTime.now())
+                ? null
+                : () => c.selectDay(DateTime(c.day.year, c.day.month, c.day.day + 1)),
             icon: const Icon(Icons.chevron_right),
           ),
         ],
       ),
-      body: ListView(
+      body: GestureDetector(
+        key: const ValueKey('diary-day-swipe'),
+        behavior: HitTestBehavior.opaque,
+        onHorizontalDragStart: (_) => horizontalDrag = 0,
+        onHorizontalDragUpdate: (details) => horizontalDrag += details.delta.dx,
+        onHorizontalDragEnd: (details) {
+          final velocity = details.primaryVelocity ?? 0;
+          if (horizontalDrag.abs() < 64 && velocity.abs() < 300) return;
+          final direction = horizontalDrag.abs() >= 64 ? horizontalDrag : velocity;
+          c.selectDay(DateTime(c.day.year, c.day.month,
+              c.day.day + (direction > 0 ? -1 : 1)));
+        },
+        child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           if (c.sync?.error != null)
@@ -400,10 +416,9 @@ class DiaryScreen extends ConsumerWidget {
                     subtitle: Text(
                       '${number(NutritionTotal(c.entries.where((e) => e.data['meal'] == meal.name).map(entryNutrition)).kcal, 0)} ккал',
                     ),
-                    trailing: IconButton.filled(
+                    trailing: FoodAddButton(
                       tooltip: 'Добавить в ${meal.label.toLowerCase()}',
                       onPressed: () => add(context, meal),
-                      icon: const Icon(Icons.add),
                     ),
                     onTap: () => add(context, meal),
                     onLongPress: () => copyMeal(context, c, meal),
@@ -489,6 +504,7 @@ class DiaryScreen extends ConsumerWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }

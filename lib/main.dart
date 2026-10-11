@@ -116,6 +116,7 @@ ThemeData diaryTheme(Brightness brightness) {
         brightness: brightness,
       ).copyWith(
         primary: dark ? const Color(0xFF56DCC6) : const Color(0xFF006B5D),
+        onPrimary: dark ? const Color(0xFF082B25) : Colors.white,
         surface: dark ? const Color(0xFF242928) : Colors.white,
         onSurface: dark ? const Color(0xFFF3F7F7) : const Color(0xFF172225),
       );

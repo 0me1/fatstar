@@ -108,7 +108,11 @@ class DiaryController extends ChangeNotifier {
       ? 'dark'
       : of('settings').first.data['theme'] as String;
   void selectDay(DateTime value) {
-    day = value;
+    final selected = DateTime(value.year, value.month, value.day);
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    if (selected.isAfter(today) || selected.isBefore(DateTime(2000))) return;
+    day = selected;
     notifyListeners();
   }
 

@@ -6,6 +6,7 @@ import '../domain/nutrition.dart';
 import '../domain/records.dart';
 import 'controller.dart';
 import 'forms.dart';
+import 'food_add_button.dart';
 
 class CatalogScreen extends ConsumerStatefulWidget {
   const CatalogScreen({super.key, this.meal});
@@ -255,10 +256,8 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                               ? productDetails(context, c, p)
                               : choose(p),
                           trailing: widget.meal != null
-                              ? IconButton(
+                              ? FoodAddButton(
                                   tooltip: 'Добавить последнюю порцию',
-                                  icon: const Icon(Icons.add_circle_outline),
-                                  color: Theme.of(context).colorScheme.primary,
                                   onPressed: p.data['active'] == false
                                       ? null
                                       : () => choose(p, quick: true),
