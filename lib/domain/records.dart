@@ -63,7 +63,8 @@ void validateRecord(Record record) {
   switch (record.kind) {
     case 'product':
       _name(d['name']);
-      if (d['brand'] != null && (d['brand'] is! String || (d['brand'] as String).length > 200)) {
+      if (d['brand'] != null &&
+          (d['brand'] is! String || (d['brand'] as String).length > 200)) {
         throw ArgumentError('Бренд должен быть текстом до 200 символов');
       }
       if (!['gram', 'milliliter'].contains(d['unit'])) {
@@ -97,7 +98,9 @@ void validateRecord(Record record) {
       Nutrition.fromJson(
         Map<String, dynamic>.from(d['nutrition'] as Map),
       ).validate();
-      if (decimal(d['amount']) <= 0 || decimal(d['amount']) > 100000 || !decimal(d['amount']).isFinite ||
+      if (decimal(d['amount']) <= 0 ||
+          decimal(d['amount']) > 100000 ||
+          !decimal(d['amount']).isFinite ||
           !['gram', 'milliliter', 'quick'].contains(d['unit'])) {
         throw ArgumentError('Неверное количество');
       }
@@ -132,7 +135,9 @@ void validateRecord(Record record) {
         throw ArgumentError('Неверный продукт');
       }
       if (record.kind == 'portion' &&
-          (decimal(d['amount']) <= 0 || decimal(d['amount']) > 100000 || !decimal(d['amount']).isFinite)) {
+          (decimal(d['amount']) <= 0 ||
+              decimal(d['amount']) > 100000 ||
+              !decimal(d['amount']).isFinite)) {
         throw ArgumentError('Неверная порция');
       }
     case 'settings':
@@ -186,15 +191,26 @@ Json entryForProduct(
   };
 }
 
-
 Record? goalForDay(Iterable<Record> records, DateTime day) {
-  final goals = records.where((r) => r.kind == 'goal' && !r.deleted &&
-    (r.data['effective_from'] as String).compareTo(dayKey(day)) <= 0).toList();
+  final goals = records
+      .where(
+        (r) =>
+            r.kind == 'goal' &&
+            !r.deleted &&
+            (r.data['effective_from'] as String).compareTo(dayKey(day)) <= 0,
+      )
+      .toList();
   goals.sort((a, b) {
-    final date = (b.data['effective_from'] as String).compareTo(a.data['effective_from'] as String);
+    final date = (b.data['effective_from'] as String).compareTo(
+      a.data['effective_from'] as String,
+    );
     if (date != 0) return date;
-    final at = DateTime.tryParse(a.data['recorded_at'] as String? ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
-    final bt = DateTime.tryParse(b.data['recorded_at'] as String? ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0);
+    final at =
+        DateTime.tryParse(a.data['recorded_at'] as String? ?? '') ??
+        DateTime.fromMillisecondsSinceEpoch(0);
+    final bt =
+        DateTime.tryParse(b.data['recorded_at'] as String? ?? '') ??
+        DateTime.fromMillisecondsSinceEpoch(0);
     final timestamp = bt.compareTo(at);
     return timestamp != 0 ? timestamp : b.id.compareTo(a.id);
   });

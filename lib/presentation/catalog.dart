@@ -107,200 +107,220 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
       canPop: widget.meal == null || selected.isEmpty || saving,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
-        final discard = await showDialog<bool>(context: context, builder: (ctx) => AlertDialog(
-          title: const Text('Убрать выбранные продукты?'),
-          content: const Text('Нажмите «Готово», чтобы сохранить их в дневнике.'),
-          actions: [TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Остаться')),
-            FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Убрать и выйти'))]));
+        final discard = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Убрать выбранные продукты?'),
+            content: const Text(
+              'Нажмите «Готово», чтобы сохранить их в дневнике.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Остаться'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Убрать и выйти'),
+              ),
+            ],
+          ),
+        );
         if (discard == true && mounted) {
           setState(selected.clear);
-          WidgetsBinding.instance.addPostFrameCallback((_) { if (mounted) Navigator.pop(context); });
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) Navigator.pop(context);
+          });
         }
       },
       child: Scaffold(
-      appBar: AppBar(
-        title: Text(widget.meal?.label ?? 'Продукты'),
-        actions: [
-          IconButton(
-            tooltip: hidden ? 'Скрыть неактивные' : 'Показать неактивные',
-            onPressed: () => setState(() => hidden = !hidden),
-            icon: Icon(
-              hidden ? Icons.visibility : Icons.visibility_off_outlined,
+        appBar: AppBar(
+          title: Text(widget.meal?.label ?? 'Продукты'),
+          actions: [
+            IconButton(
+              tooltip: hidden ? 'Скрыть неактивные' : 'Показать неактивные',
+              onPressed: () => setState(() => hidden = !hidden),
+              icon: Icon(
+                hidden ? Icons.visibility : Icons.visibility_off_outlined,
+              ),
             ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                TextField(
-                  controller: search,
-                  onChanged: (v) {
-                    debounce?.cancel();
-                    debounce = Timer(const Duration(milliseconds: 250), () {
-                      if (mounted) setState(() => query = normalizeSearch(v));
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText:
-                        'Что вы ели${widget.meal == null ? '' : ' на ${widget.meal!.label.toLowerCase()}'}?',
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      tooltip: 'Очистить',
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        search.clear();
-                        setState(() => query = '');
-                      },
+          ],
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: search,
+                    onChanged: (v) {
+                      debounce?.cancel();
+                      debounce = Timer(const Duration(milliseconds: 250), () {
+                        if (mounted) setState(() => query = normalizeSearch(v));
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText:
+                          'Что вы ели${widget.meal == null ? '' : ' на ${widget.meal!.label.toLowerCase()}'}?',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        tooltip: 'Очистить',
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          search.clear();
+                          setState(() => query = '');
+                        },
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      for (final pair in [
-                        ('all', 'Все'),
-                        ('frequent', 'Частые'),
-                        ('recent', 'Недавние'),
-                        ('favorite', 'Избранное'),
-                      ])
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: ChoiceChip(
-                            label: Text(pair.$2),
-                            selected: filter == pair.$1,
-                            onSelected: (_) => setState(() => filter = pair.$1),
+                  const SizedBox(height: 12),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        for (final pair in [
+                          ('all', 'Все'),
+                          ('frequent', 'Частые'),
+                          ('recent', 'Недавние'),
+                          ('favorite', 'Избранное'),
+                        ])
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: ChoiceChip(
+                              label: Text(pair.$2),
+                              selected: filter == pair.$1,
+                              onSelected: (_) =>
+                                  setState(() => filter = pair.$1),
+                            ),
                           ),
+                      ],
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 8,
+                    children: [
+                      TextButton.icon(
+                        onPressed: () => editProduct(context, c),
+                        icon: const Icon(Icons.add),
+                        label: const Text('Создать продукт'),
+                      ),
+                      if (widget.meal != null)
+                        TextButton.icon(
+                          onPressed: () async {
+                            final d = await quickFood(context);
+                            if (d != null && mounted) {
+                              setState(() => selected.add(d));
+                            }
+                          },
+                          icon: const Icon(Icons.bolt),
+                          label: const Text('Быстрые КБЖУ'),
                         ),
                     ],
                   ),
-                ),
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    TextButton.icon(
-                      onPressed: () => editProduct(context, c),
-                      icon: const Icon(Icons.add),
-                      label: const Text('Создать продукт'),
-                    ),
-                    if (widget.meal != null)
-                      TextButton.icon(
-                        onPressed: () async {
-                          final d = await quickFood(context);
-                          if (d != null && mounted) {
-                            setState(() => selected.add(d));
-                          }
-                        },
-                        icon: const Icon(Icons.bolt),
-                        label: const Text('Быстрые КБЖУ'),
-                      ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: products.isEmpty
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24),
-                      child: Text(
-                        query.isNotEmpty
-                            ? 'Ничего не найдено. Можно создать продукт.'
-                            : 'Пока нет продуктов. Создайте первый или дождитесь синхронизации каталога.',
-                      ),
-                    ),
-                  )
-                : ListView.separated(
-                    itemCount: products.length,
-                    separatorBuilder: (_, _) =>
-                        const Divider(indent: 16, endIndent: 16, height: 1),
-                    itemBuilder: (context, i) {
-                      final p = products[i];
-                      final n = Nutrition.fromJson(
-                        Map<String, dynamic>.from(p.data['nutrition'] as Map),
-                      );
-                      final last = c.lastPortion(p.id);
-                      final amount = last == null
-                          ? 100.0
-                          : decimal(last.data['amount']);
-                      return ListTile(
-                        title: Text(p.data['name'] as String, maxLines: 2),
-                        subtitle: Text(
-                          '${p.data['brand'] ?? ''}${p.localOnly ? ' · локальный' : ''}\n${number(amount)} ${p.data['unit'] == 'gram' ? 'г' : 'мл'} · ${number(n.kcal * amount / 100, 0)} ккал${p.data['active'] == false ? ' · скрыт' : ''}',
-                        ),
-                        onTap: () => widget.meal == null
-                            ? productDetails(context, c, p)
-                            : choose(p),
-                        trailing: widget.meal != null
-                            ? IconButton(
-                                tooltip: 'Добавить последнюю порцию',
-                                icon: const Icon(Icons.add_circle_outline),
-                                color: Theme.of(context).colorScheme.primary,
-                                onPressed: p.data['active'] == false
-                                    ? null
-                                    : () => choose(p, quick: true),
-                              )
-                            : IconButton(
-                                tooltip: 'Избранное',
-                                onPressed: () => c.favorite(p),
-                                icon: Icon(
-                                  favorites.contains(p.id)
-                                      ? Icons.star
-                                      : Icons.star_border,
-                                ),
-                              ),
-                      );
-                    },
-                  ),
-          ),
-          if (widget.meal != null)
-            SafeArea(
-              top: false,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    TextButton(
-                      onPressed: selected.isEmpty ? null : () => showSelected(),
-                      child: Text('${selected.length} выбрано'),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: FilledButton(
-                        onPressed: selected.isEmpty || saving
-                            ? null
-                            : () async {
-                                setState(() => saving = true);
-                                try {
-                                  await c.addEntries(selected, widget.meal!);
-                                  if (context.mounted) Navigator.pop(context);
-                                } catch (e) {
-                                  if (context.mounted) {
-                                    message(context, e);
-                                    setState(() => saving = false);
-                                  }
-                                }
-                              },
-                        child: Text(
-                          saving
-                              ? 'Сохранение…'
-                              : 'Готово · ${number(NutritionTotal(selected.map((d) => Nutrition.fromJson(Map<String, dynamic>.from(d['nutrition'] as Map)))).kcal, 0)} ккал',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                ],
               ),
             ),
-        ],
+            Expanded(
+              child: products.isEmpty
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Text(
+                          query.isNotEmpty
+                              ? 'Ничего не найдено. Можно создать продукт.'
+                              : 'Пока нет продуктов. Создайте первый или дождитесь синхронизации каталога.',
+                        ),
+                      ),
+                    )
+                  : ListView.separated(
+                      itemCount: products.length,
+                      separatorBuilder: (_, _) =>
+                          const Divider(indent: 16, endIndent: 16, height: 1),
+                      itemBuilder: (context, i) {
+                        final p = products[i];
+                        final n = Nutrition.fromJson(
+                          Map<String, dynamic>.from(p.data['nutrition'] as Map),
+                        );
+                        final last = c.lastPortion(p.id);
+                        final amount = last == null
+                            ? 100.0
+                            : decimal(last.data['amount']);
+                        return ListTile(
+                          title: Text(p.data['name'] as String, maxLines: 2),
+                          subtitle: Text(
+                            '${p.data['brand'] ?? ''}${p.localOnly ? ' · локальный' : ''}\n${number(amount)} ${p.data['unit'] == 'gram' ? 'г' : 'мл'} · ${number(n.kcal * amount / 100, 0)} ккал${p.data['active'] == false ? ' · скрыт' : ''}',
+                          ),
+                          onTap: () => widget.meal == null
+                              ? productDetails(context, c, p)
+                              : choose(p),
+                          trailing: widget.meal != null
+                              ? IconButton(
+                                  tooltip: 'Добавить последнюю порцию',
+                                  icon: const Icon(Icons.add_circle_outline),
+                                  color: Theme.of(context).colorScheme.primary,
+                                  onPressed: p.data['active'] == false
+                                      ? null
+                                      : () => choose(p, quick: true),
+                                )
+                              : IconButton(
+                                  tooltip: 'Избранное',
+                                  onPressed: () => c.favorite(p),
+                                  icon: Icon(
+                                    favorites.contains(p.id)
+                                        ? Icons.star
+                                        : Icons.star_border,
+                                  ),
+                                ),
+                        );
+                      },
+                    ),
+            ),
+            if (widget.meal != null)
+              SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      TextButton(
+                        onPressed: selected.isEmpty
+                            ? null
+                            : () => showSelected(),
+                        child: Text('${selected.length} выбрано'),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: FilledButton(
+                          onPressed: selected.isEmpty || saving
+                              ? null
+                              : () async {
+                                  setState(() => saving = true);
+                                  try {
+                                    await c.addEntries(selected, widget.meal!);
+                                    if (context.mounted) Navigator.pop(context);
+                                  } catch (e) {
+                                    if (context.mounted) {
+                                      message(context, e);
+                                      setState(() => saving = false);
+                                    }
+                                  }
+                                },
+                          child: Text(
+                            saving
+                                ? 'Сохранение…'
+                                : 'Готово · ${number(NutritionTotal(selected.map((d) => Nutrition.fromJson(Map<String, dynamic>.from(d['nutrition'] as Map)))).kcal, 0)} ккал',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Future<void> showSelected() async {
@@ -522,7 +542,9 @@ Future<void> productDetails(
   DiaryController c,
   Record p,
 ) async {
-  final nutrition = Nutrition.fromJson(Map<String, dynamic>.from(p.data['nutrition'] as Map));
+  final nutrition = Nutrition.fromJson(
+    Map<String, dynamic>.from(p.data['nutrition'] as Map),
+  );
   await showModalBottomSheet<void>(
     context: context,
     useSafeArea: true,
@@ -530,7 +552,9 @@ Future<void> productDetails(
       shrinkWrap: true,
       padding: const EdgeInsets.all(20),
       children: [
-        Text('На 100 ${p.data['unit'] == 'gram' ? 'г' : 'мл'}: ${number(nutrition.kcal, 0)} ккал · Б ${number(nutrition.protein)} · Ж ${number(nutrition.fat)} · У ${number(nutrition.carbs)} г'),
+        Text(
+          'На 100 ${p.data['unit'] == 'gram' ? 'г' : 'мл'}: ${number(nutrition.kcal, 0)} ккал · Б ${number(nutrition.protein)} · Ж ${number(nutrition.fat)} · У ${number(nutrition.carbs)} г',
+        ),
         Text(
           p.data['name'] as String,
           style: Theme.of(context).textTheme.titleLarge,

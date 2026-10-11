@@ -161,7 +161,10 @@ class DiaryController extends ChangeNotifier {
   Record? lastPortion(String productId) =>
       of('portion').where((r) => r.data['product_id'] == productId).firstOrNull;
   String _newId(String kind, Json data) => switch (kind) {
-    'favorite' || 'portion' => const Uuid().v5(Uuid.NAMESPACE_URL, '$userId/$kind/${data['product_id']}'),
+    'favorite' || 'portion' => const Uuid().v5(
+      Uuid.NAMESPACE_URL,
+      '$userId/$kind/${data['product_id']}',
+    ),
     'settings' => const Uuid().v5(Uuid.NAMESPACE_URL, '$userId/settings'),
     _ => const Uuid().v4(),
   };
