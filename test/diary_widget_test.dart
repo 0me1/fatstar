@@ -10,6 +10,15 @@ import 'package:calorie_diary/presentation/controller.dart';
 import 'package:calorie_diary/presentation/screens.dart';
 import 'package:calorie_diary/presentation/food_add_button.dart';
 
+class SwipeController extends DiaryController {
+  bool removalStarted = false;
+  @override
+  Future<Record> remove(Record value) {
+    removalStarted = true;
+    return super.remove(value);
+  }
+}
+
 void main() {
   setUpAll(() => initializeDateFormatting('ru'));
   for (final brightness in Brightness.values) {
@@ -137,7 +146,7 @@ void main() {
   testWidgets('left swipe deletes only the food row and undo restores it', (
     tester,
   ) async {
-    final c = DiaryController()
+    final c = SwipeController()
       ..db = DiaryDatabase.memory()
       ..userId = '00000000-0000-4000-8000-000000000001'
       ..loading = false;
@@ -167,10 +176,23 @@ void main() {
       1000,
     );
     await tester.pumpAndSettle();
+    expect(c.removalStarted, isTrue);
+    await tester.runAsync(() async {
+      for (var i = 0; i < 50 && c.entries.isNotEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+    });
+    await tester.pumpAndSettle();
     expect(c.entries, isEmpty);
     expect(dayKey(c.day), day);
     expect(find.text('Отменить'), findsOneWidget);
     await tester.tap(find.text('Отменить'));
+    await tester.pumpAndSettle();
+    await tester.runAsync(() async {
+      for (var i = 0; i < 50 && c.entries.isEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+    });
     await tester.pumpAndSettle();
     expect(c.entries, hasLength(1));
     expect(c.entries.single.data['name'], 'Swipe food');

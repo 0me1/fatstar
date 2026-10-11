@@ -1,5 +1,5 @@
 const diaryFonts = <String, String>{
-  'Rubik': 'Rubik (текущий)',
+  'Rubik': 'Rubik',
   'Comfortaa': 'Comfortaa',
   'Manrope': 'Manrope',
   'Nunito': 'Nunito',
