@@ -167,7 +167,10 @@ class DiaryController extends ChangeNotifier {
   Record? lastPortion(String productId) =>
       of('portion').where((r) => r.data['product_id'] == productId).firstOrNull;
   String _newId(String kind, Json data) => switch (kind) {
-    'favorite' || 'portion' => const Uuid().v5(Namespace.url.value, '$userId/$kind/${data['product_id']}'),
+    'favorite' || 'portion' => const Uuid().v5(
+      Namespace.url.value,
+      '$userId/$kind/${data['product_id']}',
+    ),
     'settings' => const Uuid().v5(Namespace.url.value, '$userId/settings'),
     _ => const Uuid().v4(),
   };
@@ -175,7 +178,12 @@ class DiaryController extends ChangeNotifier {
     final current = db!;
     await current.transaction(() async {
       for (final data in values) {
-        final entry = {...data, 'day': dayKey(day), 'meal': meal.name, 'recorded_at': DateTime.now().toUtc().toIso8601String()};
+        final entry = {
+          ...data,
+          'day': dayKey(day),
+          'meal': meal.name,
+          'recorded_at': DateTime.now().toUtc().toIso8601String(),
+        };
         await current.save(
           Record(id: const Uuid().v4(), kind: 'entry', data: entry),
         );
