@@ -426,8 +426,9 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
       () {
         final weight = parseNumber(fields['weight']!.text),
             desired = parseNumber(fields['desired_weight']!.text);
-        if (weight < 20 || weight > 500 || desired < 20 || desired > 500)
+        if (weight < 20 || weight > 500 || desired < 20 || desired > 500) {
           throw ArgumentError('Проверьте вес');
+        }
         final weekly = mode == 'auto'
             ? parseNumber(fields['weekly_kg']!.text)
             : 0.0;
@@ -438,8 +439,9 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
       double? bodyFat;
       if (mode == 'auto') {
         final ageValue = parseNumber(fields['age']!.text);
-          if (ageValue != ageValue.roundToDouble())
+          if (ageValue != ageValue.roundToDouble()) {
             throw ArgumentError('Возраст в полных годах');
+          }
         age = ageValue.toInt();
         height = parseNumber(fields['height']!.text);
           bodyFat = formula == BmrFormula.katch
@@ -489,9 +491,25 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
           .where((r) => r.data['effective_from'] == data['effective_from'])
           .firstOrNull;
       if (sameDay != null) {
-        final accepted = await showDialog<bool>(context: context, builder: (ctx) => AlertDialog(title: const Text('Новая версия цели на эту дату?'),
-          content: const Text('Прежний расчет останется в истории. Для выбранной даты и последующих дней будет действовать новая версия.'),
-          actions: [TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Отмена')), FilledButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Сохранить новую версию'))]));
+        final accepted = await showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Новая версия цели на эту дату?'),
+            content: const Text(
+              'Прежний расчет останется в истории. Для выбранной даты и последующих дней будет действовать новая версия.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Отмена'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Сохранить новую версию'),
+              ),
+            ],
+          ),
+        );
         if (accepted != true) return;
       }
       await c.save('goal', data);

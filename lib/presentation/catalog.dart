@@ -90,8 +90,9 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
             : 0;
         if (aa != bb) return bb.compareTo(aa);
       }
-      if (filter == 'recent')
+      if (filter == 'recent') {
         return (recent[b.id] ?? '').compareTo(recent[a.id] ?? '');
+      }
       final f = (frequency[b.id] ?? 0).compareTo(frequency[a.id] ?? 0);
       return f != 0
           ? f
@@ -172,8 +173,9 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                       TextButton.icon(
                         onPressed: () async {
                           final d = await quickFood(context);
-                          if (d != null && mounted)
+                          if (d != null && mounted) {
                             setState(() => selected.add(d));
+                          }
                         },
                         icon: const Icon(Icons.bolt),
                         label: const Text('Быстрые КБЖУ'),
@@ -676,10 +678,11 @@ Future<void> productHistory(
       ),
     );
   } catch (_) {
-    if (context.mounted)
+    if (context.mounted) {
       message(
         context,
         'История недоступна. Проверьте синхронизацию и подключение.',
       );
   }
+}
 }

@@ -236,8 +236,9 @@ class SettingsScreen extends ConsumerWidget {
       );
       if (files == null) return;
       final file = files.files.single;
-      if (file.size > 20 * 1024 * 1024)
+      if (file.size > 20 * 1024 * 1024) {
         throw const FormatException('Файл больше 20 МБ');
+      }
       final bytes = file.bytes ?? await File(file.path!).readAsBytes();
       final preview = await BackupService(c.db!).preview(utf8.decode(bytes));
       if (!context.mounted) return;

@@ -36,8 +36,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
     final c = ref.read(diaryProvider);
     try {
       if (c.needsPassword) {
-        if (password.text.length < 8)
+        if (password.text.length < 8) {
           throw ArgumentError('Пароль не короче 8 символов');
+        }
         await c.client.auth.updateUser(UserAttributes(password: password.text));
         c.needsPassword = false;
         await c.reload();
@@ -46,11 +47,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
           email.text.trim(),
           redirectTo: 'com.fatstar.calorie_diary://auth/recovery',
         );
-        if (mounted)
+        if (mounted) {
           message(
             context,
             'Если адрес зарегистрирован, письмо восстановления отправлено',
           );
+        }
       } else {
         await c.client.auth.signInWithPassword(
           email: email.text.trim(),
@@ -58,11 +60,12 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
         );
       }
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         setState(
           () => error =
               'Не удалось выполнить вход. Проверьте данные, приглашение и подключение.',
         );
+      }
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -413,8 +416,9 @@ class DiaryScreen extends ConsumerWidget {
                               await c.remove(e);
                               if (context.mounted) undo(context, c, e);
                             }
-                            if (action == 'repeat')
+                            if (action == 'repeat') {
                               await c.addEntries([e.data], meal);
+                            }
                             if (action == 'copy' && context.mounted) {
                               final date = await showDatePicker(
                                 context: context,

@@ -51,8 +51,9 @@ class BackupService {
   });
 
   Future<BackupPreview> preview(String source) async {
-    if (utf8.encode(source).length > 20 * 1024 * 1024)
+    if (utf8.encode(source).length > 20 * 1024 * 1024) {
       throw const FormatException('Файл больше 20 МБ');
+    }
     final j = jsonDecode(source);
     if (j is! Map ||
         j['format'] != 'calorie-diary' ||
@@ -65,8 +66,9 @@ class BackupService {
     for (final raw in j['records'] as List) {
       final r = Record.fromJson(Map<String, dynamic>.from(raw as Map));
       validateRecord(r);
-      if (!seen.add('${r.kind}:${r.id}'))
+      if (!seen.add('${r.kind}:${r.id}')) {
         throw const FormatException('Повторяющийся UUID');
+      }
       values.add(r);
     }
     var fresh = 0, same = 0;

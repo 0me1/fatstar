@@ -108,13 +108,18 @@ class DiaryDatabase extends GeneratedDatabase {
     'SELECT * FROM outbox ORDER BY sequence',
   ).get()).map((r) => r.data).toList();
 
-  Future<void> acknowledge(Json operation, Record server) => transaction(() async {
-    await cacheHistory(server);
-    await customStatement('DELETE FROM outbox WHERE operation_id=?', [operation['operation_id']]);
-    final pending = await customSelect('SELECT 1 FROM outbox WHERE kind=? AND record_id=? LIMIT 1',
-      variables: [Variable(server.kind), Variable(server.id)]).getSingleOrNull();
-    if (pending == null) await _write(server);
-  });
+  Future<void> acknowledge(Json operation, Record server) =>
+      transaction(() async {
+        await cacheHistory(server);
+        await customStatement('DELETE FROM outbox WHERE operation_id=?', [
+          operation['operation_id'],
+        ]);
+        final pending = await customSelect(
+          'SELECT 1 FROM outbox WHERE kind=? AND record_id=? LIMIT 1',
+          variables: [Variable(server.kind), Variable(server.id)],
+        ).getSingleOrNull();
+        if (pending == null) await _write(server);
+      });
 
   Future<void> conflict(
     Json operation,
@@ -131,43 +136,45 @@ class DiaryDatabase extends GeneratedDatabase {
           operation['kind'] as String,
           operation['record_id'] as String,
         );
-    final remoteJson = jsonDecode(operation['server'] as String) as Json;
-    final remote = remoteJson.isEmpty ? null : Record.fromJson(remoteJson);
+        final remoteJson = jsonDecode(operation['server'] as String) as Json;
+        final remote = remoteJson.isEmpty ? null : Record.fromJson(remoteJson);
         await customStatement(
           'DELETE FROM outbox WHERE kind=? AND record_id=?',
           [operation['kind'], operation['record_id']],
         );
-    if (remote != null) {
-      await _write(remote);
-    } else {
+        if (remote != null) {
+          await _write(remote);
+        } else {
           await customStatement('DELETE FROM records WHERE kind=? AND id=?', [
             operation['kind'],
             operation['record_id'],
           ]);
-    }
-    if (keepLocal && local != null) {
-      await save(local.copy(version: remote?.version ?? 0));
-    }
-  });
+        }
+        if (keepLocal && local != null) {
+          await save(local.copy(version: remote?.version ?? 0));
+        }
+      });
 
   Future<void> applyPage(List<Record> changes, int cursor) =>
       transaction(() async {
-    for (final server in changes) {
-      await cacheHistory(server);
-      final pending = await customSelect('SELECT 1 FROM outbox WHERE kind=? AND record_id=? LIMIT 1',
-        variables: [Variable(server.kind), Variable(server.id)]).getSingleOrNull();
-      final current = await find(server.kind, server.id);
+        for (final server in changes) {
+          await cacheHistory(server);
+          final pending = await customSelect(
+            'SELECT 1 FROM outbox WHERE kind=? AND record_id=? LIMIT 1',
+            variables: [Variable(server.kind), Variable(server.id)],
+          ).getSingleOrNull();
+          final current = await find(server.kind, server.id);
           if (pending == null &&
               !(current?.localOnly ?? false) &&
-          (current == null || current.version <= server.version)) {
-        await _write(server);
-      }
-    }
+              (current == null || current.version <= server.version)) {
+            await _write(server);
+          }
+        }
         await customStatement(
           "INSERT OR REPLACE INTO metadata(key,value) VALUES('cursor',?)",
           ['$cursor'],
         );
-  });
+      });
 
   Future<int> cursor() async {
     final row = await customSelect(
@@ -179,12 +186,21 @@ class DiaryDatabase extends GeneratedDatabase {
   Future<void> cacheHistory(Record server) async {
     if (server.kind != 'product') return;
     final key = 'history:${server.id}:${server.version}';
-    final value = {'version': server.version, 'actor_id': server.data['updated_by'] ?? server.data['created_by'],
-      'created_at': server.data['updated_at'], 'record': server.toJson()};
-    await customStatement('INSERT OR REPLACE INTO metadata(key,value) VALUES(?,?)', [key, jsonEncode(value)]);
+    final value = {
+      'version': server.version,
+      'actor_id': server.data['updated_by'] ?? server.data['created_by'],
+      'created_at': server.data['updated_at'],
+      'record': server.toJson(),
+    };
+    await customStatement(
+      'INSERT OR REPLACE INTO metadata(key,value) VALUES(?,?)',
+      [key, jsonEncode(value)],
+    );
   }
 
-  Future<List<Json>> cachedHistory(String productId) async => (await customSelect(
-    'SELECT value FROM metadata WHERE key LIKE ?', variables: [Variable('history:$productId:%')]).get())
-    .map((r) => jsonDecode(r.read<String>('value')) as Json).toList();
+  Future<List<Json>> cachedHistory(String productId) async =>
+      (await customSelect(
+        'SELECT value FROM metadata WHERE key LIKE ?',
+        variables: [Variable('history:$productId:%')],
+      ).get()).map((r) => jsonDecode(r.read<String>('value')) as Json).toList();
 }

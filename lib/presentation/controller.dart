@@ -57,8 +57,9 @@ class DiaryController extends ChangeNotifier {
     userId = id;
     try {
       if (id != null) {
-        if (!uuidPattern.hasMatch(id))
+        if (!uuidPattern.hasMatch(id)) {
           throw StateError('Неверный идентификатор аккаунта');
+        }
         final dir = await getApplicationSupportDirectory();
         db = DiaryDatabase(File('${dir.path}/diary_$id.sqlite'));
         await reload();
@@ -92,10 +93,23 @@ class DiaryController extends ChangeNotifier {
   List<Record> get entries =>
       of('entry').where((r) => r.data['day'] == dayKey(day)).toList();
   Record? get goal {
-    final goals = of('goal').where((r) => (r.data['effective_from'] as String).compareTo(dayKey(day)) <= 0).toList()
+    final goals =
+        of('goal')
+            .where(
+              (r) =>
+                  (r.data['effective_from'] as String).compareTo(dayKey(day)) <=
+                  0,
+            )
+            .toList()
       ..sort((a, b) {
-        final date = (b.data['effective_from'] as String).compareTo(a.data['effective_from'] as String);
-        return date != 0 ? date : (b.data['recorded_at'] as String? ?? '').compareTo(a.data['recorded_at'] as String? ?? '');
+            final date = (b.data['effective_from'] as String).compareTo(
+              a.data['effective_from'] as String,
+            );
+            return date != 0
+                ? date
+                : (b.data['recorded_at'] as String? ?? '').compareTo(
+                    a.data['recorded_at'] as String? ?? '',
+                  );
       });
     return goals.isEmpty ? null : goals.first;
   }
@@ -139,7 +153,9 @@ class DiaryController extends ChangeNotifier {
   Future<void> restore(Record original) async {
     final latest = await db!.find(original.kind, original.id);
     if (latest == null || latest.version != original.version + 1) {
-      throw StateError('После этой операции запись изменилась. Отмена не перезаписала новую правку.');
+      throw StateError(
+        'После этой операции запись изменилась. Отмена не перезаписала новую правку.',
+      );
     }
     await db!.save(original.copy(version: latest.version));
     await reload();
@@ -223,7 +239,10 @@ class DiaryController extends ChangeNotifier {
     _auth?.cancel();
     final engine = sync;
     final database = db;
-    unawaited(() async { await engine?.dispose(); await database?.close(); }());
+    unawaited(() async {
+      await engine?.dispose();
+      await database?.close();
+    }());
     super.dispose();
   }
 }
