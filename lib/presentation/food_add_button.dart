@@ -27,7 +27,6 @@ class _FoodAddButtonState extends State<FoodAddButton> {
     super.dispose();
   }
 
-  @override
   Future<void> handleTap() async {
     unawaited(HapticFeedback.selectionClick());
     if (widget.onAdd == null) {
