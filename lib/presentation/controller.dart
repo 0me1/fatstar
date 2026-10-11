@@ -112,6 +112,7 @@ class DiaryController extends ChangeNotifier {
     final value = of('settings').firstOrNull?.data['font'];
     return value is String && diaryFonts.containsKey(value) ? value : 'Rubik';
   }
+
   void selectDay(DateTime value) {
     final selected = DateTime(value.year, value.month, value.day);
     final now = DateTime.now();

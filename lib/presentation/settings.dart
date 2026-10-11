@@ -53,23 +53,61 @@ class SettingsScreen extends ConsumerWidget {
                     },
                   ),
                 ),
-                ListTile(title: const Text('Шрифт'), subtitle: Text(diaryFonts[c.font]!),
+                ListTile(
+                  title: const Text('Шрифт'),
+                  subtitle: Text(diaryFonts[c.font]!),
                   trailing: const Icon(Icons.text_fields),
-                  onTap: () => showModalBottomSheet<void>(context: context, useSafeArea: true,
-                    showDragHandle: true, sheetAnimationStyle: sheetMotion(context),
-                    builder: (sheetContext) => ListView(shrinkWrap: true, children: [
-                      const Padding(padding: EdgeInsets.all(16), child: Text('Выберите шрифт')),
-                      for (final font in diaryFonts.entries)
-                        ListTile(title: Text(font.value, style: TextStyle(fontFamily: font.key, fontWeight: FontWeight.w800)),
-                          subtitle: Text('Сводка · Завтрак · 1 750 ккал', style: TextStyle(fontFamily: font.key)),
-                          trailing: font.key == c.font ? const Icon(Icons.check) : null,
-                          onTap: () async {
-                            try {
-                              await c.save('settings', {...(c.of('settings').firstOrNull?.data ?? {'theme': 'dark'}), 'font': font.key}, previous: c.of('settings').firstOrNull);
-                              if (sheetContext.mounted) Navigator.pop(sheetContext);
-                            } catch (e) { if (sheetContext.mounted) message(sheetContext, e); }
-                          }),
-                    ]))),
+                  onTap: () => showModalBottomSheet<void>(
+                    context: context,
+                    useSafeArea: true,
+                    showDragHandle: true,
+                    sheetAnimationStyle: sheetMotion(context),
+                    builder: (sheetContext) => ListView(
+                      shrinkWrap: true,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text('Выберите шрифт'),
+                        ),
+                        for (final font in diaryFonts.entries)
+                          ListTile(
+                            title: Text(
+                              font.value,
+                              style: TextStyle(
+                                fontFamily: font.key,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            subtitle: Text(
+                              'Сводка · Завтрак · 1 750 ккал',
+                              style: TextStyle(fontFamily: font.key),
+                            ),
+                            trailing: font.key == c.font
+                                ? const Icon(Icons.check)
+                                : null,
+                            onTap: () async {
+                              try {
+                                await c.save(
+                                  'settings',
+                                  {
+                                    ...(c.of('settings').firstOrNull?.data ??
+                                        {'theme': 'dark'}),
+                                    'font': font.key,
+                                  },
+                                  previous: c.of('settings').firstOrNull,
+                                );
+                                if (sheetContext.mounted)
+                                  Navigator.pop(sheetContext);
+                              } catch (e) {
+                                if (sheetContext.mounted)
+                                  message(sheetContext, e);
+                              }
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
