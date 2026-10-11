@@ -419,7 +419,9 @@ class DiaryScreen extends ConsumerWidget {
                     if (meal != Meal.breakfast) const Divider(height: 1),
                     ListTile(
                       minVerticalPadding: 24,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                      ),
                       leading: Container(
                         width: 58,
                         height: 58,
@@ -428,7 +430,8 @@ class DiaryScreen extends ConsumerWidget {
                           shape: BoxShape.circle,
                           color: Theme.of(context).colorScheme.surface,
                           border: Border.all(
-                            color: Theme.of(context).brightness == Brightness.dark
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
                                 ? const Color(0xFF596161)
                                 : const Color(0xFFCFDBD8),
                             width: 7,
@@ -445,9 +448,8 @@ class DiaryScreen extends ConsumerWidget {
                       ),
                       title: Text(
                         '${meal.label} →',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       subtitle: Text(
                         '${number(NutritionTotal(c.entries.where((e) => e.data['meal'] == meal.name).map(entryNutrition)).kcal, 0)} ккал',
