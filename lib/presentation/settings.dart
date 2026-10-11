@@ -45,7 +45,9 @@ class SettingsScreen extends ConsumerWidget {
                       try {
                         await c.saveSettings({'theme': v});
                       } catch (e) {
-                        if (context.mounted) { message(context, e); }
+                        if (context.mounted) {
+                          message(context, e);
+                        }
                       }
                     },
                   ),
@@ -54,21 +56,51 @@ class SettingsScreen extends ConsumerWidget {
                   title: const Text('Шрифт'),
                   subtitle: Text(diaryFonts[c.font]!),
                   trailing: const Icon(Icons.text_fields),
-                  onTap: () => showModalBottomSheet<void>(context: context, useSafeArea: true,
-                    showDragHandle: true, sheetAnimationStyle: sheetMotion(context),
-                    builder: (sheetContext) => ListView(shrinkWrap: true, children: [
-                      const Padding(padding: EdgeInsets.all(16), child: Text('Выберите шрифт')),
-                      for (final font in diaryFonts.entries)
-                        ListTile(title: Text(font.value, style: TextStyle(fontFamily: font.key, fontWeight: FontWeight.w800)),
-                          subtitle: Text('Сводка · Завтрак · 1 750 ккал', style: TextStyle(fontFamily: font.key)),
-                          trailing: font.key == c.font ? const Icon(Icons.check) : null,
-                          onTap: () async {
-                            try {
-                              await c.saveSettings({'font': font.key});
-                              if (sheetContext.mounted) { Navigator.pop(sheetContext); }
-                            } catch (e) { if (sheetContext.mounted) { message(sheetContext, e); } }
-                          }),
-                    ]))),
+                  onTap: () => showModalBottomSheet<void>(
+                    context: context,
+                    useSafeArea: true,
+                    showDragHandle: true,
+                    sheetAnimationStyle: sheetMotion(context),
+                    builder: (sheetContext) => ListView(
+                      shrinkWrap: true,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text('Выберите шрифт'),
+                        ),
+                        for (final font in diaryFonts.entries)
+                          ListTile(
+                            title: Text(
+                              font.value,
+                              style: TextStyle(
+                                fontFamily: font.key,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            subtitle: Text(
+                              'Сводка · Завтрак · 1 750 ккал',
+                              style: TextStyle(fontFamily: font.key),
+                            ),
+                            trailing: font.key == c.font
+                                ? const Icon(Icons.check)
+                                : null,
+                            onTap: () async {
+                              try {
+                                await c.saveSettings({'font': font.key});
+                                if (sheetContext.mounted) {
+                                  Navigator.pop(sheetContext);
+                                }
+                              } catch (e) {
+                                if (sheetContext.mounted) {
+                                  message(sheetContext, e);
+                                }
+                              }
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -176,7 +208,9 @@ class SettingsScreen extends ConsumerWidget {
                 try {
                   await c.signOut();
                 } catch (e) {
-                  if (context.mounted) { message(context, e); }
+                  if (context.mounted) {
+                    message(context, e);
+                  }
                 }
               }
             },
@@ -223,7 +257,9 @@ class SettingsScreen extends ConsumerWidget {
       await c.reload();
       await c.sync?.run();
     } catch (e) {
-      if (context.mounted) { message(context, e); }
+      if (context.mounted) {
+        message(context, e);
+      }
     }
   }
 
@@ -246,7 +282,9 @@ class SettingsScreen extends ConsumerWidget {
         if (await file.exists()) await file.delete();
       }
     } catch (e) {
-      if (context.mounted) { message(context, 'Не удалось экспортировать: $e'); }
+      if (context.mounted) {
+        message(context, 'Не удалось экспортировать: $e');
+      }
     }
   }
 
@@ -288,10 +326,14 @@ class SettingsScreen extends ConsumerWidget {
         await BackupService(c.db!).merge(preview);
         await c.reload();
         await c.sync?.run();
-        if (context.mounted) { message(context, 'Импорт завершен'); }
+        if (context.mounted) {
+          message(context, 'Импорт завершен');
+        }
       }
     } catch (e) {
-      if (context.mounted) { message(context, 'Импорт отменен: $e'); }
+      if (context.mounted) {
+        message(context, 'Импорт отменен: $e');
+      }
     }
   }
 }

@@ -490,9 +490,13 @@ class DiaryScreen extends ConsumerWidget {
                                   confirmDismiss: (_) async {
                                     try {
                                       await c.remove(e);
-                                      if (context.mounted) { undo(context, c, e); }
+                                      if (context.mounted) {
+                                        undo(context, c, e);
+                                      }
                                     } catch (error) {
-                                      if (context.mounted) { message(context, error); }
+                                      if (context.mounted) {
+                                        message(context, error);
+                                      }
                                     }
                                     return false;
                                   },
@@ -515,9 +519,13 @@ class DiaryScreen extends ConsumerWidget {
                                             data,
                                             previous: e,
                                           );
-                                          if (context.mounted) { undo(context, c, e); }
+                                          if (context.mounted) {
+                                            undo(context, c, e);
+                                          }
                                         } catch (error) {
-                                          if (context.mounted) { message(context, error); }
+                                          if (context.mounted) {
+                                            message(context, error);
+                                          }
                                         }
                                       }
                                     },
@@ -527,7 +535,9 @@ class DiaryScreen extends ConsumerWidget {
                                         try {
                                           if (action == 'delete') {
                                             await c.remove(e);
-                                            if (context.mounted) { undo(context, c, e); }
+                                            if (context.mounted) {
+                                              undo(context, c, e);
+                                            }
                                           }
                                           if (action == 'repeat') {
                                             await c.addEntries([e.data], meal);
@@ -548,7 +558,9 @@ class DiaryScreen extends ConsumerWidget {
                                             }
                                           }
                                         } catch (error) {
-                                          if (context.mounted) { message(context, error); }
+                                          if (context.mounted) {
+                                            message(context, error);
+                                          }
                                         }
                                       },
                                       itemBuilder: (_) => const [
@@ -697,7 +709,9 @@ void undo(BuildContext context, DiaryController c, Record original) =>
             try {
               await c.restore(original);
             } catch (e) {
-              if (context.mounted) { message(context, e); }
+              if (context.mounted) {
+                message(context, e);
+              }
             }
           },
         ),

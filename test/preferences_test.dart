@@ -7,21 +7,26 @@ import 'package:calorie_diary/main.dart';
 import 'package:calorie_diary/domain/fonts.dart';
 
 void main() {
-  test('font and theme edits preserve each other and queue personal settings', () async {
-    final c = DiaryController()..db = DiaryDatabase.memory()..userId = '00000000-0000-4000-8000-000000000001';
-    expect(c.font, 'Rubik');
-    await c.saveSettings({'font': 'Manrope'});
-    expect(c.font, 'Manrope');
-    expect(c.theme, 'dark');
-    await c.saveSettings({'theme': 'light'});
-    expect(c.font, 'Manrope');
-    expect(c.theme, 'light');
-    await c.saveSettings({'font': 'Comfortaa'});
-    expect(c.theme, 'light');
-    expect(c.font, 'Comfortaa');
-    expect(await c.db!.operations(), hasLength(3));
-    c.dispose();
-  });
+  test(
+    'font and theme edits preserve each other and queue personal settings',
+    () async {
+      final c = DiaryController()
+        ..db = DiaryDatabase.memory()
+        ..userId = '00000000-0000-4000-8000-000000000001';
+      expect(c.font, 'Rubik');
+      await c.saveSettings({'font': 'Manrope'});
+      expect(c.font, 'Manrope');
+      expect(c.theme, 'dark');
+      await c.saveSettings({'theme': 'light'});
+      expect(c.font, 'Manrope');
+      expect(c.theme, 'light');
+      await c.saveSettings({'font': 'Comfortaa'});
+      expect(c.theme, 'light');
+      expect(c.font, 'Comfortaa');
+      expect(await c.db!.operations(), hasLength(3));
+      c.dispose();
+    },
+  );
   test('all eight fonts apply to body and bold headings', () {
     expect(diaryFonts, hasLength(8));
     for (final family in diaryFonts.keys) {
@@ -31,11 +36,21 @@ void main() {
       expect(theme.textTheme.titleLarge!.fontWeight, FontWeight.w900);
     }
   });
-  testWidgets('empty meals collapse and open automatically on first entry', (tester) async {
-    Widget host(bool entries) => MaterialApp(home: Scaffold(body: MealSection(
-      hasEntries: entries,
-      header: (expanded, toggle) => TextButton(onPressed: toggle, child: Text(expanded ? 'Hide' : 'Show')),
-      child: const SizedBox(height: 80, child: Text('Meal contents')))));
+  testWidgets('empty meals collapse and open automatically on first entry', (
+    tester,
+  ) async {
+    Widget host(bool entries) => MaterialApp(
+      home: Scaffold(
+        body: MealSection(
+          hasEntries: entries,
+          header: (expanded, toggle) => TextButton(
+            onPressed: toggle,
+            child: Text(expanded ? 'Hide' : 'Show'),
+          ),
+          child: const SizedBox(height: 80, child: Text('Meal contents')),
+        ),
+      ),
+    );
     await tester.pumpWidget(host(false));
     expect(find.text('Show'), findsOneWidget);
     expect(tester.getSize(find.byType(ClipRect).last).height, 0);
