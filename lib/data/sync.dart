@@ -102,8 +102,9 @@ class SyncEngine {
           next,
         );
         if (page['has_more'] != true) break;
-        if (next == cursor)
+        if (next == cursor) {
           throw StateError('Курсор синхронизации не продвигается');
+        }
         cursor = next;
       }
       lastSuccess = DateTime.now();

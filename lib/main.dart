@@ -56,8 +56,9 @@ class _CalorieDiaryAppState extends ConsumerState<CalorieDiaryApp>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed)
+    if (state == AppLifecycleState.resumed) {
       unawaited(ref.read(diaryProvider).sync?.run());
+    }
   }
 
   @override

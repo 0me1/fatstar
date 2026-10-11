@@ -63,8 +63,9 @@ void validateRecord(Record record) {
   switch (record.kind) {
     case 'product':
       _name(d['name']);
-      if (!['gram', 'milliliter'].contains(d['unit']))
+      if (!['gram', 'milliliter'].contains(d['unit'])) {
         throw ArgumentError('Неверная единица');
+      }
       Nutrition.fromJson(
         Map<String, dynamic>.from(d['nutrition'] as Map),
       ).validate(product: true);
@@ -83,8 +84,9 @@ void validateRecord(Record record) {
       }
     case 'entry':
       _date(d['day']);
-      if (!Meal.values.any((m) => m.name == d['meal']))
+      if (!Meal.values.any((m) => m.name == d['meal'])) {
         throw ArgumentError('Неверный прием пищи');
+      }
       _name(d['name']);
       Nutrition.fromJson(
         Map<String, dynamic>.from(d['nutrition'] as Map),
@@ -92,40 +94,46 @@ void validateRecord(Record record) {
       if (decimal(d['amount']) <= 0 || !decimal(d['amount']).isFinite) {
         throw ArgumentError('Неверное количество');
       }
-      if (d['base'] != null)
+      if (d['base'] != null) {
         Nutrition.fromJson(
           Map<String, dynamic>.from(d['base'] as Map),
         ).validate(product: true);
+      }
     case 'goal':
       _date(d['effective_from']);
       final n = Nutrition.fromJson(
         Map<String, dynamic>.from(d['nutrition'] as Map),
       );
       n.validate(product: true);
-      if (n.kcal < 500 || n.kcal > 10000)
+      if (n.kcal < 500 || n.kcal > 10000) {
         throw ArgumentError('Норма должна быть от 500 до 10000 ккал');
+      }
     case 'weight':
       _date(d['day']);
       final v = decimal(d['kg']);
-      if (!v.isFinite || v < 20 || v > 500)
+      if (!v.isFinite || v < 20 || v > 500) {
         throw ArgumentError('Вес от 20 до 500 кг');
+      }
     case 'favorite':
     case 'portion':
-      if (!uuidPattern.hasMatch(d['product_id'] as String))
+      if (!uuidPattern.hasMatch(d['product_id'] as String)) {
         throw ArgumentError('Неверный продукт');
+      }
       if (record.kind == 'portion' &&
           (decimal(d['amount']) <= 0 || !decimal(d['amount']).isFinite)) {
         throw ArgumentError('Неверная порция');
       }
     case 'settings':
-      if (!['dark', 'light', 'system'].contains(d['theme']))
+      if (!['dark', 'light', 'system'].contains(d['theme'])) {
         throw ArgumentError('Неверная тема');
+      }
   }
 }
 
 void _name(Object? v) {
-  if (v is! String || v.trim().isEmpty || v.length > 200)
+  if (v is! String || v.trim().isEmpty || v.length > 200) {
     throw ArgumentError('Название от 1 до 200 символов');
+  }
 }
 
 void _date(Object? v) {

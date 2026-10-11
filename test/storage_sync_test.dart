@@ -31,8 +31,9 @@ class FakeRemote implements SyncRemote {
     if (applied.containsKey(key)) return applied[key]!;
     final local = Record.fromJson(jsonDecode(op['payload'] as String) as Json);
     final remote = records[local.id];
-    if ((remote?.version ?? 0) != op['expected_version'])
+    if ((remote?.version ?? 0) != op['expected_version']) {
       return {'status': 'conflict', 'record': remote?.toJson() ?? {}};
+    }
     final saved = local.copy(version: (remote?.version ?? 0) + 1);
     records[local.id] = saved;
     writes++;
