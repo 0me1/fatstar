@@ -42,11 +42,17 @@ class SearchNormalizer {
     final s = text.toLowerCase();
     final toRussian = RegExp('[a-z]').hasMatch(s);
     final from = toRussian ? latin : russian, to = toRussian ? russian : latin;
-    return List.generate(s.length,(index) {
-      final c=s[index];
-      if((c==',' || c=='.') && index>0 && index+1<s.length && RegExp(r'\d').hasMatch(s[index-1]) && RegExp(r'\d').hasMatch(s[index+1])) { return c; }
-      final i=from.indexOf(c);
-      return i<0?c:to[i];
+    return List.generate(s.length, (index) {
+      final c = s[index];
+      if ((c == ',' || c == '.') &&
+          index > 0 &&
+          index + 1 < s.length &&
+          RegExp(r'\d').hasMatch(s[index - 1]) &&
+          RegExp(r'\d').hasMatch(s[index + 1])) {
+        return c;
+      }
+      final i = from.indexOf(c);
+      return i < 0 ? c : to[i];
     }).join();
   }
 
@@ -95,7 +101,9 @@ class SearchQuery {
         text = raw.replaceRange(match.start, match.end, ' ');
       }
     }
-    if(text.length>512) { text=text.substring(0,512); }
+    if (text.length > 512) {
+      text = text.substring(0, 512);
+    }
     tokens = SearchNormalizer.tokens(text).take(16).toList();
     normalized = tokens.join(' ');
   }

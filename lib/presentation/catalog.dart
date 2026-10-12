@@ -152,7 +152,9 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
   }
 
   Future<void> removeAdded(Record entry) async {
-    if(!selected.any((r)=>r.id==entry.id)) { return; }
+    if (!selected.any((r) => r.id == entry.id)) {
+      return;
+    }
     try {
       await ref.read(diaryProvider).remove(entry);
       unawaited(HapticFeedback.mediumImpact().catchError((Object _) {}));
@@ -204,40 +206,49 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
     final unit = p.data['unit'] == 'gram' ? 'г' : 'мл';
     return TweenAnimationBuilder<double>(
       key: ValueKey('$group/${p.id}'),
-      duration: motionDuration(context,180),
-      tween:Tween(begin:0,end:1),
-      curve:Curves.easeOut,
-      builder:(context,value,child)=>Opacity(opacity:value,child:Transform.translate(offset:Offset(0,6*(1-value)),child:child)),
+      duration: motionDuration(context, 180),
+      tween: Tween(begin: 0, end: 1),
+      curve: Curves.easeOut,
+      builder: (context, value, child) => Opacity(
+        opacity: value,
+        child: Transform.translate(
+          offset: Offset(0, 6 * (1 - value)),
+          child: child,
+        ),
+      ),
       child: ListTile(
-      key: ValueKey('$group/${p.id}'),
-      title: Text(p.data['name'] as String, maxLines: 2),
-      subtitle: Text(
-        '${p.data['brand'] ?? ''}${p.localOnly ? ' · локальный' : ''}\nНа 100 $unit: ${number(n.kcal, 0)} ккал · Б ${n.protein == null ? '—' : number(n.protein!)} · Ж ${n.fat == null ? '—' : number(n.fat!)} · У ${n.carbs == null ? '—' : number(n.carbs!)}\n${c.lastPortion(p.id) == null ? 'Порция' : 'Последняя порция'}: ${number(amount)} $unit · ${number(n.kcal * amount / 100, 0)} ккал${p.data['active'] == false ? ' · скрыт' : ''}${hit.preference != null && hit.preference!.count > 1 ? ' · обычно ${number(hit.preference!.typicalAmount(p.data['unit'] as String))} $unit' : ''}',
-      ),
-      onTap: () =>
-          widget.meal == null || p.data['active'] == false ? productDetails(context, c, p) : choose(p),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            tooltip: 'Избранное',
-            onPressed: () => c.favorite(p),
-            icon: Icon(
-              hit.preference?.favorite == true ? Icons.star : Icons.star_border,
-              color: hit.preference?.favorite == true
-                  ? const Color(0xFFFFC857)
-                  : null,
+        key: ValueKey('$group/${p.id}'),
+        title: Text(p.data['name'] as String, maxLines: 2),
+        subtitle: Text(
+          '${p.data['brand'] ?? ''}${p.localOnly ? ' · локальный' : ''}\nНа 100 $unit: ${number(n.kcal, 0)} ккал · Б ${n.protein == null ? '—' : number(n.protein!)} · Ж ${n.fat == null ? '—' : number(n.fat!)} · У ${n.carbs == null ? '—' : number(n.carbs!)}\n${c.lastPortion(p.id) == null ? 'Порция' : 'Последняя порция'}: ${number(amount)} $unit · ${number(n.kcal * amount / 100, 0)} ккал${p.data['active'] == false ? ' · скрыт' : ''}${hit.preference != null && hit.preference!.count > 1 ? ' · обычно ${number(hit.preference!.typicalAmount(p.data['unit'] as String))} $unit' : ''}',
+        ),
+        onTap: () => widget.meal == null || p.data['active'] == false
+            ? productDetails(context, c, p)
+            : choose(p),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              tooltip: 'Избранное',
+              onPressed: () => c.favorite(p),
+              icon: Icon(
+                hit.preference?.favorite == true
+                    ? Icons.star
+                    : Icons.star_border,
+                color: hit.preference?.favorite == true
+                    ? const Color(0xFFFFC857)
+                    : null,
+              ),
             ),
-          ),
-          if (widget.meal != null)
-            FoodAddButton(
-              tooltip: 'Добавить ${number(amount)} $unit',
-              onAdd: p.data['active'] == false
-                  ? null
-                  : () => choose(p, quick: true),
-            ),
-        ],
-      ),
+            if (widget.meal != null)
+              FoodAddButton(
+                tooltip: 'Добавить ${number(amount)} $unit',
+                onAdd: p.data['active'] == false
+                    ? null
+                    : () => choose(p, quick: true),
+              ),
+          ],
+        ),
       ),
     );
   }
