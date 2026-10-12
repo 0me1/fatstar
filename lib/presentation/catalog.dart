@@ -46,40 +46,87 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
   Future<void> refresh() async {
     final c = ref.read(diaryProvider);
     final db = c.db;
-    if (db == null) { return; }
-    if (accountDb != db) { accountDb = db; engine = FoodSearchRepository(db); }
+    if (db == null) {
+      return;
+    }
+    if (accountDb != db) {
+      accountDb = db;
+      engine = FoodSearchRepository(db);
+    }
     final request = ++generation;
     final revision = db.searchRevision;
-    setState(() { busy = true; error = null; });
+    setState(() {
+      busy = true;
+      error = null;
+    });
     try {
-      final result = await engine!.search(search.text,meal:widget.meal?.name,filter:filter,hidden:hidden,date:c.day);
-      if (!mounted || request != generation || ref.read(diaryProvider).db != db) { return; }
+      final result = await engine!.search(
+        search.text,
+        meal: widget.meal?.name,
+        filter: filter,
+        hidden: hidden,
+        date: c.day,
+      );
+      if (!mounted ||
+          request != generation ||
+          ref.read(diaryProvider).db != db) {
+        return;
+      }
       observedRevision = revision;
-      setState(() { busy = false; if (pointerDown || (settle?.isActive ?? false)) { pending=result; } else { hits=result; } });
+      setState(() {
+        busy = false;
+        if (pointerDown || (settle?.isActive ?? false)) {
+          pending = result;
+        } else {
+          hits = result;
+        }
+      });
     } catch (_) {
-      if (mounted && request == generation) { setState(() { observedRevision=revision; busy=false; error='Не удалось выполнить поиск. Попробуйте еще раз.'; }); }
+      if (mounted && request == generation) {
+        setState(() {
+          observedRevision = revision;
+          busy = false;
+          error = 'Не удалось выполнить поиск. Попробуйте еще раз.';
+        });
+      }
     }
   }
 
   void changed() {
-    generation++; pending=null; debounce?.cancel();
-    debounce=Timer(const Duration(milliseconds:150), () { if(mounted) { unawaited(refresh()); } });
+    generation++;
+    pending = null;
+    debounce?.cancel();
+    debounce = Timer(const Duration(milliseconds: 150), () {
+      if (mounted) {
+        unawaited(refresh());
+      }
+    });
   }
 
   void releasePointer() {
-    pointerDown=false; settle?.cancel();
-    settle=Timer(const Duration(milliseconds:220), () {
-      if(mounted && !pointerDown && pending!=null) { setState(() { hits=pending!; pending=null; }); }
+    pointerDown = false;
+    settle?.cancel();
+    settle = Timer(const Duration(milliseconds: 220), () {
+      if (mounted && !pointerDown && pending != null) {
+        setState(() {
+          hits = pending!;
+          pending = null;
+        });
+      }
     });
   }
 
   Future<bool> add(Json data) async {
     final c = ref.read(diaryProvider);
-    if (widget.meal == null) { return false; }
+    if (widget.meal == null) {
+      return false;
+    }
     try {
       final added = await c.addEntries([data], widget.meal!);
       unawaited(HapticFeedback.lightImpact().catchError((Object _) {}));
-      if (!mounted) { return true; }
+      if (!mounted) {
+        return true;
+      }
       setState(() => selected.addAll(added));
       if (added.isNotEmpty) {
         final entry = added.single;
@@ -96,15 +143,26 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
         );
       }
       return true;
-    } catch(e) { if(mounted) { message(context,e); } return false; }
+    } catch (e) {
+      if (mounted) {
+        message(context, e);
+      }
+      return false;
+    }
   }
 
   Future<void> removeAdded(Record entry) async {
     try {
       await ref.read(diaryProvider).remove(entry);
       unawaited(HapticFeedback.mediumImpact().catchError((Object _) {}));
-      if(mounted) { setState(() => selected.removeWhere((r)=>r.id==entry.id)); }
-    } catch(e) { if(mounted) { message(context,e); } }
+      if (mounted) {
+        setState(() => selected.removeWhere((r) => r.id == entry.id));
+      }
+    } catch (e) {
+      if (mounted) {
+        message(context, e);
+      }
+    }
   }
 
   Future<bool> choose(Record p, {bool quick = false}) async {
@@ -122,8 +180,17 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
     return data != null && mounted ? add(data) : false;
   }
 
-  Future<void> create() => editProduct(context,ref.read(diaryProvider),initialName:search.text.trim());
-  Future<void> quick() async { final data=await quickFood(context); if(data!=null && mounted) { await add(data); } }
+  Future<void> create() => editProduct(
+    context,
+    ref.read(diaryProvider),
+    initialName: search.text.trim(),
+  );
+  Future<void> quick() async {
+    final data = await quickFood(context);
+    if (data != null && mounted) {
+      await add(data);
+    }
+  }
 
   Widget row(SearchHit hit, {String group = 'result'}) {
     final p = hit.product, c = ref.read(diaryProvider);
@@ -168,29 +235,95 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
   }
 
   List<Widget> results() {
-    if(search.text.trim().isNotEmpty || filter!='all' || hidden) { return [
-      if(hits.isNotEmpty && hits.first.correction!=null) ListTile(title:Text('Показаны результаты: ${hits.first.correction}')),
-      ...hits.take(visibleCount).map(row),
-      if(hits.length>visibleCount) TextButton(onPressed:()=>setState(()=>visibleCount+=40),child:const Text('Показать еще')),
-    ]; }
-    final groups=<({String name,String filter,List<SearchHit> items})>[
-      (name:'Для этого приема пищи',filter:'meal',items:hits.where((h)=>(h.preference?.meals[widget.meal?.name]??0)>0).toList()),
-      (name:'Недавние',filter:'recent',items:hits.where((h)=>(h.preference?.count??0)>0).toList()..sort((a,b)=>(b.preference?.last??DateTime(2000)).compareTo(a.preference?.last??DateTime(2000)))),
-      (name:'Частые',filter:'frequent',items:hits.where((h)=>(h.preference?.count??0)>0).toList()..sort((a,b)=>(b.preference?.count??0).compareTo(a.preference?.count??0))),
-      (name:'Избранное',filter:'favorite',items:hits.where((h)=>h.preference?.favorite==true).toList()),
+    if (search.text.trim().isNotEmpty || filter != 'all' || hidden) {
+      return [
+        if (hits.isNotEmpty && hits.first.correction != null)
+          ListTile(
+            title: Text('Показаны результаты: ${hits.first.correction}'),
+          ),
+        ...hits.take(visibleCount).map(row),
+        if (hits.length > visibleCount)
+          TextButton(
+            onPressed: () => setState(() => visibleCount += 40),
+            child: const Text('Показать еще'),
+          ),
+      ];
+    }
+    final groups = <({String name, String filter, List<SearchHit> items})>[
+      (
+        name: 'Для этого приема пищи',
+        filter: 'meal',
+        items: hits
+            .where((h) => (h.preference?.meals[widget.meal?.name] ?? 0) > 0)
+            .toList(),
+      ),
+      (
+        name: 'Недавние',
+        filter: 'recent',
+        items: hits.where((h) => (h.preference?.count ?? 0) > 0).toList()
+          ..sort(
+            (a, b) => (b.preference?.last ?? DateTime(2000)).compareTo(
+              a.preference?.last ?? DateTime(2000),
+            ),
+          ),
+      ),
+      (
+        name: 'Частые',
+        filter: 'frequent',
+        items: hits.where((h) => (h.preference?.count ?? 0) > 0).toList()
+          ..sort(
+            (a, b) =>
+                (b.preference?.count ?? 0).compareTo(a.preference?.count ?? 0),
+          ),
+      ),
+      (
+        name: 'Избранное',
+        filter: 'favorite',
+        items: hits.where((h) => h.preference?.favorite == true).toList(),
+      ),
     ];
-    if(groups.every((g)=>g.items.isEmpty)) { return [const ListTile(title:Text('Каталог продуктов')), ...hits.take(visibleCount).map(row),if(hits.length>visibleCount) TextButton(onPressed:()=>setState(()=>visibleCount+=40),child:const Text('Показать еще'))]; }
-    return [for(final group in groups.where((g)=>g.items.isNotEmpty)) ...[
-      ListTile(title:Text(group.name,style:Theme.of(context).textTheme.titleLarge),trailing:TextButton(onPressed:(){setState(()=>filter=group.filter);unawaited(refresh());},child:const Text('Все'))),
-      ...group.items.take(3).map((h)=>row(h,group:group.filter)),
-    ]];
+    if (groups.every((g) => g.items.isEmpty)) {
+      return [
+        const ListTile(title: Text('Каталог продуктов')),
+        ...hits.take(visibleCount).map(row),
+        if (hits.length > visibleCount)
+          TextButton(
+            onPressed: () => setState(() => visibleCount += 40),
+            child: const Text('Показать еще'),
+          ),
+      ];
+    }
+    return [
+      for (final group in groups.where((g) => g.items.isNotEmpty)) ...[
+        ListTile(
+          title: Text(
+            group.name,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          trailing: TextButton(
+            onPressed: () {
+              setState(() => filter = group.filter);
+              unawaited(refresh());
+            },
+            child: const Text('Все'),
+          ),
+        ),
+        ...group.items.take(3).map((h) => row(h, group: group.filter)),
+      ],
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final c=ref.watch(diaryProvider);
-    if(c.db!=null && (accountDb!=c.db || observedRevision!=c.db!.searchRevision) && !busy) {
-      WidgetsBinding.instance.addPostFrameCallback((_) { if(mounted && !busy) { unawaited(refresh()); } });
+    final c = ref.watch(diaryProvider);
+    if (c.db != null &&
+        (accountDb != c.db || observedRevision != c.db!.searchRevision) &&
+        !busy) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && !busy) {
+          unawaited(refresh());
+        }
+      });
     }
     final parsed = SearchQuery(search.text);
     return Scaffold(
@@ -376,7 +509,39 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
   }
 
   Future<void> showSelected() async {
-    await showModalBottomSheet<void>(context:context,showDragHandle:true,sheetAnimationStyle:sheetMotion(context),isScrollControlled:true,builder:(context)=>StatefulBuilder(builder:(context,update)=>SafeArea(child:SizedBox(height:400,child:ListView(children:[const ListTile(title:Text('Уже добавлено в дневник')),for(final entry in selected.toList()) ListTile(key:ValueKey(entry.id),title:Text(entry.data['name'] as String),trailing:IconButton(tooltip:'Удалить из дневника',icon:const Icon(Icons.close),onPressed:() async {await removeAdded(entry);if(context.mounted){ update((){}); }})),])))));
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      sheetAnimationStyle: sheetMotion(context),
+      isScrollControlled: true,
+      builder: (context) => StatefulBuilder(
+        builder: (context, update) => SafeArea(
+          child: SizedBox(
+            height: 400,
+            child: ListView(
+              children: [
+                const ListTile(title: Text('Уже добавлено в дневник')),
+                for (final entry in selected.toList())
+                  ListTile(
+                    key: ValueKey(entry.id),
+                    title: Text(entry.data['name'] as String),
+                    trailing: IconButton(
+                      tooltip: 'Удалить из дневника',
+                      icon: const Icon(Icons.close),
+                      onPressed: () async {
+                        await removeAdded(entry);
+                        if (context.mounted) {
+                          update(() {});
+                        }
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -519,7 +684,9 @@ Future<void> editProduct(
         return result;
       },
     );
-    if (data == null || !context.mounted) { return; }
+    if (data == null || !context.mounted) {
+      return;
+    }
     final similar = c
         .of('product')
         .where(
@@ -556,11 +723,15 @@ Future<void> editProduct(
           ],
         ),
       );
-      if (confirmed != true) { return; }
+      if (confirmed != true) {
+        return;
+      }
     }
     await c.save('product', data, previous: product);
   } catch (e) {
-    if (context.mounted) { message(context, e); }
+    if (context.mounted) {
+      message(context, e);
+    }
   } finally {
     name.dispose();
     brand.dispose();
@@ -634,7 +805,9 @@ Future<void> productDetails(
               }, previous: p);
               if (context.mounted) Navigator.pop(context);
             } catch (e) {
-              if (context.mounted) { message(context, e); }
+              if (context.mounted) {
+                message(context, e);
+              }
             }
           },
         ),
@@ -705,7 +878,9 @@ Future<void> productHistory(
       raw = await c.db!.cachedHistory(p.id);
       raw.sort((a, b) => (b['version'] as int).compareTo(a['version'] as int));
     }
-    if (!context.mounted) { return; }
+    if (!context.mounted) {
+      return;
+    }
     await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
@@ -763,7 +938,9 @@ Future<void> productHistory(
                         );
                         if (context.mounted) Navigator.pop(context);
                       } catch (e) {
-                        if (context.mounted) { message(context, e); }
+                        if (context.mounted) {
+                          message(context, e);
+                        }
                       }
                     }
                   },

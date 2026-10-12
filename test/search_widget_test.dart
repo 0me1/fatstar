@@ -9,11 +9,14 @@ import 'package:calorie_diary/presentation/controller.dart';
 import 'food_search_test.dart' show food;
 
 Future<void> ready(WidgetTester tester) async {
-  await tester.pump(const Duration(milliseconds:250));
-  await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds:350)));
+  await tester.pump(const Duration(milliseconds: 250));
+  await tester.runAsync(
+    () => Future<void>.delayed(const Duration(milliseconds: 350)),
+  );
   await tester.pump();
   await tester.pumpAndSettle();
 }
+
 void main() {
   for(final brightness in Brightness.values) {
     testWidgets('offline search ${brightness.name}: keyboard, newest query, add/undo and no duplicate on back', (tester) async {

@@ -142,7 +142,9 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         record.localOnly ? 1 : 0,
       ],
     );
-    if (record.kind == 'product') { await _indexProduct(record); }
+    if (record.kind == 'product') {
+      await _indexProduct(record);
+    }
     searchRevision++;
   }
 
@@ -185,14 +187,24 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     ]) {
       await customStatement('DELETE FROM $table WHERE product_id=?', [id]);
     }
-    if (await usesFts()) { await customStatement('DELETE FROM food_search_fts WHERE product_id=?', [id]); }
+    if (await usesFts()) {
+      await customStatement('DELETE FROM food_search_fts WHERE product_id=?', [
+        id,
+      ]);
+    }
   }
 
   Future<void> _indexProduct(Record product) async {
     await _removeSearchProduct(product.id);
-    if (product.deleted) { return; }
-    final name = SearchNormalizer.normalize(product.data['name'] as String? ?? '');
-    final brand = SearchNormalizer.normalize(product.data['brand'] as String? ?? '');
+    if (product.deleted) {
+      return;
+    }
+    final name = SearchNormalizer.normalize(
+      product.data['name'] as String? ?? '',
+    );
+    final brand = SearchNormalizer.normalize(
+      product.data['brand'] as String? ?? '',
+    );
     final aliases = SearchNormalizer.aliases(product);
     await customStatement(
       'INSERT INTO food_search_documents VALUES(?,?,?,?,?)',
@@ -227,15 +239,26 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         );
       }
     }
-    if (await usesFts()) { await customStatement('INSERT INTO food_search_fts(product_id,name,brand,aliases) VALUES(?,?,?,?)',[product.id,name,brand,aliases]); }
+    if (await usesFts()) {
+      await customStatement(
+        'INSERT INTO food_search_fts(product_id,name,brand,aliases) VALUES(?,?,?,?)',
+        [product.id, name, brand, aliases],
+      );
+    }
   }
 
-  Future<List<Record>> searchProductsByIds(Iterable<String> ids, {bool hidden=false}) async {
-    final result=<Record>[];
-    final values=ids.toList();
-    for(var i=0;i<values.length;i+=200) {
-      final chunk=values.skip(i).take(200).toList();
-      final rows=await customSelect("SELECT 'product' AS kind,p.* FROM products p JOIN food_search_documents d ON d.product_id=p.id WHERE p.deleted=0 AND (?=1 OR d.hidden=0) AND p.id IN (${List.filled(chunk.length,'?').join(',')})",variables:[Variable(hidden?1:0),...chunk.map(Variable.new)]).get();
+  Future<List<Record>> searchProductsByIds(
+    Iterable<String> ids, {
+    bool hidden = false,
+  }) async {
+    final result = <Record>[];
+    final values = ids.toList();
+    for (var i = 0; i < values.length; i += 200) {
+      final chunk = values.skip(i).take(200).toList();
+      final rows = await customSelect(
+        "SELECT 'product' AS kind,p.* FROM products p JOIN food_search_documents d ON d.product_id=p.id WHERE p.deleted=0 AND (?=1 OR d.hidden=0) AND p.id IN (${List.filled(chunk.length, '?').join(',')})",
+        variables: [Variable(hidden ? 1 : 0), ...chunk.map(Variable.new)],
+      ).get();
       result.addAll(rows.map(_record));
     }
     return result;
@@ -259,7 +282,9 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       SearchQuery(SearchNormalizer.layout(query.raw)),
     ];
     for (final q in alternatives) {
-      if (q.tokens.isEmpty) { continue; }
+      if (q.tokens.isEmpty) {
+        continue;
+      }
       if (await usesFts()) {
         final expression = q.tokens
             .map((t) => '"${t.replaceAll('"', '""')}"*')
@@ -301,7 +326,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       ids.addAll(rows.map((r) => r.read<String>('product_id')));
     }
     if (ids.isEmpty) return [];
-    return searchProductsByIds(ids.take(limit*3),hidden:hidden);
+    return searchProductsByIds(ids.take(limit * 3), hidden: hidden);
   }
 
   @override
@@ -369,8 +394,9 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         if (remote != null) {
           await _write(remote);
         } else {
-          if (operation['kind'] == 'product')
+          if (operation['kind'] == 'product') {
             await _removeSearchProduct(operation['record_id'] as String);
+          }
           searchRevision++;
           await customStatement(
             'DELETE FROM ${_table(operation['kind'] as String)} WHERE id=?',

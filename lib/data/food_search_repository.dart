@@ -36,7 +36,7 @@ class FoodSearchRepository {
           .where((id) => !present.contains(id))
           .toList();
       // Personal products must remain discoverable beyond the alphabetic starter page.
-      candidates.addAll(await db.searchProductsByIds(ids,hidden:hidden));
+      candidates.addAll(await db.searchProductsByIds(ids, hidden: hidden));
     }
     final preferences = _preferences;
     return Isolate.run(
