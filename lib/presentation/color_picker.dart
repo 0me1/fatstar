@@ -56,6 +56,7 @@ class _AccentPickerState extends State<AccentPicker> {
           })),
       ]),
       const SizedBox(height: 16),
+      const Text('Оттенок адаптируется к теме для читаемости текста.'),
       FilledButton(onPressed: error != null ? null : () => Navigator.pop(context, hsv.toColor().toARGB32()), child: const Text('Применить')),
       TextButton(onPressed: () => update(HSVColor.fromColor(const Color(0xFF56DCC6))), child: const Text('Вернуть бирюзовый')),
     ])));

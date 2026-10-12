@@ -119,7 +119,7 @@ ThemeData diaryTheme(Brightness brightness, {String font = 'Rubik', int accent =
     final luminance = background.computeLuminance();
     return (luminance + 0.05) / 0.05 >= 1.05 / (luminance + 0.05) ? Colors.black : Colors.white;
   }
-  final selectedReadable = (selected.computeLuminance() + 0.05) / 0.055 >= 3;
+  final selectedReadable = (selected.computeLuminance() + 0.05) / (const Color(0xFF242928).computeLuminance() + 0.05) >= 4.5;
   final generated = ColorScheme.fromSeed(seedColor: selected, brightness: brightness);
   final scheme =
       ColorScheme.fromSeed(
