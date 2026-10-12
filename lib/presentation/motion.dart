@@ -315,89 +315,38 @@ class _DiaryMotionState extends State<DiaryMotion>
 
   @override
   Widget build(BuildContext context) => GestureDetector(
-    key: const ValueKey('diary-day-swipe'),
-    behavior: HitTestBehavior.opaque,
-    onHorizontalDragStart: (_) => beginDrag(),
-    onHorizontalDragUpdate: moveDrag,
+    key: const ValueKey('diary-day-swipe'), behavior: HitTestBehavior.opaque,
+    onHorizontalDragStart: (_) => beginDrag(), onHorizontalDragUpdate: moveDrag,
     onHorizontalDragEnd: (details) => endDrag(details.primaryVelocity ?? 0),
     onHorizontalDragCancel: () => endDrag(0, true),
-    child: LayoutBuilder(
-      builder: (context, constraints) {
-        width = constraints.maxWidth;
-        return AnimatedBuilder(
-          animation: Listenable.merge([slide, bounce, finger]),
-          builder: (context, _) {
-            final reduced = MediaQuery.disableAnimationsOf(context);
-            if (dragging) {
-              final offset = reduced ? 0.0 : finger.value;
-              return ClipRect(
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Transform.translate(
-                      key: ValueKey('finger/${dayKey(widget.day)}'),
-                      offset: Offset(offset, 0),
-                      child: IgnorePointer(
-                        child: KeyedSubtree(
-                          key: ValueKey(dayKey(widget.day)),
-                          child: widget.child,
-                        ),
-                      ),
-                    ),
-                    if (!reduced && previewDay != null && preview != null)
-                      Transform.translate(
-                        key: ValueKey('finger/${dayKey(previewDay!)}'),
-                        offset: Offset(offset + (drag > 0 ? -width : width), 0),
-                        child: IgnorePointer(
-                          child: ExcludeSemantics(child: preview!),
-                        ),
-                      ),
-                  ],
-                ),
-              );
-            }
-            final progress = reduced
-                ? 1.0
-                : Curves.easeInOutCubic.transform(slide.value);
-
-            return ClipRect(
-              child: Transform.translate(
-                offset: Offset(
-                  reduced ? 0 : -math.sin(bounce.value * math.pi) * 12,
-                  0,
-                ),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    if (previous != null && progress < 1)
-                      Transform.translate(
-                        key: ValueKey('page/${dayKey(previousDay!)}'),
-                        offset: Offset(-direction * progress * width, 0),
-                        child: IgnorePointer(
-                          child: ExcludeSemantics(
-                            child: KeyedSubtree(
-                              key: ValueKey(dayKey(previousDay!)),
-                              child: previous!,
-                            ),
-                          ),
-                        ),
-                      ),
-                    Transform.translate(
-                      key: ValueKey('page/${dayKey(widget.day)}'),
-                      offset: Offset(direction * (1 - progress) * width, 0),
-                      child: KeyedSubtree(
-                        key: ValueKey(dayKey(widget.day)),
-                        child: widget.child,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    ),
+    child: LayoutBuilder(builder: (context, constraints) {
+      width = constraints.maxWidth;
+      return AnimatedBuilder(animation: Listenable.merge([slide, bounce, finger]),
+        builder: (context, _) {
+          final reduced = MediaQuery.disableAnimationsOf(context);
+          final progress = reduced ? 1.0 : Curves.easeInOutCubic.transform(slide.value);
+          final currentOffset = reduced ? 0.0 : dragging ? finger.value : direction * (1-progress) * width;
+          return ClipRect(child: Transform.translate(
+            offset: Offset(reduced || dragging ? 0 : -math.sin(bounce.value * math.pi) * 12, 0),
+            child: Stack(fit: StackFit.expand, children: [
+              if (!dragging && previous != null && progress < 1)
+                Transform.translate(key: ValueKey('page/${dayKey(previousDay!)}'),
+                  offset: Offset(-direction * progress * width, 0),
+                  child: IgnorePointer(child: ExcludeSemantics(child: KeyedSubtree(
+                    key: ValueKey(dayKey(previousDay!)), child: previous!)))),
+              Transform.translate(key: ValueKey('page/${dayKey(widget.day)}'),
+                offset: Offset(currentOffset, 0),
+                child: IgnorePointer(ignoring: dragging || slide.isAnimating,
+                  child: ExcludeSemantics(excluding: false, child: KeyedSubtree(
+                    key: ValueKey(dayKey(widget.day)), child: widget.child)))),
+              if (dragging && !reduced && previewDay != null && preview != null)
+                Transform.translate(key: ValueKey('page/${dayKey(previewDay!)}'),
+                  offset: Offset(finger.value + (drag > 0 ? -width : width), 0),
+                  child: IgnorePointer(child: ExcludeSemantics(child: KeyedSubtree(
+                    key: ValueKey(dayKey(previewDay!)), child: preview!)))),
+            ])));
+        });
+    }),
   );
 }
 
