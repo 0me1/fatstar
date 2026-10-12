@@ -1,0 +1,22 @@
+test_anonymous_access_denied (__main__.ServerTests.test_anonymous_access_denied) ... ok
+test_audit_forgery_denied (__main__.ServerTests.test_audit_forgery_denied) ... ok
+test_concurrent_version_control (__main__.ServerTests.test_concurrent_version_control) ... ok
+test_creator_is_server_owned (__main__.ServerTests.test_creator_is_server_owned) ... ok
+test_direct_catalog_write_denied (__main__.ServerTests.test_direct_catalog_write_denied) ... ok
+test_direct_diary_write_denied (__main__.ServerTests.test_direct_diary_write_denied) ... ok
+test_idempotency (__main__.ServerTests.test_idempotency) ... ok
+test_idempotency_payload_mismatch (__main__.ServerTests.test_idempotency_payload_mismatch) ... ok
+test_invalid_nutrition_rejected (__main__.ServerTests.test_invalid_nutrition_rejected) ... ok
+test_owner_forgery_ignored (__main__.ServerTests.test_owner_forgery_ignored) ... ok
+test_pagination_cursor (__main__.ServerTests.test_pagination_cursor) ... ok
+test_private_diary_isolation (__main__.ServerTests.test_private_diary_isolation) ... ok
+test_public_registration_disabled (__main__.ServerTests.test_public_registration_disabled) ... ok
+test_pull_filters_private_data (__main__.ServerTests.test_pull_filters_private_data) ... ok
+test_restore_creates_new_audit_version (__main__.ServerTests.test_restore_creates_new_audit_version) ... ok
+test_shared_catalog (__main__.ServerTests.test_shared_catalog) ... ok
+test_soft_delete_restore (__main__.ServerTests.test_soft_delete_restore) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.389s
+
+OK
