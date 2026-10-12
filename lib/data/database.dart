@@ -74,13 +74,18 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     beforeOpen: (_) async {
       await customStatement('PRAGMA foreign_keys = ON');
       await customStatement('PRAGMA journal_mode = WAL');
-      final lexicon = await customSelect("SELECT value FROM metadata WHERE key='food_search_lexicon_version'").getSingleOrNull();
+      final lexicon = await customSelect(
+        "SELECT value FROM metadata WHERE key='food_search_lexicon_version'",
+      ).getSingleOrNull();
       if (lexicon?.read<String>('value') != '$foodSearchLexiconVersion') {
         await transaction(() async {
-          for (final product in await records(kind:'product',deleted:true)) {
+          for (final product in await records(kind: 'product', deleted: true)) {
             await _indexProduct(product);
           }
-          await customStatement("INSERT OR REPLACE INTO metadata VALUES('food_search_lexicon_version',?)",['$foodSearchLexiconVersion']);
+          await customStatement(
+            "INSERT OR REPLACE INTO metadata VALUES('food_search_lexicon_version',?)",
+            ['$foodSearchLexiconVersion'],
+          );
         });
       }
     },
@@ -186,7 +191,10 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         // The indexed token and bigram tables remain available without FTS5.
       }
     }
-    await customStatement("INSERT OR REPLACE INTO metadata VALUES('food_search_lexicon_version',?)",['$foodSearchLexiconVersion']);
+    await customStatement(
+      "INSERT OR REPLACE INTO metadata VALUES('food_search_lexicon_version',?)",
+      ['$foodSearchLexiconVersion'],
+    );
   }
 
   Future<bool> usesFts() async => (await customSelect(
@@ -314,14 +322,19 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         ).get();
         ids.addAll(rows.map((r) => r.read<String>('product_id')));
       }
-      final clauses=<String>[];
-      final args=<Variable>[];
-      for(final token in q.tokens) {
-        clauses.add('SELECT product_id FROM food_search_tokens WHERE token>=? AND token<?');
-        args.addAll([Variable(token),Variable('$token\uffff')]);
+      final clauses = <String>[];
+      final args = <Variable>[];
+      for (final token in q.tokens) {
+        clauses.add(
+          'SELECT product_id FROM food_search_tokens WHERE token>=? AND token<?',
+        );
+        args.addAll([Variable(token), Variable('$token\uffff')]);
       }
-      final exactWords=await customSelect('${clauses.join(' INTERSECT ')} LIMIT ?',variables:[...args,Variable(limit)]).get();
-      ids.addAll(exactWords.map((r)=>r.read<String>('product_id')));
+      final exactWords = await customSelect(
+        '${clauses.join(' INTERSECT ')} LIMIT ?',
+        variables: [...args, Variable(limit)],
+      ).get();
+      ids.addAll(exactWords.map((r) => r.read<String>('product_id')));
       for (final token in [
         ...q.tokens,
         ...q.tokens

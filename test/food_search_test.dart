@@ -185,7 +185,23 @@ void main() {
       expect(pref.typicalAmount('gram'), 180);
       expect(pref.typicalAmount('milliliter'), 300);
     },
-  );  test('decimal comma survives wrong layout and explicit units allow punctuation',(){expect(SearchNormalizer.layout('vjkjrj 2,5'),'молоко 2,5');expect(SearchQuery('творог 180 г,').amount,180);});
-  test('frequent suggestions emphasize recent weeks before distant lifetime counts',(){final a=FoodPreference()..count=100;final b=FoodPreference()..count=1..week=1..month=1;expect(compareFoodFrequency(a,b),greaterThan(0));});
-
+  );
+  test(
+    'decimal comma survives wrong layout and explicit units allow punctuation',
+    () {
+      expect(SearchNormalizer.layout('vjkjrj 2,5'), 'молоко 2,5');
+      expect(SearchQuery('творог 180 г,').amount, 180);
+    },
+  );
+  test(
+    'frequent suggestions emphasize recent weeks before distant lifetime counts',
+    () {
+      final a = FoodPreference()..count = 100;
+      final b = FoodPreference()
+        ..count = 1
+        ..week = 1
+        ..month = 1;
+      expect(compareFoodFrequency(a, b), greaterThan(0));
+    },
+  );
 }

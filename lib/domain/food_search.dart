@@ -147,11 +147,13 @@ class FoodPreference {
   }
 }
 
-int compareFoodFrequency(FoodPreference? a,FoodPreference? b) {
-  final recent=(b?.month??0).compareTo(a?.month??0);
-  if(recent!=0) { return recent; }
-  final week=(b?.week??0).compareTo(a?.week??0);
-  return week!=0 ? week : (b?.count??0).compareTo(a?.count??0);
+int compareFoodFrequency(FoodPreference? a, FoodPreference? b) {
+  final recent = (b?.month ?? 0).compareTo(a?.month ?? 0);
+  if (recent != 0) {
+    return recent;
+  }
+  final week = (b?.week ?? 0).compareTo(a?.week ?? 0);
+  return week != 0 ? week : (b?.count ?? 0).compareTo(a?.count ?? 0);
 }
 
 Map<String, FoodPreference> foodPreferences(
@@ -345,7 +347,7 @@ List<SearchHit> rankFoodCandidates(
       }
     }
     final score = filter == 'frequent'
-        ? compareFoodFrequency(a.preference,b.preference)
+        ? compareFoodFrequency(a.preference, b.preference)
         : b.personal.compareTo(a.personal);
     if (score != 0) {
       return score;
