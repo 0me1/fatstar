@@ -332,8 +332,9 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
   }
   AutomaticGoal calculateAutomatic() {
     final age = parseNumber(fields['age']!.text);
-    if (age != age.roundToDouble())
+    if (age != age.roundToDouble()) {
       throw ArgumentError('Возраст в полных годах');
+    }
     return automaticGoal(
       formula: formula,
       weight: parseNumber(fields['weight']!.text),
