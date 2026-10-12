@@ -20,6 +20,13 @@ class SwipeController extends DiaryController {
   }
 }
 
+class FailingRemovalController extends DiaryController {
+  @override
+  Future<Record> remove(Record value) async {
+    throw StateError('Local deletion failed');
+  }
+}
+
 void main() {
   setUpAll(() => initializeDateFormatting('ru'));
   for (final brightness in Brightness.values) {
@@ -263,7 +270,7 @@ void main() {
         null,
       ),
     );
-    final c = DiaryController()
+    final c = FailingRemovalController()
       ..db = DiaryDatabase.memory()
       ..loading = false;
     final entry = await c.save('entry', {
