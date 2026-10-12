@@ -149,7 +149,7 @@ void main() {
   ) async {
     final haptics = <Object?>[];
     tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
-      if (call.method == 'HapticFeedback.vibrate') haptics.add(call.arguments);
+      if (call.method == 'HapticFeedback.vibrate') { haptics.add(call.arguments); }
       return null;
     });
     addTearDown(() => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, null));

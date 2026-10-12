@@ -133,7 +133,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       'INSERT OR REPLACE INTO ${_table(record.kind)}(id,data,version,deleted,local_only) VALUES(?,?,?,?,?)',
       [record.id, jsonEncode(record.data), record.version, record.deleted ? 1 : 0, record.localOnly ? 1 : 0],
     );
-    if (record.kind == 'product') await _indexProduct(record);
+    if (record.kind == 'product') { await _indexProduct(record); }
     searchRevision++;
   }
 
@@ -158,12 +158,12 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     for (final table in ['food_search_documents','food_search_tokens','food_search_grams']) {
       await customStatement('DELETE FROM $table WHERE product_id=?', [id]);
     }
-    if (await usesFts()) await customStatement('DELETE FROM food_search_fts WHERE product_id=?', [id]);
+    if (await usesFts()) { await customStatement('DELETE FROM food_search_fts WHERE product_id=?', [id]); }
   }
 
   Future<void> _indexProduct(Record product) async {
     await _removeSearchProduct(product.id);
-    if (product.deleted) return;
+    if (product.deleted) { return; }
     final name = SearchNormalizer.normalize(product.data['name'] as String? ?? '');
     final brand = SearchNormalizer.normalize(product.data['brand'] as String? ?? '');
     final aliases = SearchNormalizer.aliases(product);
@@ -178,7 +178,18 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         await customStatement('INSERT OR IGNORE INTO ${pair.$1} VALUES ${List.filled(chunk.length,'(?,?)').join(',')}', [for (final v in chunk) ...[v,product.id]]);
       }
     }
-    if (await usesFts()) await customStatement('INSERT INTO food_search_fts(product_id,name,brand,aliases) VALUES(?,?,?,?)',[product.id,name,brand,aliases]);
+    if (await usesFts()) { await customStatement('INSERT INTO food_search_fts(product_id,name,brand,aliases) VALUES(?,?,?,?)',[product.id,name,brand,aliases]); }
+  }
+
+  Future<List<Record>> searchProductsByIds(Iterable<String> ids, {bool hidden=false}) async {
+    final result=<Record>[];
+    final values=ids.toList();
+    for(var i=0;i<values.length;i+=200) {
+      final chunk=values.skip(i).take(200).toList();
+      final rows=await customSelect("SELECT 'product' AS kind,p.* FROM products p JOIN food_search_documents d ON d.product_id=p.id WHERE p.deleted=0 AND (?=1 OR d.hidden=0) AND p.id IN (${List.filled(chunk.length,'?').join(',')})",variables:[Variable(hidden?1:0),...chunk.map(Variable.new)]).get();
+      result.addAll(rows.map(_record));
+    }
+    return result;
   }
 
   Future<List<Record>> searchCandidates(SearchQuery query, {bool hidden = false, int limit = 600}) async {
@@ -189,7 +200,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     final ids = <String>{};
     final alternatives = [query,SearchQuery(SearchNormalizer.layout(query.raw))];
     for (final q in alternatives) {
-      if (q.tokens.isEmpty) continue;
+      if (q.tokens.isEmpty) { continue; }
       if (await usesFts()) {
         final expression = q.tokens.map((t) => '"${t.replaceAll('"','""')}"*').join(' OR ');
         final rows = await customSelect('SELECT product_id FROM food_search_fts WHERE food_search_fts MATCH ? ORDER BY rank LIMIT ?',variables:[Variable(expression),Variable(limit)]).get();
@@ -207,14 +218,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       ids.addAll(rows.map((r)=>r.read<String>('product_id')));
     }
     if (ids.isEmpty) return [];
-    final result = <Record>[];
-    final values = ids.take(limit*3).toList();
-    for(var i=0;i<values.length;i+=200) {
-      final chunk=values.skip(i).take(200).toList();
-      final rows=await customSelect("SELECT 'product' AS kind,p.* FROM products p JOIN food_search_documents d ON d.product_id=p.id WHERE p.deleted=0 AND (?=1 OR d.hidden=0) AND p.id IN (${List.filled(chunk.length,'?').join(',')})",variables:[Variable(hidden?1:0),...chunk.map(Variable.new)]).get();
-      result.addAll(rows.map(_record));
-    }
-    return result;
+    return searchProductsByIds(ids.take(limit*3),hidden:hidden);
   }
 
   @override

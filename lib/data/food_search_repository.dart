@@ -29,10 +29,7 @@ class FoodSearchRepository {
       final present = candidates.map((p)=>p.id).toSet();
       final ids = _preferences.keys.where((id)=>!present.contains(id)).toList();
       // Personal products must remain discoverable beyond the alphabetic starter page.
-      for (final id in ids) {
-        final p = await db.find('product',id);
-        if (p != null && !p.deleted && (hidden || p.data['active'] != false)) candidates.add(p);
-      }
+      candidates.addAll(await db.searchProductsByIds(ids,hidden:hidden));
     }
     final preferences = _preferences;
     return Isolate.run(() => rankFoodCandidates(candidates,query,preferences,meal,now,filter:filter));
