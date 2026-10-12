@@ -113,6 +113,8 @@ class DiaryController extends ChangeNotifier {
     return value is String && diaryFonts.containsKey(value) ? value : 'Rubik';
   }
 
+  int get accent => of('settings').firstOrNull?.data['accent'] as int? ?? 0xFF56DCC6;
+
   Future<void> saveSettings(Json patch) async {
     final previous = of('settings').firstOrNull;
     await save('settings', {

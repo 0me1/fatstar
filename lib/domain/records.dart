@@ -142,6 +142,10 @@ void validateRecord(Record record) {
         throw ArgumentError('Неверная порция');
       }
     case 'settings':
+      final accent = d['accent'];
+      if (accent != null && (accent is! int || accent < 0xFF000000 || accent > 0xFFFFFFFF)) {
+        throw ArgumentError('Неверный акцентный цвет');
+      }
       if (d['font'] != null && !diaryFonts.containsKey(d['font'])) {
         throw ArgumentError('Неизвестный шрифт');
       }

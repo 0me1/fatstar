@@ -233,12 +233,6 @@ class DiaryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = ref.watch(diaryProvider);
-    final total = NutritionTotal(c.entries.map(entryNutrition));
-    final goal = c.goal == null
-        ? null
-        : Nutrition.fromJson(
-            Map<String, dynamic>.from(c.goal!.data['nutrition'] as Map),
-          );
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -290,7 +284,22 @@ class DiaryScreen extends ConsumerWidget {
       body: DiaryMotion(
         day: c.day,
         selectDay: c.selectDay,
-        child: ListView(
+        child: page(context, c, c.day),
+        pageBuilder: (day) => page(context, c, day),
+      ),
+    );
+  }
+
+  Widget page(BuildContext context, DiaryController c, DateTime day) {
+    final entries = c.of('entry').where((e) => e.data['day'] == dayKey(day)).toList();
+    final goalRecord = goalForDay(c.records, day);
+    final total = NutritionTotal(entries.map(entryNutrition));
+    final goal = goalRecord == null
+        ? null
+        : Nutrition.fromJson(
+            Map<String, dynamic>.from(goalRecord!.data['nutrition'] as Map),
+          );
+    return ListView(
           padding: const EdgeInsets.all(16),
           children: [
             if (c.sync?.error != null)
@@ -414,8 +423,8 @@ class DiaryScreen extends ConsumerWidget {
                   for (final meal in Meal.values) ...[
                     if (meal != Meal.breakfast) const Divider(height: 1),
                     MealSection(
-                      key: ValueKey('meal/${dayKey(c.day)}/${meal.name}'),
-                      hasEntries: c.entries.any(
+                      key: ValueKey('meal/${dayKey(day)}/${meal.name}'),
+                      hasEntries: entries.any(
                         (e) => e.data['meal'] == meal.name,
                       ),
                       header: (expanded, toggle) => ListTile(
@@ -448,13 +457,14 @@ class DiaryScreen extends ConsumerWidget {
                             }, style: const TextStyle(fontSize: 26)),
                           ),
                         ),
-                        title: Text(
-                          '${meal.label} ${expanded ? '⌃' : '⌄'}',
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(fontWeight: FontWeight.w700),
-                        ),
+                        title: Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
+                          Flexible(child: Text(meal.label, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700))),
+                          const SizedBox(width: 4),
+                          AnimatedRotation(turns: expanded ? 0.5 : 0, duration: motionDuration(context, 180),
+                            child: const Icon(Icons.expand_more_rounded, size: 24)),
+                        ]),
                         subtitle: Text(
-                          '${number(NutritionTotal(c.entries.where((e) => e.data['meal'] == meal.name).map(entryNutrition)).kcal, 0)} ккал',
+                          '${number(NutritionTotal(entries.where((e) => e.data['meal'] == meal.name).map(entryNutrition)).kcal, 0)} ккал',
                         ),
                         trailing: FoodAddButton(
                           tooltip: 'Добавить в ${meal.label.toLowerCase()}',
@@ -467,10 +477,10 @@ class DiaryScreen extends ConsumerWidget {
                         children: [
                           MotionRows(
                             key: ValueKey(
-                              'entries/${dayKey(c.day)}/${meal.name}',
+                              'entries/${dayKey(day)}/${meal.name}',
                             ),
                             children: [
-                              for (final e in c.entries.where(
+                              for (final e in entries.where(
                                 (e) => e.data['meal'] == meal.name,
                               ))
                                 Dismissible(
@@ -546,7 +556,7 @@ class DiaryScreen extends ConsumerWidget {
                                               context.mounted) {
                                             final date = await showDatePicker(
                                               context: context,
-                                              initialDate: c.day,
+                                              initialDate: day,
                                               firstDate: DateTime(2000),
                                               lastDate: DateTime(2100),
                                             );
@@ -598,9 +608,7 @@ class DiaryScreen extends ConsumerWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
+        );
   }
 
   Widget macro(

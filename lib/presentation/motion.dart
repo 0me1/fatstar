@@ -152,17 +152,23 @@ class DiaryMotion extends StatefulWidget {
     required this.day,
     required this.selectDay,
     required this.child,
+    this.pageBuilder,
   });
   final DateTime day;
   final ValueChanged<DateTime> selectDay;
   final Widget child;
+  final Widget Function(DateTime)? pageBuilder;
   @override
   State<DiaryMotion> createState() => _DiaryMotionState();
 }
 
 class _DiaryMotionState extends State<DiaryMotion>
     with TickerProviderStateMixin {
-  double drag = 0;
+  double drag = 0, width = 1;
+  bool dragging = false;
+  Widget? preview;
+  DateTime? previewDay, pendingDay;
+  late final finger = AnimationController.unbounded(vsync: this);
   int direction = 1;
   Widget? previous;
   DateTime? previousDay;
@@ -189,6 +195,12 @@ class _DiaryMotionState extends State<DiaryMotion>
   void didUpdateWidget(covariant DiaryMotion oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!DateUtils.isSameDay(oldWidget.day, widget.day)) {
+      if (DateUtils.isSameDay(pendingDay, widget.day)) {
+        previous = null; pendingDay = null; preview = null; previewDay = null;
+        dragging = false; finger.value = 0; slide.value = 1;
+        return;
+      }
+      finger.stop(); dragging = false; preview = null; previewDay = null;
       direction = widget.day.isAfter(oldWidget.day) ? 1 : -1;
       if (MediaQuery.disableAnimationsOf(context)) {
         previous = null;
@@ -203,39 +215,74 @@ class _DiaryMotionState extends State<DiaryMotion>
 
   @override
   void dispose() {
+    finger.dispose();
     bounce.dispose();
     slide.dispose();
     super.dispose();
   }
 
+  DateTime? adjacent(double offset) {
+    if (offset == 0) return null;
+    final next = DateTime(widget.day.year, widget.day.month, widget.day.day + (offset > 0 ? -1 : 1));
+    final now = DateTime.now();
+    return next.isBefore(DateTime(2000)) || next.isAfter(DateTime(now.year, now.month, now.day)) ? null : next;
+  }
+  void beginDrag() {
+    if (slide.isAnimating || finger.isAnimating) return;
+    setState(() { drag = 0; dragging = true; preview = null; previewDay = null; finger.value = 0; });
+  }
+  void moveDrag(DragUpdateDetails details) {
+    if (!dragging || finger.isAnimating) return;
+    drag = (drag + details.delta.dx).clamp(-width, width);
+    final next = adjacent(drag);
+    if (!DateUtils.isSameDay(next, previewDay)) {
+      previewDay = next;
+      preview = next == null ? null : widget.pageBuilder?.call(next);
+    }
+    finger.value = next == null ? drag * 0.16 : drag;
+  }
+  Future<void> endDrag([double velocity = 0, bool cancel = false]) async {
+    if (!dragging || finger.isAnimating) return;
+    final next = adjacent(drag);
+    final complete = !cancel && next != null && (drag.abs() >= width * 0.2 || (velocity.abs() >= 500 && velocity * drag > 0));
+    if (MediaQuery.disableAnimationsOf(context)) {
+      if (complete) { pendingDay = next; widget.selectDay(next); }
+      else { setState(() { dragging = false; finger.value = 0; preview = null; }); }
+      return;
+    }
+    final target = complete ? (drag > 0 ? width : -width) : 0.0;
+    final duration = Duration(milliseconds: math.max(100, (300 * (target-finger.value).abs()/width).round()));
+    try { await finger.animateTo(target, duration: duration, curve: Curves.easeOutCubic).orCancel; }
+    on TickerCanceled { return; }
+    if (!mounted) return;
+    if (complete) { pendingDay = next; widget.selectDay(next); }
+    else { setState(() { dragging = false; preview = null; previewDay = null; }); }
+  }
   @override
   Widget build(BuildContext context) => GestureDetector(
-    key: const ValueKey('diary-day-swipe'),
-    behavior: HitTestBehavior.opaque,
-    onHorizontalDragStart: (_) => drag = 0,
-    onHorizontalDragUpdate: (details) => drag += details.delta.dx,
-    onHorizontalDragEnd: (details) {
-      if (slide.isAnimating) return;
-      final velocity = details.primaryVelocity ?? 0;
-      if (drag.abs() < 64 && velocity.abs() < 300) return;
-      final delta = (drag.abs() >= 64 ? drag : velocity) > 0 ? -1 : 1;
-      final next = DateTime(
-        widget.day.year,
-        widget.day.month,
-        widget.day.day + delta,
-      );
-      final now = DateTime.now();
-      if (next.isAfter(DateTime(now.year, now.month, now.day))) {
-        if (!MediaQuery.disableAnimationsOf(context)) bounce.forward(from: 0);
-        return;
-      }
-      widget.selectDay(next);
-    },
+    key: const ValueKey('diary-day-swipe'), behavior: HitTestBehavior.opaque,
+    onHorizontalDragStart: (_) => beginDrag(),
+    onHorizontalDragUpdate: moveDrag,
+    onHorizontalDragEnd: (details) => endDrag(details.primaryVelocity ?? 0),
+    onHorizontalDragCancel: () => endDrag(0, true),
     child: LayoutBuilder(
-      builder: (context, constraints) => AnimatedBuilder(
-        animation: Listenable.merge([slide, bounce]),
+      builder: (context, constraints) {
+        width = constraints.maxWidth;
+        return AnimatedBuilder(
+        animation: Listenable.merge([slide, bounce, finger]),
         builder: (context, _) {
           final reduced = MediaQuery.disableAnimationsOf(context);
+          if (dragging) {
+            final offset = reduced ? 0.0 : finger.value;
+            return ClipRect(child: Stack(fit: StackFit.expand, children: [
+              Transform.translate(key: ValueKey('finger/${dayKey(widget.day)}'), offset: Offset(offset, 0),
+                child: IgnorePointer(child: KeyedSubtree(key: ValueKey(dayKey(widget.day)), child: widget.child))),
+              if (!reduced && previewDay != null && preview != null)
+                Transform.translate(key: ValueKey('finger/${dayKey(previewDay!)}'),
+                  offset: Offset(offset + (drag > 0 ? -width : width), 0),
+                  child: IgnorePointer(child: ExcludeSemantics(child: preview!))),
+            ]));
+          }
           final progress = reduced
               ? 1.0
               : Curves.easeInOutCubic.transform(slide.value);
@@ -275,7 +322,8 @@ class _DiaryMotionState extends State<DiaryMotion>
             ),
           );
         },
-      ),
+      );
+      },
     ),
   );
 }

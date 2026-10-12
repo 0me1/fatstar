@@ -81,8 +81,8 @@ class _CalorieDiaryAppState extends ConsumerState<CalorieDiaryApp>
       locale: const Locale('ru'),
       supportedLocales: const [Locale('ru')],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      theme: diaryTheme(Brightness.light, font: c.font),
-      darkTheme: diaryTheme(Brightness.dark, font: c.font),
+      theme: diaryTheme(Brightness.light, font: c.font, accent: c.accent),
+      darkTheme: diaryTheme(Brightness.dark, font: c.font, accent: c.accent),
       themeMode: switch (c.theme) {
         'light' => ThemeMode.light,
         'system' => ThemeMode.system,
@@ -112,15 +112,22 @@ class _CalorieDiaryAppState extends ConsumerState<CalorieDiaryApp>
   }
 }
 
-ThemeData diaryTheme(Brightness brightness, {String font = 'Rubik'}) {
+ThemeData diaryTheme(Brightness brightness, {String font = 'Rubik', int accent = 0xFF56DCC6}) {
   final dark = brightness == Brightness.dark;
+  final selected = Color(accent);
+  Color foreground(Color background) {
+    final luminance = background.computeLuminance();
+    return (luminance + 0.05) / 0.05 >= 1.05 / (luminance + 0.05) ? Colors.black : Colors.white;
+  }
+  final selectedReadable = (selected.computeLuminance() + 0.05) / 0.055 >= 3;
+  final generated = ColorScheme.fromSeed(seedColor: selected, brightness: brightness);
   final scheme =
       ColorScheme.fromSeed(
-        seedColor: const Color(0xFF56DCC6),
+        seedColor: selected,
         brightness: brightness,
       ).copyWith(
-        primary: dark ? const Color(0xFF56DCC6) : const Color(0xFF006B5D),
-        onPrimary: dark ? const Color(0xFF082B25) : Colors.white,
+        primary: dark && selectedReadable ? selected : generated.primary,
+        onPrimary: foreground(dark && selectedReadable ? selected : generated.primary),
         surface: dark ? const Color(0xFF242928) : Colors.white,
         onSurface: dark ? const Color(0xFFF3F7F7) : const Color(0xFF172225),
       );
