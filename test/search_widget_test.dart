@@ -87,7 +87,7 @@ void main() {
           tester.widget<ListView>(find.byType(ListView)).controller!.offset,
           offset,
         );
-        await tester.tap(find.byTooltip('Добавить 100 г'));
+        await tester.tap(find.byTooltip('Добавить 100,0 г'));
         await ready(tester);
         expect(c.entries, hasLength(1));
         expect(c.entries.single.data['amount'], 100);

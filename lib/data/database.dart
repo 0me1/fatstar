@@ -152,6 +152,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     await customStatement(
       'CREATE TABLE food_search_documents (product_id TEXT PRIMARY KEY, name TEXT NOT NULL, brand TEXT NOT NULL, aliases TEXT NOT NULL, hidden INTEGER NOT NULL)',
     );
+    await customStatement('CREATE INDEX food_search_name ON food_search_documents(name)');
     await customStatement(
       'CREATE TABLE food_search_tokens (token TEXT NOT NULL, product_id TEXT NOT NULL, PRIMARY KEY(token,product_id)) WITHOUT ROWID',
     );
@@ -277,6 +278,8 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       return rows.map(_record).toList();
     }
     final ids = <String>{};
+    final exact = await customSelect('SELECT product_id FROM food_search_documents WHERE name=? LIMIT ?',variables:[Variable(query.normalized),Variable(limit)]).get();
+    ids.addAll(exact.map((r)=>r.read<String>('product_id')));
     final alternatives = [
       query,
       SearchQuery(SearchNormalizer.layout(query.raw)),

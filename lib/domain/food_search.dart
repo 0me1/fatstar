@@ -42,9 +42,11 @@ class SearchNormalizer {
     final s = text.toLowerCase();
     final toRussian = RegExp('[a-z]').hasMatch(s);
     final from = toRussian ? latin : russian, to = toRussian ? russian : latin;
-    return s.split('').map((c) {
-      final i = from.indexOf(c);
-      return i < 0 ? c : to[i];
+    return List.generate(s.length,(index) {
+      final c=s[index];
+      if((c==',' || c=='.') && index>0 && index+1<s.length && RegExp(r'\d').hasMatch(s[index-1]) && RegExp(r'\d').hasMatch(s[index+1])) { return c; }
+      final i=from.indexOf(c);
+      return i<0?c:to[i];
     }).join();
   }
 
@@ -81,7 +83,7 @@ class SearchNormalizer {
 class SearchQuery {
   SearchQuery(this.raw) {
     final match = RegExp(
-      r'(\d+(?:[.,]\d+)?)\s*(грамм(?:а|ов)?|гр|г|мл)(?:\s|$)',
+      r'(\d+(?:[.,]\d+)?)\s*(грамм(?:а|ов)?|гр|г|мл)(?=\s|[.,;!?)]|$)',
       caseSensitive: false,
     ).firstMatch(raw);
     var text = raw;
@@ -93,8 +95,9 @@ class SearchQuery {
         text = raw.replaceRange(match.start, match.end, ' ');
       }
     }
-    normalized = SearchNormalizer.normalize(text);
-    tokens = SearchNormalizer.tokens(text);
+    if(text.length>512) { text=text.substring(0,512); }
+    tokens = SearchNormalizer.tokens(text).take(16).toList();
+    normalized = tokens.join(' ');
   }
   final String raw;
   late final String normalized;
