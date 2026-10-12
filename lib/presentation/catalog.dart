@@ -244,9 +244,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                           Map<String, dynamic>.from(p.data['nutrition'] as Map),
                         );
                         final last = c.lastPortion(p.id);
-                        final amount = last == null
-                            ? 100.0
-                            : decimal(last.data['amount']);
+                        final amount = decimal(quickEntryForProduct(p, last)['amount']);
                         return ListTile(
                           title: Text(p.data['name'] as String, maxLines: 2),
                           subtitle: Text(
@@ -257,7 +255,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
                               : choose(p),
                           trailing: widget.meal != null
                               ? FoodAddButton(
-                                  tooltip: 'Добавить последнюю порцию',
+                                  tooltip: 'Добавить ${number(amount)} ${p.data['unit'] == 'gram' ? 'г' : 'мл'}',
                                   onAdd: p.data['active'] == false
                                       ? null
                                       : () => choose(p, quick: true),
