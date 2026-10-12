@@ -10,16 +10,20 @@ double contrast(Color a, Color b) {
   final x = a.computeLuminance(), y = b.computeLuminance();
   return x > y ? (x + 0.05) / (y + 0.05) : (y + 0.05) / (x + 0.05);
 }
+
 class PageProbe extends StatefulWidget {
   const PageProbe({super.key, required this.label});
   final String label;
   @override
   State<PageProbe> createState() => _PageProbeState();
 }
+
 class _PageProbeState extends State<PageProbe> {
   @override
-  Widget build(BuildContext context) => SizedBox.expand(child: Center(child: Text(widget.label)));
+  Widget build(BuildContext context) =>
+      SizedBox.expand(child: Center(child: Text(widget.label)));
 }
+
 void main() {
   test('accent preserves font and theme in personal settings', () async {
     final c = DiaryController()
@@ -81,21 +85,55 @@ void main() {
     await tester.pumpAndSettle();
     expect(selected, 0xFFA125FF);
   });
-  testWidgets('diary follows finger before committing and returns after a short drag', (tester) async {
-    var day = DateTime(2026,1,3);
-    Widget page(DateTime date) => PageProbe(key: ValueKey('probe/${date.day}'), label: 'Day ${date.day}');
-    await tester.pumpWidget(MaterialApp(home: Scaffold(body: StatefulBuilder(builder: (context,set) =>
-      DiaryMotion(day: day, selectDay: (next) => set(() => day = next), child: page(day), pageBuilder: page)))));
-    final initialPage = tester.state(find.byKey(const ValueKey('probe/3')));
-    final gesture = await tester.startGesture(const Offset(400,300));
-    await gesture.moveBy(const Offset(25,0)); await tester.pump();
-    await gesture.moveBy(const Offset(100,0)); await tester.pump();
-    expect(tester.getCenter(find.text('Day 3')).dx, greaterThan(450));
-    expect(day.day,3); expect(find.text('Day 2'),findsOneWidget);
-    expect(identical(initialPage, tester.state(find.byKey(const ValueKey('probe/3')))), isTrue);
-    await gesture.up(); await tester.pumpAndSettle();
-    expect(day.day,3); expect(tester.getCenter(find.text('Day 3')).dx, closeTo(400,1));
-    await tester.fling(find.byKey(const ValueKey('diary-day-swipe')),const Offset(300,0),800);
-    await tester.pumpAndSettle(); expect(day.day,2);
-  });
+  testWidgets(
+    'diary follows finger before committing and returns after a short drag',
+    (tester) async {
+      var day = DateTime(2026, 1, 3);
+      Widget page(DateTime date) => PageProbe(
+        key: ValueKey('probe/${date.day}'),
+        label: 'Day ${date.day}',
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: StatefulBuilder(
+              builder: (context, set) => DiaryMotion(
+                day: day,
+                selectDay: (next) => set(() => day = next),
+                pageBuilder: page,
+                child: page(day),
+              ),
+            ),
+          ),
+        ),
+      );
+      final initialPage = tester.state(find.byKey(const ValueKey('probe/3')));
+      final gesture = await tester.startGesture(const Offset(400, 300));
+      await gesture.moveBy(const Offset(25, 0));
+      await tester.pump();
+      await gesture.moveBy(const Offset(100, 0));
+      await tester.pump();
+      expect(tester.getCenter(find.text('Day 3')).dx, greaterThan(450));
+      expect(day.day, 3);
+      expect(find.text('Day 2'), findsOneWidget);
+      expect(
+        identical(
+          initialPage,
+          tester.state(find.byKey(const ValueKey('probe/3'))),
+        ),
+        isTrue,
+      );
+      await gesture.up();
+      await tester.pumpAndSettle();
+      expect(day.day, 3);
+      expect(tester.getCenter(find.text('Day 3')).dx, closeTo(400, 1));
+      await tester.fling(
+        find.byKey(const ValueKey('diary-day-swipe')),
+        const Offset(300, 0),
+        800,
+      );
+      await tester.pumpAndSettle();
+      expect(day.day, 2);
+    },
+  );
 }
