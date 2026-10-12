@@ -291,215 +291,243 @@ class DiaryScreen extends ConsumerWidget {
   }
 
   Widget page(BuildContext context, DiaryController c, DateTime day) {
-    final entries = c.of('entry').where((e) => e.data['day'] == dayKey(day)).toList();
+    final entries = c
+        .of('entry')
+        .where((e) => e.data['day'] == dayKey(day))
+        .toList();
     final goalRecord = goalForDay(c.records, day);
     final total = NutritionTotal(entries.map(entryNutrition));
     final goal = goalRecord == null
         ? null
         : Nutrition.fromJson(
-            Map<String, dynamic>.from(goalRecord!.data['nutrition'] as Map),
+            Map<String, dynamic>.from(goalRecord.data['nutrition'] as Map),
           );
     return ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            if (c.sync?.error != null)
-              Text(
-                c.sync!.error!,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            Text('Сводка', style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
+      padding: const EdgeInsets.all(16),
+      children: [
+        if (c.sync?.error != null)
+          Text(c.sync!.error!, style: Theme.of(context).textTheme.bodySmall),
+        Text('Сводка', style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 8),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 24,
+                  runSpacing: 16,
                   children: [
-                    Wrap(
-                      alignment: WrapAlignment.center,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 24,
-                      runSpacing: 16,
+                    Column(
                       children: [
-                        Column(
-                          children: [
-                            MotionNumber(
-                              value: total.kcal,
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                            const Text('Съедено'),
-                          ],
+                        MotionNumber(
+                          value: total.kcal,
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
-                        SizedBox(
-                          width: 160,
-                          height: 160,
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              SizedBox.expand(
-                                child: GoalPulse(
-                                  reached:
-                                      goal != null &&
-                                      total.kcal >= goal.kcal &&
-                                      total.kcal <= goal.kcal * 1.02,
-                                  child: MotionProgress(
-                                    circular: true,
-                                    label: 'Прогресс калорий',
-                                    value: goal == null || goal.kcal == 0
-                                        ? 0
-                                        : (total.kcal / goal.kcal).clamp(
-                                            0.0,
-                                            1.0,
-                                          ),
-                                  ),
-                                ),
+                        const Text('Съедено'),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 160,
+                      height: 160,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          SizedBox.expand(
+                            child: GoalPulse(
+                              reached:
+                                  goal != null &&
+                                  total.kcal >= goal.kcal &&
+                                  total.kcal <= goal.kcal * 1.02,
+                              child: MotionProgress(
+                                circular: true,
+                                label: 'Прогресс калорий',
+                                value: goal == null || goal.kcal == 0
+                                    ? 0
+                                    : (total.kcal / goal.kcal).clamp(0.0, 1.0),
                               ),
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (goal == null)
-                                    const Text('—')
-                                  else
-                                    MotionNumber(
-                                      value: (goal.kcal - total.kcal).abs(),
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.headlineMedium,
-                                    ),
-                                  Text(
-                                    goal == null
-                                        ? 'Цель не задана'
-                                        : total.kcal > goal.kcal
-                                        ? 'Сверх цели'
-                                        : 'Осталось',
-                                  ),
-                                ],
+                            ),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (goal == null)
+                                const Text('—')
+                              else
+                                MotionNumber(
+                                  value: (goal.kcal - total.kcal).abs(),
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.headlineMedium,
+                                ),
+                              Text(
+                                goal == null
+                                    ? 'Цель не задана'
+                                    : total.kcal > goal.kcal
+                                    ? 'Сверх цели'
+                                    : 'Осталось',
                               ),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      goal == null
-                          ? 'Задайте норму в разделе «Цели»'
-                          : 'Суточная цель ${number(goal.kcal, 0)} ккал',
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        macro(
-                          context,
-                          'Углеводы',
-                          total.carbs,
-                          goal?.carbs,
-                          total.carbsComplete,
-                        ),
-                        macro(
-                          context,
-                          'Белки',
-                          total.protein,
-                          goal?.protein,
-                          total.proteinComplete,
-                        ),
-                        macro(
-                          context,
-                          'Жиры',
-                          total.fat,
-                          goal?.fat,
-                          total.fatComplete,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 16),
+                Text(
+                  goal == null
+                      ? 'Задайте норму в разделе «Цели»'
+                      : 'Суточная цель ${number(goal.kcal, 0)} ккал',
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    macro(
+                      context,
+                      'Углеводы',
+                      total.carbs,
+                      goal?.carbs,
+                      total.carbsComplete,
+                    ),
+                    macro(
+                      context,
+                      'Белки',
+                      total.protein,
+                      goal?.protein,
+                      total.proteinComplete,
+                    ),
+                    macro(
+                      context,
+                      'Жиры',
+                      total.fat,
+                      goal?.fat,
+                      total.fatComplete,
+                    ),
+                  ],
+                ),
+              ],
             ),
-            const SizedBox(height: 24),
-            Text('Питание', style: Theme.of(context).textTheme.titleLarge),
-            Card(
-              child: Column(
-                children: [
-                  for (final meal in Meal.values) ...[
-                    if (meal != Meal.breakfast) const Divider(height: 1),
-                    MealSection(
-                      key: ValueKey('meal/${dayKey(day)}/${meal.name}'),
-                      hasEntries: entries.any(
-                        (e) => e.data['meal'] == meal.name,
+          ),
+        ),
+        const SizedBox(height: 24),
+        Text('Питание', style: Theme.of(context).textTheme.titleLarge),
+        Card(
+          child: Column(
+            children: [
+              for (final meal in Meal.values) ...[
+                if (meal != Meal.breakfast) const Divider(height: 1),
+                MealSection(
+                  key: ValueKey('meal/${dayKey(day)}/${meal.name}'),
+                  hasEntries: entries.any((e) => e.data['meal'] == meal.name),
+                  header: (expanded, toggle) => ListTile(
+                    minVerticalPadding: 24,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    leading: Container(
+                      width: 58,
+                      height: 58,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.surface,
+                        border: Border.all(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? const Color(0xFF596161)
+                              : const Color(0xFFCFDBD8),
+                          width: 7,
+                        ),
                       ),
-                      header: (expanded, toggle) => ListTile(
-                        minVerticalPadding: 24,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                        ),
-                        leading: Container(
-                          width: 58,
-                          height: 58,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).colorScheme.surface,
-                            border: Border.all(
-                              color:
-                                  Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? const Color(0xFF596161)
-                                  : const Color(0xFFCFDBD8),
-                              width: 7,
-                            ),
-                          ),
-                          child: ExcludeSemantics(
-                            child: Text(switch (meal) {
-                              Meal.breakfast => '☕',
-                              Meal.lunch => '🍝',
-                              Meal.dinner => '🥗',
-                              Meal.snack => '🍎',
-                            }, style: const TextStyle(fontSize: 26)),
-                          ),
-                        ),
-                        title: Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.center, children: [
-                          Flexible(child: Text(meal.label, style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700))),
-                          const SizedBox(width: 4),
-                          AnimatedRotation(turns: expanded ? 0.5 : 0, duration: motionDuration(context, 180),
-                            child: const Icon(Icons.expand_more_rounded, size: 24)),
-                        ]),
-                        subtitle: Text(
-                          '${number(NutritionTotal(entries.where((e) => e.data['meal'] == meal.name).map(entryNutrition)).kcal, 0)} ккал',
-                        ),
-                        trailing: FoodAddButton(
-                          tooltip: 'Добавить в ${meal.label.toLowerCase()}',
-                          onPressed: () => add(context, meal),
-                        ),
-                        onTap: toggle,
-                        onLongPress: () => copyMeal(context, c, meal),
+                      child: ExcludeSemantics(
+                        child: Text(switch (meal) {
+                          Meal.breakfast => '☕',
+                          Meal.lunch => '🍝',
+                          Meal.dinner => '🥗',
+                          Meal.snack => '🍎',
+                        }, style: const TextStyle(fontSize: 26)),
                       ),
-                      child: Column(
+                    ),
+                    title: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            meal.label,
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        AnimatedRotation(
+                          turns: expanded ? 0.5 : 0,
+                          duration: motionDuration(context, 180),
+                          child: const Icon(
+                            Icons.expand_more_rounded,
+                            size: 24,
+                          ),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text(
+                      '${number(NutritionTotal(entries.where((e) => e.data['meal'] == meal.name).map(entryNutrition)).kcal, 0)} ккал',
+                    ),
+                    trailing: FoodAddButton(
+                      tooltip: 'Добавить в ${meal.label.toLowerCase()}',
+                      onPressed: () => add(context, meal),
+                    ),
+                    onTap: toggle,
+                    onLongPress: () => copyMeal(context, c, meal),
+                  ),
+                  child: Column(
+                    children: [
+                      MotionRows(
+                        key: ValueKey('entries/${dayKey(day)}/${meal.name}'),
                         children: [
-                          MotionRows(
-                            key: ValueKey(
-                              'entries/${dayKey(day)}/${meal.name}',
-                            ),
-                            children: [
-                              for (final e in entries.where(
-                                (e) => e.data['meal'] == meal.name,
-                              ))
-                                Dismissible(
-                                  key: ValueKey(e.id),
-                                  direction: DismissDirection.endToStart,
-                                  background: Container(
-                                    color: Theme.of(context).colorScheme.error,
-                                    alignment: Alignment.centerRight,
-                                    padding: const EdgeInsets.only(right: 24),
-                                    child: Icon(
-                                      Icons.delete_outline,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onError,
-                                    ),
-                                  ),
-                                  confirmDismiss: (_) async {
+                          for (final e in entries.where(
+                            (e) => e.data['meal'] == meal.name,
+                          ))
+                            Dismissible(
+                              key: ValueKey(e.id),
+                              direction: DismissDirection.endToStart,
+                              background: Container(
+                                color: Theme.of(context).colorScheme.error,
+                                alignment: Alignment.centerRight,
+                                padding: const EdgeInsets.only(right: 24),
+                                child: Icon(
+                                  Icons.delete_outline,
+                                  color: Theme.of(context).colorScheme.onError,
+                                ),
+                              ),
+                              confirmDismiss: (_) async {
+                                try {
+                                  await c.remove(e);
+                                  if (context.mounted) {
+                                    undo(context, c, e);
+                                  }
+                                } catch (error) {
+                                  if (context.mounted) {
+                                    message(context, error);
+                                  }
+                                }
+                                return false;
+                              },
+                              child: ListTile(
+                                key: ValueKey(e.id),
+                                title: Text(e.data['name'] as String),
+                                subtitle: Text(
+                                  '${number(e.data['amount'] as num)} ${e.data['unit'] == 'gram'
+                                      ? 'г'
+                                      : e.data['unit'] == 'milliliter'
+                                      ? 'мл'
+                                      : 'запись'} · ${number(entryNutrition(e).kcal, 0)} ккал',
+                                ),
+                                onTap: () async {
+                                  final data = await editEntry(context, e);
+                                  if (data != null) {
                                     try {
-                                      await c.remove(e);
+                                      await c.save('entry', data, previous: e);
                                       if (context.mounted) {
                                         undo(context, c, e);
                                       }
@@ -508,107 +536,77 @@ class DiaryScreen extends ConsumerWidget {
                                         message(context, error);
                                       }
                                     }
-                                    return false;
-                                  },
-                                  child: ListTile(
-                                    key: ValueKey(e.id),
-                                    title: Text(e.data['name'] as String),
-                                    subtitle: Text(
-                                      '${number(e.data['amount'] as num)} ${e.data['unit'] == 'gram'
-                                          ? 'г'
-                                          : e.data['unit'] == 'milliliter'
-                                          ? 'мл'
-                                          : 'запись'} · ${number(entryNutrition(e).kcal, 0)} ккал',
-                                    ),
-                                    onTap: () async {
-                                      final data = await editEntry(context, e);
-                                      if (data != null) {
-                                        try {
-                                          await c.save(
-                                            'entry',
-                                            data,
-                                            previous: e,
-                                          );
-                                          if (context.mounted) {
-                                            undo(context, c, e);
-                                          }
-                                        } catch (error) {
-                                          if (context.mounted) {
-                                            message(context, error);
-                                          }
+                                  }
+                                },
+                                trailing: PopupMenuButton<String>(
+                                  tooltip: 'Действия с записью',
+                                  onSelected: (action) async {
+                                    try {
+                                      if (action == 'delete') {
+                                        await c.remove(e);
+                                        if (context.mounted) {
+                                          undo(context, c, e);
                                         }
                                       }
-                                    },
-                                    trailing: PopupMenuButton<String>(
-                                      tooltip: 'Действия с записью',
-                                      onSelected: (action) async {
-                                        try {
-                                          if (action == 'delete') {
-                                            await c.remove(e);
-                                            if (context.mounted) {
-                                              undo(context, c, e);
-                                            }
-                                          }
-                                          if (action == 'repeat') {
-                                            await c.addEntries([e.data], meal);
-                                          }
-                                          if (action == 'copy' &&
-                                              context.mounted) {
-                                            final date = await showDatePicker(
-                                              context: context,
-                                              initialDate: day,
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(2100),
-                                            );
-                                            if (date != null) {
-                                              await c.save('entry', {
-                                                ...e.data,
-                                                'day': dayKey(date),
-                                              });
-                                            }
-                                          }
-                                        } catch (error) {
-                                          if (context.mounted) {
-                                            message(context, error);
-                                          }
+                                      if (action == 'repeat') {
+                                        await c.addEntries([e.data], meal);
+                                      }
+                                      if (action == 'copy' && context.mounted) {
+                                        final date = await showDatePicker(
+                                          context: context,
+                                          initialDate: day,
+                                          firstDate: DateTime(2000),
+                                          lastDate: DateTime(2100),
+                                        );
+                                        if (date != null) {
+                                          await c.save('entry', {
+                                            ...e.data,
+                                            'day': dayKey(date),
+                                          });
                                         }
-                                      },
-                                      itemBuilder: (_) => const [
-                                        PopupMenuItem(
-                                          value: 'repeat',
-                                          child: Text('Повторить'),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'copy',
-                                          child: Text('Копировать на дату'),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'delete',
-                                          child: Text('Удалить'),
-                                        ),
-                                      ],
+                                      }
+                                    } catch (error) {
+                                      if (context.mounted) {
+                                        message(context, error);
+                                      }
+                                    }
+                                  },
+                                  itemBuilder: (_) => const [
+                                    PopupMenuItem(
+                                      value: 'repeat',
+                                      child: Text('Повторить'),
                                     ),
-                                  ),
+                                    PopupMenuItem(
+                                      value: 'copy',
+                                      child: Text('Копировать на дату'),
+                                    ),
+                                    PopupMenuItem(
+                                      value: 'delete',
+                                      child: Text('Удалить'),
+                                    ),
+                                  ],
                                 ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: TextButton.icon(
-                              onPressed: () => copyMeal(context, c, meal),
-                              icon: const Icon(Icons.copy_outlined, size: 18),
-                              label: const Text('Копировать с другого дня'),
+                              ),
                             ),
-                          ),
                         ],
                       ),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-          ],
-        );
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: TextButton.icon(
+                          onPressed: () => copyMeal(context, c, meal),
+                          icon: const Icon(Icons.copy_outlined, size: 18),
+                          label: const Text('Копировать с другого дня'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget macro(
