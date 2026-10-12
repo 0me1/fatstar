@@ -61,7 +61,9 @@ class SearchNormalizer {
         .map(normalize)
         .toList();
     for (final rule in foodSynonyms) {
-      if (rule.excluded.any((word) => name.split(' ').contains(word))) { continue; }
+      if (rule.excluded.any((word) => name.split(' ').contains(word))) {
+        continue;
+      }
       for (final term in rule.terms) {
         if (RegExp('(^| )${RegExp.escape(term)}( |\$)').hasMatch(name)) {
           own.addAll(
@@ -139,13 +141,24 @@ Map<String, FoodPreference> foodPreferences(
 ) {
   final result = <String, FoodPreference>{};
   for (final r in records) {
-    if (r.deleted) { continue; }
+    if (r.deleted) {
+      continue;
+    }
     final id = r.data['product_id'];
-    if (id is! String) { continue; }
-    final p = result.putIfAbsent(id,FoodPreference.new);
-    if (r.kind == 'favorite') { p.favorite = true; continue; }
-    if (r.kind != 'entry') { continue; }
-    final date = DateTime.tryParse(r.data['day'] as String? ?? r.data['recorded_at'] as String? ?? '');
+    if (id is! String) {
+      continue;
+    }
+    final p = result.putIfAbsent(id, FoodPreference.new);
+    if (r.kind == 'favorite') {
+      p.favorite = true;
+      continue;
+    }
+    if (r.kind != 'entry') {
+      continue;
+    }
+    final date = DateTime.tryParse(
+      r.data['day'] as String? ?? r.data['recorded_at'] as String? ?? '',
+    );
     p.count++;
     final meal = r.data['meal'] as String?;
     if (meal != null) p.meals[meal] = (p.meals[meal] ?? 0) + 1;
@@ -181,34 +194,74 @@ class SearchHit {
   final FoodPreference? preference;
   final String? correction;
 }
-int editDistance(String a,String b,int maximum) {
-  if ((a.length-b.length).abs() > maximum) { return maximum+1; }
-  var previous = List.generate(b.length+1,(i)=>i), before = previous;
-  for (var i=1;i<=a.length;i++) {
-    final row = List<int>.filled(b.length+1,0); row[0]=i;
-    for (var j=1;j<=b.length;j++) {
-      row[j]=math.min(math.min(row[j-1]+1,previous[j]+1),previous[j-1]+(a[i-1]==b[j-1]?0:1));
-      if (i>1 && j>1 && a[i-1]==b[j-2] && a[i-2]==b[j-1]) row[j]=math.min(row[j],before[j-2]+1);
+
+int editDistance(String a, String b, int maximum) {
+  if ((a.length - b.length).abs() > maximum) {
+    return maximum + 1;
+  }
+  var previous = List.generate(b.length + 1, (i) => i), before = previous;
+  for (var i = 1; i <= a.length; i++) {
+    final row = List<int>.filled(b.length + 1, 0);
+    row[0] = i;
+    for (var j = 1; j <= b.length; j++) {
+      row[j] = math.min(
+        math.min(row[j - 1] + 1, previous[j] + 1),
+        previous[j - 1] + (a[i - 1] == b[j - 1] ? 0 : 1),
+      );
+      if (i > 1 && j > 1 && a[i - 1] == b[j - 2] && a[i - 2] == b[j - 1])
+        row[j] = math.min(row[j], before[j - 2] + 1);
     }
     before = previous;
     previous = row;
   }
   return previous.last;
 }
-int textTier(Record p, SearchQuery q,{bool fuzzy=false}) {
-  if (q.tokens.isEmpty) { return 0; }
+
+int textTier(Record p, SearchQuery q, {bool fuzzy = false}) {
+  if (q.tokens.isEmpty) {
+    return 0;
+  }
   final name = SearchNormalizer.normalize(p.data['name'] as String? ?? '');
   final words = SearchNormalizer.tokens('$name ${p.data['brand'] ?? ''}');
   final aliases = SearchNormalizer.tokens(SearchNormalizer.aliases(p));
-  if (name == q.normalized) { return 0; }
-  if (q.tokens.every(words.contains)) { return 1; }
+  if (name == q.normalized) {
+    return 0;
+  }
+  if (q.tokens.every(words.contains)) {
+    return 1;
+  }
   bool exactNumber(String token) => double.tryParse(token) != null;
-  if (q.tokens.every((t)=>words.any((w)=>exactNumber(t)?w==t:w.startsWith(t)))) { return 2; }
-  if (q.tokens.every((t)=>[...words,...aliases].any((w)=>exactNumber(t)?w==t:w.startsWith(t)))) { return 3; }
-  if (q.tokens.every((t)=>words.any((w)=>exactNumber(t)?w==t:w.contains(t)))) { return 4; }
-  if (!fuzzy) { return 99; }
-  final ok = q.tokens.every((t) => words.any((w) => exactNumber(t) ? w==t : w.startsWith(t) ||
-    (t.length >= 4 && editDistance(t,w,t.length >= 6 ? 2 : 1) <= (t.length >= 6 ? 2 : 1))));
+  if (q.tokens.every(
+    (t) => words.any((w) => exactNumber(t) ? w == t : w.startsWith(t)),
+  )) {
+    return 2;
+  }
+  if (q.tokens.every(
+    (t) => [
+      ...words,
+      ...aliases,
+    ].any((w) => exactNumber(t) ? w == t : w.startsWith(t)),
+  )) {
+    return 3;
+  }
+  if (q.tokens.every(
+    (t) => words.any((w) => exactNumber(t) ? w == t : w.contains(t)),
+  )) {
+    return 4;
+  }
+  if (!fuzzy) {
+    return 99;
+  }
+  final ok = q.tokens.every(
+    (t) => words.any(
+      (w) => exactNumber(t)
+          ? w == t
+          : w.startsWith(t) ||
+                (t.length >= 4 &&
+                    editDistance(t, w, t.length >= 6 ? 2 : 1) <=
+                        (t.length >= 6 ? 2 : 1)),
+    ),
+  );
   return ok ? 6 : 99;
 }
 
@@ -253,17 +306,34 @@ List<SearchHit> rankFoodCandidates(
   var result = collect(query, false, 0, null);
   if (result.isEmpty && query.tokens.isNotEmpty && fallback) {
     final layout = SearchQuery(SearchNormalizer.layout(query.raw));
-    if (layout.normalized != query.normalized)
+    if (layout.normalized != query.normalized) {
       result = collect(layout, false, 5, layout.normalized);
+    }
     if (result.isEmpty) result = collect(query, true, 6, null);
   }
-  result.sort((a,b) {
-    final tier=a.textTier.compareTo(b.textTier); if (tier!=0) { return tier; }
-    if (filter=='recent') { final recent=(b.preference?.last??DateTime(2000)).compareTo(a.preference?.last??DateTime(2000)); if(recent!=0){ return recent; } }
-    final score=filter=='frequent' ? (b.preference?.count??0).compareTo(a.preference?.count??0) : b.personal.compareTo(a.personal);
-    if(score!=0){ return score; }
-    final name=(a.product.data['name'] as String).compareTo(b.product.data['name'] as String);
-    return name!=0?name:a.product.id.compareTo(b.product.id);
+  result.sort((a, b) {
+    final tier = a.textTier.compareTo(b.textTier);
+    if (tier != 0) {
+      return tier;
+    }
+    if (filter == 'recent') {
+      final recent = (b.preference?.last ?? DateTime(2000)).compareTo(
+        a.preference?.last ?? DateTime(2000),
+      );
+      if (recent != 0) {
+        return recent;
+      }
+    }
+    final score = filter == 'frequent'
+        ? (b.preference?.count ?? 0).compareTo(a.preference?.count ?? 0)
+        : b.personal.compareTo(a.personal);
+    if (score != 0) {
+      return score;
+    }
+    final name = (a.product.data['name'] as String).compareTo(
+      b.product.data['name'] as String,
+    );
+    return name != 0 ? name : a.product.id.compareTo(b.product.id);
   });
   return result;
 }
