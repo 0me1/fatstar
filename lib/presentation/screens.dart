@@ -332,10 +332,8 @@ class DiaryScreen extends ConsumerWidget {
                       ],
                     ),
                     SizedBox(
-                      width: MediaQuery.sizeOf(context).width < 360 ? 120 : 140,
-                      height: MediaQuery.sizeOf(context).width < 360
-                          ? 120
-                          : 140,
+                      width: MediaQuery.sizeOf(context).width < 360 ? 96 : 140,
+                      height: MediaQuery.sizeOf(context).width < 360 ? 96 : 140,
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -347,6 +345,7 @@ class DiaryScreen extends ConsumerWidget {
                                   total.kcal <= available * 1.02,
                               child: MotionProgress(
                                 circular: true,
+                                arc: true,
                                 label: 'Прогресс калорий',
                                 value: goal == null || goal.kcal == 0
                                     ? 0

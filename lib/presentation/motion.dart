@@ -79,9 +79,10 @@ class MotionProgress extends StatelessWidget {
     required this.value,
     required this.circular,
     this.label,
+    this.arc = false,
   });
   final double value;
-  final bool circular;
+  final bool circular, arc;
   final String? label;
   @override
   Widget build(BuildContext context) => TweenAnimationBuilder<double>(
@@ -89,13 +90,25 @@ class MotionProgress extends StatelessWidget {
     duration: motionDuration(context, 420),
     curve: Curves.easeOutCubic,
     builder: (context, progress, _) => circular
-        ? CircularProgressIndicator(
-            value: progress,
-            strokeWidth: 8,
-            strokeCap: StrokeCap.round,
-            semanticsLabel: label,
-            backgroundColor: Theme.of(context).colorScheme.outlineVariant,
-          )
+        ? arc
+              ? Semantics(
+                  label: label,
+                  value: '${(progress * 100).round()}%',
+                  child: CustomPaint(
+                    painter: _CalorieArc(
+                      progress,
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.outlineVariant,
+                    ),
+                  ),
+                )
+              : CircularProgressIndicator(
+                  value: progress,
+                  strokeWidth: 8,
+                  strokeCap: StrokeCap.round,
+                  semanticsLabel: label,
+                  backgroundColor: Theme.of(context).colorScheme.outlineVariant,
+                )
         : LinearProgressIndicator(
             value: progress,
             minHeight: 6,
@@ -103,6 +116,48 @@ class MotionProgress extends StatelessWidget {
             semanticsLabel: label,
           ),
   );
+}
+
+class _CalorieArc extends CustomPainter {
+  const _CalorieArc(this.progress, this.color, this.track);
+  final double progress;
+  final Color color, track;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Rect.fromCircle(
+      center: size.center(Offset.zero),
+      radius: math.min(size.width, size.height) / 2 - 5,
+    );
+    final brush = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 8
+      ..strokeCap = StrokeCap.round;
+    const start = math.pi * .75, sweep = math.pi * 1.5;
+    canvas.drawArc(rect, start, sweep, false, brush..color = track);
+    canvas.drawArc(
+      rect,
+      start,
+      sweep * progress.clamp(0, 1),
+      false,
+      brush..color = color,
+    );
+    if (progress == 0) {
+      canvas.drawCircle(
+        Offset(
+          rect.center.dx + rect.width / 2 * math.cos(start),
+          rect.center.dy + rect.height / 2 * math.sin(start),
+        ),
+        4,
+        Paint()..color = color,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _CalorieArc oldDelegate) =>
+      progress != oldDelegate.progress ||
+      color != oldDelegate.color ||
+      track != oldDelegate.track;
 }
 
 class GoalPulse extends StatefulWidget {
