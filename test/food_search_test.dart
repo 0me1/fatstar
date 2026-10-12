@@ -203,5 +203,6 @@ void main() {
         ..month = 1;
       expect(compareFoodFrequency(a, b), greaterThan(0));
     },
-  );
+  );  test('invalid negative or embedded quantities are never proposed as positive portions',(){expect(SearchQuery('творог -180 г').amount,isNull);expect(SearchQuery('творог A180г').amount,isNull);expect(SearchQuery('творог 180 г').amount,180);});
+
 }

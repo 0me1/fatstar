@@ -90,7 +90,7 @@ class SearchNormalizer {
 class SearchQuery {
   SearchQuery(this.raw) {
     final match = RegExp(
-      r'(\d+(?:[.,]\d+)?)\s*(грамм(?:а|ов)?|гр|г|мл)(?=\s|[.,;!?)]|$)',
+      r'(?:^|\s|\()(\d+(?:[.,]\d+)?)\s*(грамм(?:а|ов)?|гр|г|мл)(?=\s|[.,;!?)]|$)',
       caseSensitive: false,
     ).firstMatch(raw);
     var text = raw;
