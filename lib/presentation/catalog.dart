@@ -260,7 +260,16 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
           ListTile(
             title: Text('Показаны результаты: ${hits.first.correction}'),
           ),
-        if(hits.isNotEmpty && hits.first.textTier==6) ListTile(title:Text('Возможно, вы искали: ${hits.first.product.data['name']}'),onTap:(){search.text=hits.first.product.data['name'] as String;changed();}),
+        if (hits.isNotEmpty && hits.first.textTier == 6)
+          ListTile(
+            title: Text(
+              'Возможно, вы искали: ${hits.first.product.data['name']}',
+            ),
+            onTap: () {
+              search.text = hits.first.product.data['name'] as String;
+              changed();
+            },
+          ),
         ...hits.take(visibleCount).map(row),
         if (hits.length > visibleCount)
           TextButton(
@@ -574,9 +583,13 @@ Future<void> editProduct(
   final brand = TextEditingController(
     text: product?.data['brand'] as String? ?? '',
   );
-  final rawAliases=product?.data['aliases'];
+  final rawAliases = product?.data['aliases'];
   final aliases = TextEditingController(
-    text: (rawAliases is List ? rawAliases.whereType<String>().take(32) : const <String>[]).join('\n'),
+    text:
+        (rawAliases is List
+                ? rawAliases.whereType<String>().take(32)
+                : const <String>[])
+            .join('\n'),
   );
   final n = product == null
       ? const Nutrition(0, 0, 0, 0)

@@ -64,10 +64,11 @@ class SearchNormalizer {
   };
   static String aliases(Record p) {
     final name = normalize(p.data['name'] as String? ?? '');
-    final rawAliases=p.data['aliases'];
+    final rawAliases = p.data['aliases'];
     final own = (rawAliases is List ? rawAliases : const [])
-        .whereType<String>().take(32)
-        .map((s)=>normalize(s.length>200?s.substring(0,200):s))
+        .whereType<String>()
+        .take(32)
+        .map((s) => normalize(s.length > 200 ? s.substring(0, 200) : s))
         .toList();
     for (final rule in foodSynonyms) {
       if (rule.excluded.any((word) => name.split(' ').contains(word))) {
