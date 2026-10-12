@@ -5,6 +5,7 @@ import 'package:drift/native.dart';
 import 'package:uuid/uuid.dart';
 import '../domain/records.dart';
 import '../domain/food_search.dart';
+import '../domain/search_lexicon.dart';
 import '../domain/repository.dart';
 
 /// Drift custom SQL: the versioned document schema requires no generated code.
@@ -73,6 +74,15 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     beforeOpen: (_) async {
       await customStatement('PRAGMA foreign_keys = ON');
       await customStatement('PRAGMA journal_mode = WAL');
+      final lexicon = await customSelect("SELECT value FROM metadata WHERE key='food_search_lexicon_version'").getSingleOrNull();
+      if (lexicon?.read<String>('value') != '$foodSearchLexiconVersion') {
+        await transaction(() async {
+          for (final product in await records(kind:'product',deleted:true)) {
+            await _indexProduct(product);
+          }
+          await customStatement("INSERT OR REPLACE INTO metadata VALUES('food_search_lexicon_version',?)",['$foodSearchLexiconVersion']);
+        });
+      }
     },
   );
 
@@ -176,6 +186,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         // The indexed token and bigram tables remain available without FTS5.
       }
     }
+    await customStatement("INSERT OR REPLACE INTO metadata VALUES('food_search_lexicon_version',?)",['$foodSearchLexiconVersion']);
   }
 
   Future<bool> usesFts() async => (await customSelect(

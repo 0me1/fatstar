@@ -1,3 +1,5 @@
+const foodSearchLexiconVersion = 1;
+
 // Search equivalents only: never merge cards or alter nutritional values.
 const foodSynonyms =
     <({String kind, List<String> terms, List<String> excluded})>[
