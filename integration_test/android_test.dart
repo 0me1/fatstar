@@ -13,6 +13,7 @@ import 'package:calorie_diary/data/backup.dart';
 import 'package:calorie_diary/domain/nutrition.dart';
 import 'package:calorie_diary/domain/records.dart';
 import 'package:calorie_diary/presentation/controller.dart';
+import 'package:calorie_diary/presentation/activities.dart';
 import 'package:calorie_diary/presentation/screens.dart';
 
 void main() {
@@ -243,4 +244,45 @@ void main() {
       await tester.pumpWidget(const SizedBox());
     },
   );
+  testWidgets('Android: offline activity minutes preview and save', (
+    tester,
+  ) async {
+    final db = DiaryDatabase(
+      File('${Directory.systemTemp.path}/${const Uuid().v4()}.sqlite'),
+    );
+    final c = DiaryController()
+      ..db = db
+      ..loading = false;
+    await c.save('weight', {'day': '2026-10-12', 'kg': 70});
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [diaryProvider.overrideWith((ref) => c)],
+        child: MaterialApp(
+          theme: app.diaryTheme(Brightness.dark),
+          home: ActivitySearchScreen(day: DateTime(2026, 10, 12)),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Ходьба, обычная'));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('activity-minutes')),
+      '60',
+    );
+    await tester.pump();
+    expect(find.text('184 ккал сожжено'), findsOneWidget);
+    await tester.tap(find.text('Сохранить'));
+    for (var i = 0; i < 50 && c.of('activity').isEmpty; i++) {
+      await tester.pump(const Duration(milliseconds: 100));
+    }
+    await tester.pumpAndSettle();
+    expect(c.of('activity').single.data['kcal'], closeTo(183.75, .001));
+    expect(
+      (await db.operations()).where((o) => o['kind'] == 'activity'),
+      hasLength(1),
+    );
+    await tester.pumpWidget(const SizedBox());
+    await tester.pumpAndSettle();
+  });
 }
