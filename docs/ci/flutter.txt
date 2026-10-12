@@ -1,0 +1,941 @@
+Resolving dependencies...
+Downloading packages...
+  app_links 6.4.1 (7.2.2 available)
+  app_links_linux 1.0.3 (1.0.4 available)
+  app_links_platform_interface 2.0.2 (2.0.4 available)
+  app_links_web 1.0.4 (1.0.5 available)
+  characters 1.4.0 (1.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  connectivity_plus 6.1.5 (7.3.2 available)
+  cross_file 0.3.5+2 (0.4.0 available)
+  crypto 3.0.6 (3.0.7 available)
+  dbus 0.7.15 (0.8.0 available)
+  drift 2.28.1 (2.35.2 available)
+  file_picker 10.3.2 (13.1.0 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  flutter_riverpod 2.6.1 (3.4.3 available)
+  flutter_secure_storage 9.2.4 (11.2.0 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  functions_client 2.4.4 (2.7.1 available)
+  gotrue 2.14.0 (2.27.3 available)
+  intl 0.20.2 (0.20.3 available)
+  js 0.6.7 (0.7.2 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.17 (0.12.20 available)
+  material_color_utilities 0.11.1 (0.13.1 available)
+  meta 1.16.0 (1.19.0 available)
+  nm 0.5.0 (0.6.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider 2.1.5 (2.1.6 available)
+  path_provider_foundation 2.5.1 (2.6.0 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  postgrest 2.4.2 (2.9.1 available)
+  realtime_client 2.5.2 (2.13.1 available)
+  riverpod 2.6.1 (3.4.3 available)
+  share_plus 11.1.0 (13.3.1 available)
+  share_plus_platform_interface 6.1.0 (7.2.0 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  shared_preferences_android 2.4.23 (2.4.28 available)
+  shared_preferences_foundation 2.5.6 (2.5.7 available)
+  sqlite3 2.9.4 (3.7.0 available)
+  sqlite3_flutter_libs 0.5.39 (0.6.0+eol available)
+  stack_trace 1.12.1 (1.12.2 available)
+  storage_client 2.4.1 (2.8.1 available)
+  supabase 2.9.0 (2.16.4 available)
+  supabase_flutter 2.10.0 (2.18.2 available)
+  test_api 0.7.6 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.29 (6.3.33 available)
+  url_launcher_ios 6.3.6 (6.4.2 available)
+  url_launcher_linux 3.2.2 (3.2.3 available)
+  url_launcher_macos 3.2.5 (3.2.6 available)
+  url_launcher_web 2.4.1 (2.4.3 available)
+  url_launcher_windows 3.1.5 (3.1.6 available)
+  uuid 4.5.1 (4.6.0 available)
+  vector_math 2.2.0 (2.4.3 available)
+  win32 5.15.0 (6.4.0 available)
+  xml 6.6.1 (7.1.0 available)
+  yet_another_json_isolate 2.1.0 (2.1.1 available)
+Got dependencies!
+64 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing fatstar...                                            
+No issues found! (ran in 7.2s)
+Resolving dependencies...
+Downloading packages...
+  app_links 6.4.1 (7.2.2 available)
+  app_links_linux 1.0.3 (1.0.4 available)
+  app_links_platform_interface 2.0.2 (2.0.4 available)
+  app_links_web 1.0.4 (1.0.5 available)
+  characters 1.4.0 (1.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  connectivity_plus 6.1.5 (7.3.2 available)
+  cross_file 0.3.5+2 (0.4.0 available)
+  crypto 3.0.6 (3.0.7 available)
+  dbus 0.7.15 (0.8.0 available)
+  drift 2.28.1 (2.35.2 available)
+  file_picker 10.3.2 (13.1.0 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  flutter_riverpod 2.6.1 (3.4.3 available)
+  flutter_secure_storage 9.2.4 (11.2.0 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  functions_client 2.4.4 (2.7.1 available)
+  gotrue 2.14.0 (2.27.3 available)
+  intl 0.20.2 (0.20.3 available)
+  js 0.6.7 (0.7.2 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.17 (0.12.20 available)
+  material_color_utilities 0.11.1 (0.13.1 available)
+  meta 1.16.0 (1.19.0 available)
+  nm 0.5.0 (0.6.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider 2.1.5 (2.1.6 available)
+  path_provider_foundation 2.5.1 (2.6.0 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  postgrest 2.4.2 (2.9.1 available)
+  realtime_client 2.5.2 (2.13.1 available)
+  riverpod 2.6.1 (3.4.3 available)
+  share_plus 11.1.0 (13.3.1 available)
+  share_plus_platform_interface 6.1.0 (7.2.0 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  shared_preferences_android 2.4.23 (2.4.28 available)
+  shared_preferences_foundation 2.5.6 (2.5.7 available)
+  sqlite3 2.9.4 (3.7.0 available)
+  sqlite3_flutter_libs 0.5.39 (0.6.0+eol available)
+  stack_trace 1.12.1 (1.12.2 available)
+  storage_client 2.4.1 (2.8.1 available)
+  supabase 2.9.0 (2.16.4 available)
+  supabase_flutter 2.10.0 (2.18.2 available)
+  test_api 0.7.6 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.29 (6.3.33 available)
+  url_launcher_ios 6.3.6 (6.4.2 available)
+  url_launcher_linux 3.2.2 (3.2.3 available)
+  url_launcher_macos 3.2.5 (3.2.6 available)
+  url_launcher_web 2.4.1 (2.4.3 available)
+  url_launcher_windows 3.1.5 (3.1.6 available)
+  uuid 4.5.1 (4.6.0 available)
+  vector_math 2.2.0 (2.4.3 available)
+  win32 5.15.0 (6.4.0 available)
+  xml 6.6.1 (7.1.0 available)
+  yet_another_json_isolate 2.1.0 (2.1.1 available)
+Got dependencies!
+64 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart
+00:00 +0: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: (setUpAll)
+00:00 +0: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +1: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +2: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +3: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +4: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +5: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +6: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +7: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +8: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +9: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +10: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +11: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +12: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +13: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +14: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +15: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +16: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +17: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +18: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +19: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +20: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +21: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +22: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +23: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +24: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +25: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:00 +26: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:01 +27: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary light: empty meals, no invented activity, calendar navigation
+00:02 +28: /home/runner/work/fatstar/fatstar/test/motion_test.dart: numbers start at the real value and animate subsequent changes
+00:02 +29: /home/runner/work/fatstar/fatstar/test/motion_test.dart: numbers start at the real value and animate subsequent changes
+00:03 +30: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:03 +31: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:03 +32: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:03 +33: /home/runner/work/fatstar/fatstar/test/motion_test.dart: successful selection shows temporary confirmation
+00:03 +34: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: failed local deletion does not confirm haptically
+00:03 +35: /home/runner/work/fatstar/fatstar/test/motion_test.dart: undo during removal retains one interactive row
+00:03 +36: /home/runner/work/fatstar/fatstar/test/motion_test.dart: day pages slide side by side without fading or overlapping
+00:03 +37: /home/runner/work/fatstar/fatstar/test/motion_test.dart: incoming page retains its state when outgoing page is removed
+00:04 +38: loading /home/runner/work/fatstar/fatstar/test/nutrition_test.dart
+00:05 +38: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Mifflin male
+00:05 +39: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Mifflin female
+00:05 +40: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Harris 1984 male
+00:05 +41: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Harris 1984 female
+00:05 +42: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Katch lean mass
+00:05 +43: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Katch requires body fat
+00:05 +44: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients children cannot receive automatic recommendations
+00:05 +45: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients nonfinite weight rejected
+00:05 +46: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros maintenance uses multiplier
+00:05 +47: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros loss cannot exceed 20 percent
+00:05 +48: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros gain cannot exceed 15 percent
+00:05 +49: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros muscle target includes surplus
+00:05 +50: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros unknown activity rejected
+00:05 +51: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros macro energy adds up
+00:05 +52: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros percent sum checked
+00:05 +53: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values two eggs 110 grams
+00:05 +54: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values milk 300 ml
+00:05 +55: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values mass volume conversion forbidden
+00:05 +56: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values zero quantity rejected
+00:05 +57: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values only calories preserve null macros
+00:05 +58: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values label calories independent from macros
+00:05 +59: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values milli precision
+00:05 +60: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values Unicode Russian search
+00:05 +61: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values calendar day uses local components
+00:05 +62: /home/runner/work/fatstar/fatstar/test/activity_test.dart: MET duration, weight, custom rate and invalid values
+00:05 +63: /home/runner/work/fatstar/fatstar/test/activity_test.dart: activities preserve snapshots, dates, deletion, outbox and backup
+WARNING (drift): It looks like you've created the database class DiaryDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new DiaryDatabase.memory (package:calorie_diary/data/database.dart:28:7)
+#4      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/activity_test.dart:26:67)
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:242:19)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:240:7)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:282:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:05 +64: /home/runner/work/fatstar/fatstar/test/activity_test.dart: activity validation rejects malformed minutes and dates
+00:06 +65: loading /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart
+00:07 +65: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: local write and outbox are atomic
+00:07 +66: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: stale local edit rejected
+00:07 +67: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: soft delete and restore keep identity
+00:07 +68: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: separate account databases isolate diaries
+WARNING (drift): It looks like you've created the database class DiaryDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new DiaryDatabase.memory (package:calorie_diary/data/database.dart:28:7)
+#4      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/storage_sync_test.dart:87:33)
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:242:19)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:240:7)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:282:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:07 +69: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: backup round trip and repeat import
+WARNING (drift): It looks like you've created the database class DiaryDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new DiaryDatabase.memory (package:calorie_diary/data/database.dart:28:7)
+#4      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/storage_sync_test.dart:98:33)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:242:9)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:240:7)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:282:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:07 +70: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: invalid backup does not alter records
+00:07 +71: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: backup conflicts preserve existing data
+00:07 +72: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: duplicate backup UUID is rejected
+00:07 +73: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: offline queue is preserved then synchronized
+00:07 +74: /home/runner/work/fatstar/fatstar/test/migration_test.dart: v1 → v3 preserves values, versions, local products, pending operations and cursor
+00:07 +75: /home/runner/work/fatstar/fatstar/test/migration_test.dart: v1 → v3 preserves values, versions, local products, pending operations and cursor
+00:07 +76: /home/runner/work/fatstar/fatstar/test/migration_test.dart: v1 → v3 preserves values, versions, local products, pending operations and cursor
+00:07 +77: /home/runner/work/fatstar/fatstar/test/migration_test.dart: v1 → v3 preserves values, versions, local products, pending operations and cursor
+00:08 +78: /home/runner/work/fatstar/fatstar/test/migration_test.dart: v1 → v3 preserves values, versions, local products, pending operations and cursor
+00:08 +79: /home/runner/work/fatstar/fatstar/test/migration_test.dart: v1 → v3 preserves values, versions, local products, pending operations and cursor
+00:08 +80: /home/runner/work/fatstar/fatstar/test/migration_test.dart: failed migration rolls back without destroying legacy data
+00:09 +81: loading /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart
+00:09 +81: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:10 +82: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:10 +83: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:10 +84: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:10 +85: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:10 +86: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following assertion was thrown building RawGestureDetector(state:
+RawGestureDetectorState#ffcb8(gestures: [tap, long press, tap and horizontal drag],
+excludeFromSemantics: true, behavior: translucent)):
+A TextEditingController was used after being disposed.
+Once you have called dispose() on a TextEditingController, it can no longer be used.
+
+When the exception was thrown, this was the stack:
+#0      ChangeNotifier.debugAssertNotDisposed.<anonymous closure> (package:flutter/src/foundation/change_notifier.dart:182:9)
+#1      ChangeNotifier.debugAssertNotDisposed (package:flutter/src/foundation/change_notifier.dart:189:6)
+#2      ChangeNotifier.addListener (package:flutter/src/foundation/change_notifier.dart:271:27)
+#3      _MergingListenable.addListener (package:flutter/src/foundation/change_notifier.dart:503:14)
+#4      _AnimatedState.didUpdateWidget (package:flutter/src/widgets/transitions.dart:119:25)
+#5      StatefulElement.update (package:flutter/src/widgets/framework.dart:5893:55)
+#6      Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#7      SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7025:14)
+#8      Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#9      ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#10     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#11     Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#12     StatefulElement.update (package:flutter/src/widgets/framework.dart:5909:5)
+#13     Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#14     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#17     StatefulElement.update (package:flutter/src/widgets/framework.dart:5909:5)
+#18     Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#19     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7025:14)
+#20     Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#21     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#22     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#23     Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#24     StatefulElement.update (package:flutter/src/widgets/framework.dart:5909:5)
+#25     Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#26     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7025:14)
+#27     Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#28     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7025:14)
+#29     Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#30     SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7025:14)
+#31     Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#32     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#33     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#34     Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#35     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2695:15)
+#36     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2752:11)
+#37     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3056:18)
+#38     AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1506:19)
+#39     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#40     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#41     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#42     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#45     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#46     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#47     WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+#50     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#51     WidgetTester.pumpAndSettle (package:flutter_test/src/widget_tester.dart:712:27)
+#52     main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/activity_widget_test.dart:37:18)
+<asynchronous suspension>
+#53     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#54     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following assertion was thrown building Overlay-[LabeledGlobalKey<OverlayState>#79a74](state:
+OverlayState#2e976(entries: [OverlayEntry#a96b4(opaque: true; maintainState: false),
+OverlayEntry#599b9(opaque: false; maintainState: true)])):
+'package:flutter/src/widgets/framework.dart': Failed assertion: line 6171 pos 14:
+'_dependents.isEmpty': is not true.
+
+Either the assertion indicates an error in the framework itself, or we should provide substantially
+more information in this error message to help you determine and fix the underlying cause.
+In either case, please report this assertion by filing a bug on GitHub:
+  https://github.com/flutter/flutter/issues/new?template=02_bug.yml
+
+The relevant error-causing widget was:
+  MaterialApp
+  MaterialApp:file:///home/runner/work/fatstar/fatstar/test/activity_widget_test.dart:19:16
+
+When the exception was thrown, this was the stack:
+#2      InheritedElement.debugDeactivated.<anonymous closure> (package:flutter/src/widgets/framework.dart:6171:14)
+#3      InheritedElement.debugDeactivated (package:flutter/src/widgets/framework.dart:6173:6)
+#4      _InactiveElements._deactivateRecursively.<anonymous closure> (package:flutter/src/widgets/framework.dart:2098:15)
+#5      _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2100:6)
+#6      SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#7      _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#8      ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#9      _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#10     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#11     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#12     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#13     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#14     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#15     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#16     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#17     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#18     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#19     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#20     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#21     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#22     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#23     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#24     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#25     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#26     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#27     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#28     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#29     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#30     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#31     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#32     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#33     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#34     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#35     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#36     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#37     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#38     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#39     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#40     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#41     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#42     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#43     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#44     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#45     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#46     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#47     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#48     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#49     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#50     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#51     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#52     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#53     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#54     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#55     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#56     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#57     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#58     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#59     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#60     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#61     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#62     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#63     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#64     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#65     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#66     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#67     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#68     _InactiveElements.add (package:flutter/src/widgets/framework.dart:2108:7)
+#69     Element.deactivateChild (package:flutter/src/widgets/framework.dart:4590:30)
+#70     Element.updateChildren (package:flutter/src/widgets/framework.dart:4250:11)
+#71     MultiChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7202:17)
+#72     Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#73     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#74     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#75     Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#76     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2695:15)
+#77     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2752:11)
+#78     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3056:18)
+#79     AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1506:19)
+#80     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#81     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#82     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#83     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#86     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#87     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#88     WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+<asynchronous suspension>
+#89     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#90     main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/activity_widget_test.dart:37:5)
+<asynchronous suspension>
+#91     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#92     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from class _AssertionError, dart:async, and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY SCHEDULER LIBRARY ╞═════════════════════════════════════════════════════════
+The following assertion was thrown during a scheduler callback:
+'package:flutter/src/rendering/object.dart': Failed assertion: line 3530 pos 12: 'attached': is not
+true.
+
+Either the assertion indicates an error in the framework itself, or we should provide substantially
+more information in this error message to help you determine and fix the underlying cause.
+In either case, please report this assertion by filing a bug on GitHub:
+  https://github.com/flutter/flutter/issues/new?template=02_bug.yml
+
+When the exception was thrown, this was the stack:
+#2      RenderObject.getTransformTo (package:flutter/src/rendering/object.dart:3530:12)
+#3      RenderBox.localToGlobal (package:flutter/src/rendering/box.dart:3091:39)
+#4      RenderEditable._snapToPhysicalPixel (package:flutter/src/rendering/editable.dart:2351:33)
+#5      RenderEditable.getLocalRectForCaret (package:flutter/src/rendering/editable.dart:1871:28)
+#6      EditableTextState._updateComposingRectIfNeeded (package:flutter/src/widgets/editable_text.dart:4872:38)
+#7      EditableTextState._schedulePeriodicPostFrameCallbacks (package:flutter/src/widgets/editable_text.dart:4776:5)
+#8      SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#9      SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1361:11)
+#10     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#13     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#14     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#15     WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+<asynchronous suspension>
+#16     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#17     main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/activity_widget_test.dart:37:5)
+<asynchronous suspension>
+#18     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#19     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from class _AssertionError, dart:async, and package:stack_trace)
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY WIDGET INSPECTOR ╞══════════════════════════════════════════════════════════
+The following assertion was thrown:
+Looking up a deactivated widget's ancestor is unsafe.
+At this point the state of the widget's element tree is no longer stable.
+To safely refer to a widget's ancestor in its dispose() method, save a reference to the ancestor by
+calling dependOnInheritedWidgetOfExactType() in the widget's didChangeDependencies() method.
+
+When the exception was thrown, this was the stack:
+#0      Element._debugCheckStateIsActiveForAncestorLookup.<anonymous closure> (package:flutter/src/widgets/framework.dart:4954:9)
+#1      Element._debugCheckStateIsActiveForAncestorLookup (package:flutter/src/widgets/framework.dart:4968:6)
+#2      Element.visitAncestorElements (package:flutter/src/widgets/framework.dart:5080:12)
+#3      _describeRelevantUserCode (package:flutter/src/widgets/widget_inspector.dart:4221:13)
+#4      _parseDiagnosticsNode (package:flutter/src/widgets/widget_inspector.dart:4140:12)
+#5      debugTransformDebugCreator (package:flutter/src/widgets/widget_inspector.dart:4119:21)
+#6      _FlutterErrorDetailsNode.builder (package:flutter/src/foundation/assertions.dart:1310:31)
+#7      DiagnosticableNode.getProperties (package:flutter/src/foundation/diagnostics.dart:2945:68)
+#8      TextTreeRenderer._debugRender (package:flutter/src/foundation/diagnostics.dart:1270:63)
+#9      TextTreeRenderer.render (package:flutter/src/foundation/diagnostics.dart:1137:14)
+#10     FlutterError.dumpErrorToConsole (package:flutter/src/foundation/assertions.dart:1040:13)
+#11     TestWidgetsFlutterBinding._runTest.<anonymous closure> (package:flutter_test/src/binding.dart:886:24)
+#12     FlutterError.reportError (package:flutter/src/foundation/assertions.dart:1203:14)
+#13     _reportException (package:flutter/src/widgets/framework.dart:7305:16)
+#14     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5751:9)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#17     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2695:15)
+#18     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2752:11)
+#19     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3056:18)
+#20     AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1506:19)
+#21     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#22     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#23     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#24     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#29     WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/activity_widget_test.dart:37:5)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+This exception was caught while trying to describe the user-relevant code of another error.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY WIDGET INSPECTOR ╞══════════════════════════════════════════════════════════
+The following assertion was thrown:
+Looking up a deactivated widget's ancestor is unsafe.
+At this point the state of the widget's element tree is no longer stable.
+To safely refer to a widget's ancestor in its dispose() method, save a reference to the ancestor by
+calling dependOnInheritedWidgetOfExactType() in the widget's didChangeDependencies() method.
+
+When the exception was thrown, this was the stack:
+#0      Element._debugCheckStateIsActiveForAncestorLookup.<anonymous closure> (package:flutter/src/widgets/framework.dart:4954:9)
+#1      Element._debugCheckStateIsActiveForAncestorLookup (package:flutter/src/widgets/framework.dart:4968:6)
+#2      Element.visitAncestorElements (package:flutter/src/widgets/framework.dart:5080:12)
+#3      _describeRelevantUserCode (package:flutter/src/widgets/widget_inspector.dart:4221:13)
+#4      _parseDiagnosticsNode (package:flutter/src/widgets/widget_inspector.dart:4140:12)
+#5      debugTransformDebugCreator (package:flutter/src/widgets/widget_inspector.dart:4119:21)
+#6      _FlutterErrorDetailsNode.builder (package:flutter/src/foundation/assertions.dart:1310:31)
+#7      DiagnosticableNode.emptyBodyDescription (package:flutter/src/foundation/diagnostics.dart:2941:45)
+#8      TextTreeRenderer._debugRender (package:flutter/src/foundation/diagnostics.dart:1307:14)
+#9      TextTreeRenderer.render (package:flutter/src/foundation/diagnostics.dart:1137:14)
+#10     FlutterError.dumpErrorToConsole (package:flutter/src/foundation/assertions.dart:1040:13)
+#11     TestWidgetsFlutterBinding._runTest.<anonymous closure> (package:flutter_test/src/binding.dart:886:24)
+#12     FlutterError.reportError (package:flutter/src/foundation/assertions.dart:1203:14)
+#13     _reportException (package:flutter/src/widgets/framework.dart:7305:16)
+#14     ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5751:9)
+#15     StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#16     Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#17     BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2695:15)
+#18     BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2752:11)
+#19     BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3056:18)
+#20     AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1506:19)
+#21     RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#22     SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#23     SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#24     AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#27     TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#28     AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#29     WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+<asynchronous suspension>
+#30     TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#31     main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/activity_widget_test.dart:37:5)
+<asynchronous suspension>
+#32     testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#33     TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+This exception was caught while trying to describe the user-relevant code of another error.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following assertion was thrown building _FocusInheritedScope:
+'package:flutter/src/widgets/framework.dart': Failed assertion: line 6171 pos 14:
+'_dependents.isEmpty': is not true.
+
+Either the assertion indicates an error in the framework itself, or we should provide substantially
+more information in this error message to help you determine and fix the underlying cause.
+In either case, please report this assertion by filing a bug on GitHub:
+  https://github.com/flutter/flutter/issues/new?template=02_bug.yml
+
+When the exception was thrown, this was the stack:
+#2      InheritedElement.debugDeactivated.<anonymous closure> (package:flutter/src/widgets/framework.dart:6171:14)
+#3      InheritedElement.debugDeactivated (package:flutter/src/widgets/framework.dart:6173:6)
+#4      _InactiveElements._deactivateRecursively.<anonymous closure> (package:flutter/src/widgets/framework.dart:2098:15)
+#5      _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2100:6)
+#6      ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#7      _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#8      ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#9      _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#10     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#11     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#12     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#13     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#14     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#15     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#16     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#17     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#18     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#19     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#20     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#21     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#22     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#23     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#24     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#25     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#26     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#27     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#28     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#29     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#30     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#31     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#32     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#33     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#34     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#35     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#36     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#37     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#38     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#39     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#40     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#41     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#42     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#43     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#44     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#45     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#46     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#47     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#48     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#49     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#50     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#51     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#52     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#53     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#54     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#55     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#56     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#57     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#58     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#59     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#60     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#61     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#62     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#63     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#64     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#65     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#66     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#67     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#68     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#69     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#70     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#71     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#72     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#73     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#74     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#75     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#76     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#77     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#78     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#79     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#80     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#81     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#82     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#83     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#84     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#85     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#86     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#87     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#88     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#89     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#90     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#91     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#92     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#93     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#94     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#95     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#96     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#97     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#98     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#99     _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#100    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#101    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#102    SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#103    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#104    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#105    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#106    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#107    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#108    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#109    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#110    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#111    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#112    SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#113    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#114    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#115    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#116    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#117    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#118    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#119    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#120    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#121    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#122    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#123    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#124    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#125    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#126    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#127    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#128    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#129    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#130    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#131    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#132    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#133    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#134    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#135    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#136    SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:7004:14)
+#137    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#138    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#139    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#140    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#141    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#142    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#143    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#144    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#145    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#146    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#147    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#148    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#149    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#150    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5773:14)
+#151    _InactiveElements._deactivateRecursively (package:flutter/src/widgets/framework.dart:2096:13)
+#152    _InactiveElements.add (package:flutter/src/widgets/framework.dart:2108:7)
+#153    Element.deactivateChild (package:flutter/src/widgets/framework.dart:4590:30)
+#154    Element.updateChild (package:flutter/src/widgets/framework.dart:3993:9)
+#155    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#156    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#157    ProxyElement.update (package:flutter/src/widgets/framework.dart:6051:5)
+#158    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#159    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#160    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#161    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#162    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#163    StatefulElement.update (package:flutter/src/widgets/framework.dart:5909:5)
+#164    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#165    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#166    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#167    ProxyElement.update (package:flutter/src/widgets/framework.dart:6051:5)
+#168    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#169    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#170    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#171    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#172    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#173    StatefulElement.update (package:flutter/src/widgets/framework.dart:5909:5)
+#174    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#175    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#176    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#177    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#178    StatefulElement.update (package:flutter/src/widgets/framework.dart:5909:5)
+#179    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#180    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#181    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#182    ProxyElement.update (package:flutter/src/widgets/framework.dart:6051:5)
+#183    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#184    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#185    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#186    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#187    StatefulElement.update (package:flutter/src/widgets/framework.dart:5909:5)
+#188    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#189    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#190    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#191    ProxyElement.update (package:flutter/src/widgets/framework.dart:6051:5)
+#192    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#193    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#194    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#195    ProxyElement.update (package:flutter/src/widgets/framework.dart:6051:5)
+#196    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#197    _RawViewElement._updateChild (package:flutter/src/widgets/view.dart:481:16)
+#198    _RawViewElement.update (package:flutter/src/widgets/view.dart:568:5)
+#199    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#200    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#201    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#202    StatelessElement.update (package:flutter/src/widgets/framework.dart:5797:5)
+#203    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#204    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5747:16)
+#205    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5884:11)
+#206    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#207    StatefulElement.update (package:flutter/src/widgets/framework.dart:5909:5)
+#208    Element.updateChild (package:flutter/src/widgets/framework.dart:3982:15)
+#209    RootElement._rebuild (package:flutter/src/widgets/binding.dart:1716:16)
+#210    RootElement.update (package:flutter/src/widgets/binding.dart:1694:5)
+#211    RootElement.performRebuild (package:flutter/src/widgets/binding.dart:1708:7)
+#212    Element.rebuild (package:flutter/src/widgets/framework.dart:5435:7)
+#213    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2695:15)
+#214    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2752:11)
+#215    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3056:18)
+#216    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:1506:19)
+#217    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:495:5)
+#218    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1434:15)
+#219    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1347:9)
+#220    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:1335:9)
+#223    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#224    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:1324:27)
+#225    WidgetTester.pumpWidget.<anonymous closure> (package:flutter_test/src/widget_tester.dart:598:22)
+#228    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#229    WidgetTester.pumpWidget (package:flutter_test/src/widget_tester.dart:595:27)
+#230    main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/activity_widget_test.dart:41:18)
+<asynchronous suspension>
+#231    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#232    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 7 frames from class _AssertionError, dart:async, and package:stack_trace)
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following message was thrown:
+Multiple exceptions (6) were detected during the running of the current test, and at least one was
+unexpected.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:11 +86 -1: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save [E]
+  Test failed. See exception logs above.
+  The test description was: search activity, live minutes calculation and local save
+  
+00:12 +86 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search index FTS5: writes, aliases, delete, restore, pull
+00:12 +87 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search index token fallback: writes, aliases, delete, restore, pull
+00:12 +88 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: v2 → v3 rebuilds index and preserves products and diary
+00:12 +88 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: v2 → v3 rebuilds index and preserves products and diary [E]
+  SqliteException(1): while executing, table activity_entries already exists, SQL logic error (code 1)
+    Causing statement (at position 13): CREATE TABLE activity_entries (id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)), version INTEGER NOT NULL, deleted INTEGER NOT NULL DEFAULT 0 CHECK(deleted IN (0,1)), local_only INTEGER NOT NULL DEFAULT 0 CHECK(local_only IN (0,1))), parameters: 
+  package:sqlite3/src/implementation/exception.dart 95:3                             throwException
+  package:sqlite3/src/implementation/database.dart 306:9                             DatabaseImplementation.execute
+  package:drift/src/sqlite3/database.dart 145:16                                     Sqlite3Delegate.runWithArgsSync
+  package:drift/native.dart 420:30                                                   _NativeDelegate.runCustom.<fn>
+  dart:async                                                                         new Future.sync
+  package:drift/native.dart 420:19                                                   _NativeDelegate.runCustom
+  package:drift/src/runtime/executor/helpers/engines.dart 116:19                     _BaseExecutor.runCustom.<fn>
+  package:drift/src/runtime/executor/helpers/engines.dart 62:20                      _BaseExecutor._synchronized
+  package:drift/src/runtime/executor/helpers/engines.dart 112:12                     _BaseExecutor.runCustom
+  package:drift/src/remote/server_impl.dart 154:24                                   ServerImplementation._runQuery
+  package:drift/src/remote/server_impl.dart 119:25                                   ServerImplementation._handleRequest.<fn>
+  package:drift/src/remote/communication.dart 165:20                                 DriftCommunication.setRequestHandler.<fn>
+  ===== asynchronous gap ===========================
+  package:drift/src/remote/communication.dart 113:66                                 DriftCommunication.request
+  package:drift/src/remote/client_impl.dart 101:28                                   _BaseExecutor._runRequest
+  package:drift/src/remote/client_impl.dart 116:12                                   _BaseExecutor.runCustom
+  package:drift/src/runtime/api/connection_user.dart 427:23                          DatabaseConnectionUser.customStatement.<fn>
+  package:drift/src/runtime/api/connection_user.dart 171:16                          DatabaseConnectionUser.doWhenOpened.<fn>
+  dart:async                                                                         _CustomZone.runUnary
+  package:calorie_diary/data/database.dart 73:11                                     DiaryDatabase.migration.<fn>.<fn>
+  package:drift/src/runtime/api/connection_user.dart 505:26                          DatabaseConnectionUser.transaction.<fn>.<fn>
+  package:drift/src/runtime/api/connection_user.dart 496:12                          DatabaseConnectionUser.transaction
+  package:drift/src/runtime/api/db_base.dart 133:9                                   GeneratedDatabase.beforeOpen.<fn>
+  package:drift/src/remote/client_impl.dart 59:17                                    DriftClient._handleRequest.<fn>
+  package:drift/src/remote/communication.dart 165:20                                 DriftCommunication.setRequestHandler.<fn>
+  ===== asynchronous gap ===========================
+  package:drift/src/remote/communication.dart 113:66                                 DriftCommunication.request
+  package:drift/src/remote/server_impl.dart 309:24                                   _ServerDbUser.beforeOpen
+  package:drift/src/runtime/executor/helpers/engines.dart 512:16                     DelegatedDatabase._runMigrations
+  package:drift/src/runtime/executor/helpers/engines.dart 476:9                      DelegatedDatabase.ensureOpen.<fn>
+  package:drift/src/utils/synchronized.dart 18:46                                    Lock.synchronized.callBlockAndComplete.<fn>
+  package:drift/src/remote/server_impl.dart 140:42                                   ServerImplementation._handleEnsureOpen
+  package:drift/src/remote/communication.dart 165:20                                 DriftCommunication.setRequestHandler.<fn>
+  ===== asynchronous gap ===========================
+  package:drift/src/remote/communication.dart 113:66                                 DriftCommunication.request
+  package:drift/src/remote/client_impl.dart 173:10                                   _RemoteQueryExecutor.ensureOpen
+  package:drift/src/utils/lazy_database.dart 74:49                                   LazyDatabase.ensureOpen.<fn>
+  dart:async                                                                         _CustomZone.runUnary
+  package:drift/src/runtime/api/connection_user.dart 169:55                          DatabaseConnectionUser.doWhenOpened.<fn>
+  package:drift/src/runtime/query_builder/statements/select/custom_select.dart 54:3  CustomSelectStatement._mapDbResponse
+  package:calorie_diary/data/database.dart 131:18                                    DiaryDatabase.records
+  package:calorie_diary/data/food_search_repository.dart 24:12                       FoodSearchRepository.search
+  test/search_storage_test.dart 79:14                                                main.<fn>
+  
+00:12 +88 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: personal caches invalidate on edits/delete; account databases stay separate
+WARNING (drift): It looks like you've created the database class DiaryDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new DiaryDatabase.memory (package:calorie_diary/data/database.dart:28:7)
+#4      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/search_storage_test.dart:90:59)
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:242:19)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:240:7)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:282:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:12 +89 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+00:13 +90 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+00:13 +91 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+00:14 +92 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+00:14 +93 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+SEARCH_BENCH products=2000 fts=true query=мол cold_ms=5 warm_ms=2 hits=1
+SEARCH_BENCH products=2000 fts=true query=малако cold_ms=3 warm_ms=3 hits=1
+SEARCH_BENCH products=2000 fts=true query=vjkjrj cold_ms=2 warm_ms=3 hits=1
+SEARCH_BENCH products=2000 fts=true query=номер 1999 cold_ms=80 warm_ms=64 hits=1
+00:15 +94 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: lexicon revision rebuilds only derived index, keeping pending operations
+00:15 +95 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: hidden cards never exhaust the candidate limit: fts=true
+00:15 +96 -2: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: hidden cards never exhaust the candidate limit: fts=false
+00:16 +97 -2: /home/runner/work/fatstar/fatstar/test/history_test.dart: new formula does not alter past day targets
+00:16 +98 -2: /home/runner/work/fatstar/fatstar/test/history_test.dart: same date revision retains original and selects latest deterministically
+00:16 +99 -2: /home/runner/work/fatstar/fatstar/test/history_test.dart: future and deleted goals not applied
+00:16 +100 -2: /home/runner/work/fatstar/fatstar/test/history_test.dart: product changes never mutate diary snapshot
+00:17 +101 -2: loading /home/runner/work/fatstar/fatstar/test/auth_errors_test.dart
+00:17 +101 -2: /home/runner/work/fatstar/fatstar/test/auth_errors_test.dart: recovery failures never claim login failed or expose server details
+00:17 +102 -2: /home/runner/work/fatstar/fatstar/test/auth_errors_test.dart: mail rate limits explain waiting and SMTP
+00:17 +103 -2: /home/runner/work/fatstar/fatstar/test/auth_errors_test.dart: uncertain timeout warns against replacing a delivered link
+00:18 +104 -2: /home/runner/work/fatstar/fatstar/test/preferences_test.dart: font and theme edits preserve each other and queue personal settings
+00:18 +105 -2: /home/runner/work/fatstar/fatstar/test/preferences_test.dart: all eight fonts apply to body and bold headings
+00:18 +106 -2: /home/runner/work/fatstar/fatstar/test/preferences_test.dart: empty meals collapse and open automatically on first entry
+00:19 +107 -2: /home/runner/work/fatstar/fatstar/test/preferences_test.dart: removing a meal during collapse safely disposes its animation
+00:19 +108 -2: /home/runner/work/fatstar/fatstar/test/search_widget_test.dart: offline search dark: keyboard, newest query, add/undo and no duplicate on back
+00:22 +109 -2: /home/runner/work/fatstar/fatstar/test/search_widget_test.dart: offline search light: keyboard, newest query, add/undo and no duplicate on back
+00:25 +110 -2: Some tests failed.
