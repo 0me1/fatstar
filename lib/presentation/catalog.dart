@@ -290,10 +290,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
         name: 'Частые',
         filter: 'frequent',
         items: hits.where((h) => (h.preference?.count ?? 0) > 0).toList()
-          ..sort(
-            (a, b) =>
-                compareFoodFrequency(a.preference,b.preference),
-          ),
+          ..sort((a, b) => compareFoodFrequency(a.preference, b.preference)),
       ),
       (
         name: 'Избранное',
