@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqlite3/sqlite3.dart';
 import 'package:calorie_diary/data/database.dart';
+import 'package:calorie_diary/domain/food_search.dart';
 import 'package:calorie_diary/data/food_search_repository.dart';
 import 'food_search_test.dart' show food, use;
 
@@ -176,4 +177,16 @@ void main() {
       }
     },
   );
+  for(final fts in [true,false]) {
+    test('hidden cards never exhaust the candidate limit: fts=$fts',() async {
+      final db=DiaryDatabase.memory(enableFts:fts);
+      try {
+        final hidden=food(1,'Молоко');await db.save(hidden.copy(data:{...hidden.data,'active':false}));
+        final active=await db.save(food(2,'Молоко'));
+        expect((await db.searchCandidates(SearchQuery('молоко'),limit:1)).single.id,active.id);
+        expect((await db.searchCandidates(SearchQuery('малако'),limit:1)).single.id,active.id);
+      } finally {await db.close();}
+    });
+  }
+
 }
