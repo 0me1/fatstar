@@ -125,8 +125,15 @@ ThemeData diaryTheme(
         ? Colors.black
         : Colors.white;
   }
-  final selectedReadable = (selected.computeLuminance() + 0.05) / (const Color(0xFF242928).computeLuminance() + 0.05) >= 4.5;
-  final generated = ColorScheme.fromSeed(seedColor: selected, brightness: brightness);
+
+  final selectedReadable =
+      (selected.computeLuminance() + 0.05) /
+          (const Color(0xFF242928).computeLuminance() + 0.05) >=
+      4.5;
+  final generated = ColorScheme.fromSeed(
+    seedColor: selected,
+    brightness: brightness,
+  );
   final scheme =
       ColorScheme.fromSeed(
         seedColor: selected,
