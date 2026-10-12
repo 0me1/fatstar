@@ -144,43 +144,95 @@ void main() {
       await b.dispose();
     },
   );
-  testWidgets('Android: local indexed search and immediate quick add without remote', (tester) async {
-    final file=File('${Directory.systemTemp.path}/${const Uuid().v4()}.sqlite');
-    final db=DiaryDatabase(file);
-    final c=DiaryController()..db=db..loading=false..userId=const Uuid().v4();
-    await db.transaction(() async {
-      for(var i=0;i<1000;i++) {
-        await db.save(Record(id:const Uuid().v4(),kind:'product',localOnly:true,data:{
-          'name':i==500?'Молоко 2,5%':'Продукт номер $i','brand':'CI','unit':'gram','active':true,'portions':[],
-          'nutrition':const Nutrition(50,3,2,5).toJson(),
-        }));
+  testWidgets(
+    'Android: local indexed search and immediate quick add without remote',
+    (tester) async {
+      final file = File(
+        '${Directory.systemTemp.path}/${const Uuid().v4()}.sqlite',
+      );
+      final db = DiaryDatabase(file);
+      final c = DiaryController()
+        ..db = db
+        ..loading = false
+        ..userId = const Uuid().v4();
+      await db.transaction(() async {
+        for (var i = 0; i < 1000; i++) {
+          await db.save(
+            Record(
+              id: const Uuid().v4(),
+              kind: 'product',
+              localOnly: true,
+              data: {
+                'name': i == 500 ? 'Молоко 2,5%' : 'Продукт номер $i',
+                'brand': 'CI',
+                'unit': 'gram',
+                'active': true,
+                'portions': [],
+                'nutrition': const Nutrition(50, 3, 2, 5).toJson(),
+              },
+            ),
+          );
+        }
+      });
+      await c.reload();
+      final engine = FoodSearchRepository(db);
+      for (final query in ['мол', 'малако', 'vjkjrj']) {
+        final watch = Stopwatch()..start();
+        final hits = await engine.search(query);
+        watch.stop();
+        expect(hits.single.product.data['name'], 'Молоко 2,5%');
+        // ignore: avoid_print
+        print(
+          'ANDROID_SEARCH_BENCH products=1000 fts=${await db.usesFts()} query=$query ms=${watch.elapsedMilliseconds}',
+        );
       }
-    });
-    await c.reload();
-    final engine=FoodSearchRepository(db);
-    for(final query in ['мол','малако','vjkjrj']) {
-      final watch=Stopwatch()..start();final hits=await engine.search(query);watch.stop();
-      expect(hits.single.product.data['name'],'Молоко 2,5%');
-      // ignore: avoid_print
-      print('ANDROID_SEARCH_BENCH products=1000 fts=${await db.usesFts()} query=$query ms=${watch.elapsedMilliseconds}');
-    }
-    await tester.pumpWidget(ProviderScope(overrides:[diaryProvider.overrideWith((ref)=>c)],child:MaterialApp(theme:app.diaryTheme(Brightness.dark),home:const CatalogScreen(meal:Meal.breakfast))));
-    await tester.pump(const Duration(milliseconds:250));
-    for(var i=0;i<50 && find.byType(LinearProgressIndicator).evaluate().isNotEmpty;i++){await tester.pump(const Duration(milliseconds:100));}
-    await tester.enterText(find.byType(TextField),'vjkjrj');
-    await tester.pump(const Duration(milliseconds:200));
-    for(var i=0;i<50 && find.byType(LinearProgressIndicator).evaluate().isNotEmpty;i++){await tester.pump(const Duration(milliseconds:100));}
-    await tester.pumpAndSettle();
-    expect(find.text('Молоко 2,5%'),findsOneWidget);
-    await tester.tap(find.byTooltip('Добавить 100,0 г'));
-    for(var i=0;i<50 && c.entries.isEmpty;i++){await tester.pump(const Duration(milliseconds:100));}
-    await tester.pumpAndSettle();
-    expect(c.entries,hasLength(1));expect(c.entries.single.data['amount'],100);
-    expect(c.sync,isNull);expect((await db.operations()).where((o)=>o['kind']=='entry'),hasLength(1));
-    await tester.tap(find.text('Отменить'));
-    for(var i=0;i<50 && c.entries.isNotEmpty;i++){await tester.pump(const Duration(milliseconds:100));}
-    await tester.pumpAndSettle();expect(c.entries,isEmpty);
-    await tester.pumpWidget(const SizedBox());
-  });
-
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [diaryProvider.overrideWith((ref) => c)],
+          child: MaterialApp(
+            theme: app.diaryTheme(Brightness.dark),
+            home: const CatalogScreen(meal: Meal.breakfast),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 250));
+      for (
+        var i = 0;
+        i < 50 && find.byType(LinearProgressIndicator).evaluate().isNotEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      await tester.enterText(find.byType(TextField), 'vjkjrj');
+      await tester.pump(const Duration(milliseconds: 200));
+      for (
+        var i = 0;
+        i < 50 && find.byType(LinearProgressIndicator).evaluate().isNotEmpty;
+        i++
+      ) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      await tester.pumpAndSettle();
+      expect(find.text('Молоко 2,5%'), findsOneWidget);
+      await tester.tap(find.byTooltip('Добавить 100,0 г'));
+      for (var i = 0; i < 50 && c.entries.isEmpty; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      await tester.pumpAndSettle();
+      expect(c.entries, hasLength(1));
+      expect(c.entries.single.data['amount'], 100);
+      expect(c.sync, isNull);
+      expect(
+        (await db.operations()).where((o) => o['kind'] == 'entry'),
+        hasLength(1),
+      );
+      await tester.tap(find.text('Отменить'));
+      for (var i = 0; i < 50 && c.entries.isNotEmpty; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      await tester.pumpAndSettle();
+      expect(c.entries, isEmpty);
+      await tester.pumpWidget(const SizedBox());
+    },
+  );
 }
