@@ -219,6 +219,76 @@ Nutrition macroPercent(double kcal, double protein, double fat, double carbs) {
   );
 }
 
+/// Goal targets only: package calories for foods must never be replaced by 4/4/9.
+Nutrition automaticMacros({
+  required double kcal,
+  required double weight,
+  bool highProtein = false,
+}) {
+  if (!kcal.isFinite ||
+      kcal < 500 ||
+      kcal > 10000 ||
+      !weight.isFinite ||
+      weight < 20 ||
+      weight > 500) {
+    throw ArgumentError('Проверьте норму калорий и расчетный вес');
+  }
+  final energy = milli(kcal);
+  final protein =
+      (math.min(energy / 1000 * (highProtein ? .30 : .25) / 4, weight * 2.2) *
+              1000)
+          .floor();
+  var fat = (energy * .30 / 9).round();
+  // With milligram storage, choose the nearest fat value whose energy remainder
+  // is divisible by four. This preserves exact 4/4/9 balance after JSON rounding.
+  var shift = (energy - fat) % 4;
+  if (shift > 2) shift -= 4;
+  fat += shift;
+  final carbs = (energy - 4 * protein - 9 * fat) ~/ 4;
+  return Nutrition(energy / 1000, protein / 1000, fat / 1000, carbs / 1000);
+}
+
+class AutomaticGoal {
+  const AutomaticGoal(this.energy, this.nutrition);
+  final EnergyTarget energy;
+  final Nutrition nutrition;
+}
+
+AutomaticGoal automaticGoal({
+  required BmrFormula formula,
+  required double weight,
+  required double height,
+  required int age,
+  required BiologicalSex sex,
+  required double activity,
+  required WeightGoal goal,
+  required double weeklyKg,
+  double? bodyFat,
+  bool highProtein = false,
+}) {
+  final energy = energyTarget(
+    basal: bmr(
+      formula: formula,
+      weight: weight,
+      height: height,
+      age: age,
+      sex: sex,
+      bodyFat: bodyFat,
+    ),
+    activity: activity,
+    goal: goal,
+    weeklyKg: weeklyKg,
+  );
+  return AutomaticGoal(
+    energy,
+    automaticMacros(
+      kcal: energy.kcal,
+      weight: weight,
+      highProtein: highProtein,
+    ),
+  );
+}
+
 String dayKey(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-'
     '${date.month.toString().padLeft(2, '0')}-'

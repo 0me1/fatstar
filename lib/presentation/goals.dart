@@ -25,6 +25,14 @@ const activityNames = [
 ];
 const activityValues = [1.2, 1.375, 1.55, 1.725, 1.9];
 
+const activityDescriptions = [
+  'Сидячий образ жизни, мало ходьбы, без регулярных тренировок.',
+  'Немного ходьбы и легкие тренировки 1–3 раза в неделю.',
+  'Подвижный день и умеренные тренировки 3–5 раз в неделю.',
+  'Много движения или интенсивные тренировки 6–7 раз в неделю.',
+  'Тяжелый физический труд и интенсивные тренировки, иногда дважды в день.',
+];
+
 class GoalsScreen extends ConsumerWidget {
   const GoalsScreen({super.key});
   @override
@@ -296,6 +304,8 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
   var goal = WeightGoal.values.byName(prior?['goal'] as String? ?? 'maintain');
   var activity = (prior?['activity'] as num?)?.toDouble() ?? 1.2;
   var macros = prior?['macro_mode'] as String? ?? 'Проценты';
+  if (!['Проценты', 'Граммы'].contains(macros)) macros = 'Граммы';
+  var highProtein = prior?['macro_template'] == 'protein';
   final fields = <String, TextEditingController>{};
   for (final key in [
     'weight',
@@ -320,6 +330,67 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
     fields['fat']!.text = '30';
     fields['carbs']!.text = '45';
   }
+  AutomaticGoal calculateAutomatic() {
+    final age = parseNumber(fields['age']!.text);
+    if (age != age.roundToDouble())
+      throw ArgumentError('Возраст в полных годах');
+    return automaticGoal(
+      formula: formula,
+      weight: parseNumber(fields['weight']!.text),
+      height: parseNumber(fields['height']!.text),
+      age: age.toInt(),
+      sex: sex,
+      activity: activity,
+      goal: goal,
+      weeklyKg: parseNumber(fields['weekly_kg']!.text),
+      bodyFat: formula == BmrFormula.katch
+          ? parseNumber(fields['body_fat']!.text)
+          : null,
+      highProtein: highProtein,
+    );
+  }
+
+  Widget automaticPreview() {
+    try {
+      final n = calculateAutomatic().nutrition;
+      final weight = parseNumber(fields['weight']!.text);
+      return Card(
+        key: const ValueKey('auto-goal-preview'),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${number(n.kcal, 0)} ккал в сутки',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text('Белки: ${number(n.protein)} г'),
+              Text('Жиры: ${number(n.fat)} г'),
+              Text('Углеводы: ${number(n.carbs)} г'),
+              const SizedBox(height: 8),
+              Text(
+                'Белок не выше 2,2 г/кг: ${number(weight * 2.2)} г. Жиры — около 30% калорий, углеводы — оставшаяся энергия.',
+              ),
+              const SizedBox(height: 8),
+              Text(
+                '4 × белки + 9 × жиры + 4 × углеводы = ${number(n.kcal, 0)} ккал. Граммы на экране округлены; сохраняется точный расчет.',
+              ),
+            ],
+          ),
+        ),
+      );
+    } catch (error) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: 12),
+        child: Text(
+          'Заполните корректные параметры: калории и БЖУ будут рассчитаны вместе. Для своего распределения выберите ручной режим.',
+        ),
+      );
+    }
+  }
+
   var date = DateTime.now();
   try {
     final data = await editForm<Json>(
@@ -333,11 +404,26 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
         dropdown('Цель', goal.name, {
           for (final v in WeightGoal.values) v.name: goalNames[v.index],
         }, (v) => set(() => goal = WeightGoal.values.byName(v))),
-        input('Исходный / расчетный вес, кг', fields['weight']!, numeric: true),
+        input(
+          'Исходный / расчетный вес, кг',
+          fields['weight']!,
+          numeric: true,
+          onChanged: (_) => set(() {}),
+        ),
         input('Желаемый вес, кг', fields['desired_weight']!, numeric: true),
         if (mode == 'auto') ...[
-          input('Рост, см', fields['height']!, numeric: true),
-          input('Возраст (полных лет)', fields['age']!, numeric: true),
+          input(
+            'Рост, см',
+            fields['height']!,
+            numeric: true,
+            onChanged: (_) => set(() {}),
+          ),
+          input(
+            'Возраст (полных лет)',
+            fields['age']!,
+            numeric: true,
+            onChanged: (_) => set(() {}),
+          ),
           dropdown(
             'Параметр пола для формулы',
             sex.name,
@@ -351,60 +437,112 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
             (v) => set(() => formula = BmrFormula.values.byName(v)),
           ),
           if (formula == BmrFormula.katch)
-            input('Жир тела, %', fields['body_fat']!, numeric: true),
+            input(
+              'Жир тела, %',
+              fields['body_fat']!,
+              numeric: true,
+              onChanged: (_) => set(() {}),
+            ),
           DropdownButtonFormField<double>(
             initialValue: activity,
+            isExpanded: true,
+            itemHeight: null,
+            selectedItemBuilder: (context) => activityNames
+                .map(
+                  (name) =>
+                      Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
+                )
+                .toList(),
             decoration: const InputDecoration(labelText: 'Активность'),
             items: [
               for (var i = 0; i < activityValues.length; i++)
                 DropdownMenuItem(
                   value: activityValues[i],
-                  child: Text(activityNames[i]),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(activityNames[i]),
+                        const SizedBox(height: 4),
+                        Text(
+                          activityDescriptions[i],
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
             ],
             onChanged: (v) => set(() => activity = v!),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            activityDescriptions[activityValues.indexOf(activity)],
+            style: Theme.of(context).textTheme.bodySmall,
           ),
           const SizedBox(height: 12),
           input(
             'Изменение веса в неделю, кг (положительное число)',
             fields['weekly_kg']!,
             numeric: true,
+            onChanged: (_) => set(() {}),
           ),
         ] else
           input('Суточные калории', fields['kcal']!, numeric: true),
-        dropdown('Настройка БЖУ', macros, {
-          'Проценты': 'В процентах',
-          'Граммы': 'В граммах',
-        }, (v) => set(() => macros = v)),
-        Wrap(
-          spacing: 8,
-          children: [
-            TextButton(
-              onPressed: () => set(() {
-                macros = 'Проценты';
-                fields['protein']!.text = '25';
-                fields['fat']!.text = '30';
-                fields['carbs']!.text = '45';
-              }),
-              child: const Text('Сбалансированный'),
-            ),
-            TextButton(
-              onPressed: () => set(() {
-                macros = 'Проценты';
-                fields['protein']!.text = '30';
-                fields['fat']!.text = '30';
-                fields['carbs']!.text = '40';
-              }),
-              child: const Text('Больше белка'),
-            ),
-          ],
-        ),
-        for (final key in ['protein', 'fat', 'carbs'])
-          input(
-            '${{'protein': 'Белки', 'fat': 'Жиры', 'carbs': 'Углеводы'}[key]}, ${macros == 'Проценты' ? '%' : 'г'}',
-            fields[key]!,
-            numeric: true,
+        if (mode == 'auto') ...[
+          Wrap(
+            spacing: 8,
+            children: [
+              ChoiceChip(
+                label: const Text('Сбалансированный'),
+                selected: !highProtein,
+                onSelected: (_) => set(() => highProtein = false),
+              ),
+              ChoiceChip(
+                label: const Text('Больше белка'),
+                selected: highProtein,
+                onSelected: (_) => set(() => highProtein = true),
+              ),
+            ],
           ),
+          automaticPreview(),
+        ] else ...[
+          dropdown('Настройка БЖУ', macros, {
+            'Проценты': 'В процентах',
+            'Граммы': 'В граммах',
+          }, (v) => set(() => macros = v)),
+          Wrap(
+            spacing: 8,
+            children: [
+              TextButton(
+                onPressed: () => set(() {
+                  macros = 'Проценты';
+                  fields['protein']!.text = '25';
+                  fields['fat']!.text = '30';
+                  fields['carbs']!.text = '45';
+                }),
+                child: const Text('Сбалансированный'),
+              ),
+              TextButton(
+                onPressed: () => set(() {
+                  macros = 'Проценты';
+                  fields['protein']!.text = '30';
+                  fields['fat']!.text = '30';
+                  fields['carbs']!.text = '40';
+                }),
+                child: const Text('Больше белка'),
+              ),
+            ],
+          ),
+          for (final key in ['protein', 'fat', 'carbs'])
+            input(
+              '${{'protein': 'Белки', 'fat': 'Жиры', 'carbs': 'Углеводы'}[key]}, ${macros == 'Проценты' ? '%' : 'г'}',
+              fields[key]!,
+              numeric: true,
+            ),
+        ],
         ListTile(
           title: const Text('Применить с даты'),
           subtitle: Text(dayKey(date)),
@@ -433,6 +571,7 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
             ? parseNumber(fields['weekly_kg']!.text)
             : 0.0;
         double kcal;
+        Nutrition? automaticNutrition;
         String explanation;
         var age = 0;
         var height = 0.0;
@@ -447,35 +586,30 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
           bodyFat = formula == BmrFormula.katch
               ? parseNumber(fields['body_fat']!.text)
               : null;
-          final basal = bmr(
-            formula: formula,
-            weight: weight,
-            height: height,
-            age: age,
-            sex: sex,
-            bodyFat: bodyFat,
-          );
-          final target = energyTarget(
-            basal: basal,
-            activity: activity,
-            goal: goal,
-            weeklyKg: weekly,
-          );
-          kcal = target.kcal;
+          final calculation = calculateAutomatic();
+          final target = calculation.energy;
+          automaticNutrition = calculation.nutrition;
+          kcal = automaticNutrition.kcal;
           explanation =
-              '${formulaNames[formula.index]}: BMR ${number(basal, 0)} × $activity = TDEE ${number(target.tdee, 0)}. Поправка ${number(target.adjustment, 0)} ккал. ${target.limited ? 'Применено ограничение.' : ''}';
+              '${formulaNames[formula.index]}: BMR ${number(target.basal, 0)} × $activity = TDEE ${number(target.tdee, 0)}. Поправка ${number(target.adjustment, 0)} ккал. ${target.limited ? 'Применено ограничение.' : ''} '
+              'БЖУ рассчитаны вместе с калориями по 4/4/9; белок ограничен 2,2 г/кг расчетного веса. Жиры около 30%, углеводы — остаток.';
         } else {
           kcal = parseNumber(fields['kcal']!.text);
           explanation = 'Ручная норма: ${number(kcal, 0)} ккал.';
         }
-        final p = parseNumber(fields['protein']!.text),
-            f = parseNumber(fields['fat']!.text),
-            carbs = parseNumber(fields['carbs']!.text);
-        final n = macros == 'Проценты'
-            ? macroPercent(kcal, p, f, carbs)
-            : Nutrition(kcal, p, f, carbs);
+        final p =
+                automaticNutrition?.protein ??
+                parseNumber(fields['protein']!.text),
+            f = automaticNutrition?.fat ?? parseNumber(fields['fat']!.text),
+            carbs =
+                automaticNutrition?.carbs ?? parseNumber(fields['carbs']!.text);
+        final n =
+            automaticNutrition ??
+            (macros == 'Проценты'
+                ? macroPercent(kcal, p, f, carbs)
+                : Nutrition(kcal, p, f, carbs));
         n.validate(product: true);
-        if (macros == 'Граммы') {
+        if (mode == 'manual' && macros == 'Граммы') {
           explanation +=
               ' Энергия из БЖУ: ${number(p * 4 + carbs * 4 + f * 9, 0)} ккал (ориентир 4/4/9).';
         }
@@ -498,7 +632,9 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
           'protein': p,
           'fat': f,
           'carbs': carbs,
-          'macro_mode': macros,
+          'macro_mode': mode == 'auto' ? 'Автоматически' : macros,
+          if (mode == 'auto')
+            'macro_template': highProtein ? 'protein' : 'balanced',
           'explanation': explanation,
         };
         validateRecord(
@@ -510,6 +646,7 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
         );
         return result;
       },
+      ownedControllers: fields.values.toList(),
     );
     if (data != null && context.mounted) {
       final sameDay = c
@@ -542,10 +679,6 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
     }
   } catch (e) {
     if (context.mounted) message(context, e);
-  } finally {
-    for (final f in fields.values) {
-      f.dispose();
-    }
   }
 }
 

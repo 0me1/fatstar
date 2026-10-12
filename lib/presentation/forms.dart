@@ -98,10 +98,12 @@ Widget input(
   TextEditingController controller, {
   bool numeric = false,
   int lines = 1,
+  ValueChanged<String>? onChanged,
 }) => Padding(
   padding: const EdgeInsets.only(bottom: 12),
   child: TextField(
     controller: controller,
+    onChanged: onChanged,
     keyboardType: numeric
         ? const TextInputType.numberWithOptions(decimal: true)
         : TextInputType.text,
