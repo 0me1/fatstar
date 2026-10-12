@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../domain/nutrition.dart';
+import '../domain/activity.dart';
+import 'activities.dart';
 import '../domain/records.dart';
 import 'catalog.dart';
 import 'controller.dart';
@@ -298,11 +300,13 @@ class DiaryScreen extends ConsumerWidget {
         .toList();
     final goalRecord = goalForDay(c.records, day);
     final total = NutritionTotal(entries.map(entryNutrition));
+    final burned = burnedForDay(c.records, day);
     final goal = goalRecord == null
         ? null
         : Nutrition.fromJson(
             Map<String, dynamic>.from(goalRecord.data['nutrition'] as Map),
           );
+    final available = goal == null ? 0.0 : goal.kcal + burned;
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -315,11 +319,8 @@ class DiaryScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 24,
-                  runSpacing: 16,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Column(
                       children: [
@@ -331,8 +332,10 @@ class DiaryScreen extends ConsumerWidget {
                       ],
                     ),
                     SizedBox(
-                      width: 160,
-                      height: 160,
+                      width: MediaQuery.sizeOf(context).width < 360 ? 120 : 140,
+                      height: MediaQuery.sizeOf(context).width < 360
+                          ? 120
+                          : 140,
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -340,14 +343,14 @@ class DiaryScreen extends ConsumerWidget {
                             child: GoalPulse(
                               reached:
                                   goal != null &&
-                                  total.kcal >= goal.kcal &&
-                                  total.kcal <= goal.kcal * 1.02,
+                                  total.kcal >= available &&
+                                  total.kcal <= available * 1.02,
                               child: MotionProgress(
                                 circular: true,
                                 label: 'Прогресс калорий',
                                 value: goal == null || goal.kcal == 0
                                     ? 0
-                                    : (total.kcal / goal.kcal).clamp(0.0, 1.0),
+                                    : (total.kcal / available).clamp(0.0, 1.0),
                               ),
                             ),
                           ),
@@ -358,7 +361,7 @@ class DiaryScreen extends ConsumerWidget {
                                 const Text('—')
                               else
                                 MotionNumber(
-                                  value: (goal.kcal - total.kcal).abs(),
+                                  value: (available - total.kcal).abs(),
                                   style: Theme.of(
                                     context,
                                   ).textTheme.headlineMedium,
@@ -366,7 +369,7 @@ class DiaryScreen extends ConsumerWidget {
                               Text(
                                 goal == null
                                     ? 'Цель не задана'
-                                    : total.kcal > goal.kcal
+                                    : total.kcal > available
                                     ? 'Сверх цели'
                                     : 'Осталось',
                               ),
@@ -374,6 +377,15 @@ class DiaryScreen extends ConsumerWidget {
                           ),
                         ],
                       ),
+                    ),
+                    Column(
+                      children: [
+                        MotionNumber(
+                          value: burned,
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const Text('Сожжено'),
+                      ],
                     ),
                   ],
                 ),
@@ -600,6 +612,7 @@ class DiaryScreen extends ConsumerWidget {
             ],
           ),
         ),
+        ActivitySection(controller: c, day: day),
       ],
     );
   }

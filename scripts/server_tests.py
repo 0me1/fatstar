@@ -61,6 +61,18 @@ def entry():
     return {'day': '2026-10-11', 'meal': 'breakfast', 'name': 'Быстрые КБЖУ', 'nutrition': {'kcal': 100, 'protein': None, 'fat': None, 'carbs': None}, 'amount': 1, 'unit': 'quick'}
 
 class ServerTests(unittest.TestCase):
+    def test_activities_private_validation_idempotency(self):
+        rid = str(uuid.uuid4())
+        data = {'day': '2026-10-12', 'name': 'Walking', 'minutes': 30, 'kcal': 92}
+        op = str(uuid.uuid4())
+        status, first = rpc(self.ta, 'activity', rid, data, operation=op)
+        self.assertEqual(status, 200)
+        self.assertEqual(rpc(self.ta, 'activity', rid, data, operation=op), (status, first))
+        status, foreign = request('/rest/v1/private_records?id=eq.' + rid, token=self.tb)
+        self.assertEqual(status, 200)
+        self.assertEqual(foreign, [])
+        self.assertEqual(rpc(self.ta, 'activity', str(uuid.uuid4()), {**data, 'minutes': -1})[0], 400)
+
     @classmethod
     def setUpClass(cls):
         cls.a, cls.ta = user('server-a@example.com')

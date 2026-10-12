@@ -51,6 +51,8 @@ const recordKinds = {
   'favorite',
   'portion',
   'settings',
+  'activity',
+  'activity_type',
 };
 final uuidPattern = RegExp(
   r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
@@ -151,6 +153,25 @@ void validateRecord(Record record) {
               decimal(d['amount']) > 100000 ||
               !decimal(d['amount']).isFinite)) {
         throw ArgumentError('Неверная порция');
+      }
+    case 'activity':
+      _date(d['day']);
+      _name(d['name']);
+      for (final key in ['minutes', 'kcal']) {
+        final v = d[key];
+        if (v is! num ||
+            !v.isFinite ||
+            v < 0 ||
+            (key == 'minutes' && (v <= 0 || v > 1440)) ||
+            (key == 'kcal' && v > 100000)) {
+          throw ArgumentError('Неверная продолжительность или калорийность');
+        }
+      }
+    case 'activity_type':
+      _name(d['name']);
+      final rate = d['kcal_per_minute'];
+      if (rate is! num || !rate.isFinite || rate <= 0 || rate > 100) {
+        throw ArgumentError('Расход от 0 до 100 ккал в минуту');
       }
     case 'settings':
       final accent = d['accent'];

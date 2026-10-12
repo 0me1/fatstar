@@ -18,6 +18,8 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     'favorite': 'favorites',
     'portion': 'portion_preferences',
     'settings': 'user_settings',
+    'activity': 'activity_entries',
+    'activity_type': 'activity_types',
   };
   DiaryDatabase(File file)
     : enableFts = true,
@@ -27,7 +29,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
   final bool enableFts;
   int searchRevision = 0;
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
   @override
   Iterable<TableInfo<Table, Object?>> get allTables => const [];
   @override
@@ -51,7 +53,7 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       await _createSearchIndex();
     }),
     onUpgrade: (_, from, to) => transaction(() async {
-      if (from == 1 && to == 3) {
+      if (from == 1 && to == 4) {
         await _createAggregateTables();
         for (final pair in tables.entries) {
           await customStatement(
@@ -61,12 +63,21 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         }
         await customStatement('DROP TABLE records');
         await _createRecordsView();
-      } else if (from != 2 || to != 3) {
+      } else if (![2, 3].contains(from) || to != 4) {
         throw StateError(
           'Неподдерживаемая миграция $from → $to. База не удалена.',
         );
       }
-      await _createSearchIndex();
+      if (from != 1) {
+        for (final table in ['activity_entries', 'activity_types']) {
+          await customStatement(
+            'CREATE TABLE $table (id TEXT PRIMARY KEY, data TEXT NOT NULL CHECK(json_valid(data)), version INTEGER NOT NULL, deleted INTEGER NOT NULL DEFAULT 0 CHECK(deleted IN (0,1)), local_only INTEGER NOT NULL DEFAULT 0 CHECK(local_only IN (0,1)))',
+          );
+        }
+        await customStatement('DROP VIEW records');
+        await _createRecordsView();
+      }
+      if (from < 3) await _createSearchIndex();
       for (final product in await records(kind: 'product', deleted: true)) {
         await _indexProduct(product);
       }

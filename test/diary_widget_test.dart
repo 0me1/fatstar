@@ -49,7 +49,7 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.text('Цель не задана'), findsOneWidget);
         expect(find.text('Завтрак'), findsOneWidget);
-        expect(find.text('Сожжено'), findsNothing);
+        expect(find.text('Сожжено'), findsOneWidget);
         final add = tester.widget<IconButton>(
           find.descendant(
             of: find.byType(FoodAddButton).first,
