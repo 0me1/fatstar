@@ -152,8 +152,9 @@ class _ActivitySearchState extends ConsumerState<ActivitySearchScreen> {
       );
       if (data != null) {
         final saved = await c.save('activity_type', data);
-        if (mounted)
+        if (mounted) {
           await editActivity(context, c, activityType(saved), widget.day);
+        }
       }
     } catch (e) {
       if (mounted) message(context, e);
