@@ -40,7 +40,7 @@ void createLegacy(File file, {bool corrupt = false}) {
 
 void main() {
   test(
-    'v1 → v2 preserves values, versions, local products, pending operations and cursor',
+    'v1 → v3 preserves values, versions, local products, pending operations and cursor',
     () async {
       final dir = Directory.systemTemp.createTempSync('diary-migration-');
       final file = File('${dir.path}/db.sqlite');

@@ -195,7 +195,8 @@ class DiaryController extends ChangeNotifier {
     'settings' => const Uuid().v5(Namespace.url.value, '$userId/settings'),
     _ => const Uuid().v4(),
   };
-  Future<void> addEntries(List<Json> values, Meal meal) async {
+  Future<List<Record>> addEntries(List<Json> values, Meal meal) async {
+    final added = <Record>[];
     final current = db!;
     await current.transaction(() async {
       for (final data in values) {
@@ -205,9 +206,9 @@ class DiaryController extends ChangeNotifier {
           'meal': meal.name,
           'recorded_at': DateTime.now().toUtc().toIso8601String(),
         };
-        await current.save(
+        added.add(await current.save(
           Record(id: const Uuid().v4(), kind: 'entry', data: entry),
-        );
+        ));
         if (data['product_id'] != null) {
           final existing = (await current.records(kind: 'portion'))
               .where((r) => r.data['product_id'] == data['product_id'])
@@ -231,6 +232,7 @@ class DiaryController extends ChangeNotifier {
     });
     await reload();
     unawaited(sync?.run());
+    return added;
   }
 
   Future<void> copyMeal(

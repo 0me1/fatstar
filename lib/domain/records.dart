@@ -68,6 +68,10 @@ void validateRecord(Record record) {
           (d['brand'] is! String || (d['brand'] as String).length > 200)) {
         throw ArgumentError('Бренд должен быть текстом до 200 символов');
       }
+      final aliases = d['aliases'];
+      if (aliases != null && (aliases is! List || aliases.length > 32 || aliases.any((a)=>a is! String || a.trim().isEmpty || a.length > 200))) {
+        throw ArgumentError('Допускается до 32 альтернативных названий по 200 символов');
+      }
       if (!['gram', 'milliliter'].contains(d['unit'])) {
         throw ArgumentError('Неверная единица');
       }

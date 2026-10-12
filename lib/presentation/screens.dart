@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -502,10 +503,7 @@ class DiaryScreen extends ConsumerWidget {
                               ),
                               confirmDismiss: (_) async {
                                 try {
-                                  await c.remove(e);
-                                  if (context.mounted) {
-                                    undo(context, c, e);
-                                  }
+                                  await deleteDiaryEntry(context, c, e);
                                 } catch (error) {
                                   if (context.mounted) {
                                     message(context, error);
@@ -543,10 +541,7 @@ class DiaryScreen extends ConsumerWidget {
                                   onSelected: (action) async {
                                     try {
                                       if (action == 'delete') {
-                                        await c.remove(e);
-                                        if (context.mounted) {
-                                          undo(context, c, e);
-                                        }
+                                        await deleteDiaryEntry(context, c, e);
                                       }
                                       if (action == 'repeat') {
                                         await c.addEntries([e.data], meal);
@@ -703,6 +698,12 @@ class DiaryScreen extends ConsumerWidget {
       await c.copyMeal(date, source, target);
     }
   }
+}
+
+Future<void> deleteDiaryEntry(BuildContext context, DiaryController c, Record entry) async {
+  await c.remove(entry);
+  unawaited(HapticFeedback.mediumImpact().catchError((Object _) {}));
+  if (context.mounted) { undo(context, c, entry); }
 }
 
 void undo(BuildContext context, DiaryController c, Record original) =>
