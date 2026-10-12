@@ -39,13 +39,8 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
               (raw) => raw['id'] == last.data['portion_id'],
             ));
     final savedAmount = last == null ? null : decimal(last.data['amount']);
-    final data = quick && last != null && validLast
-        ? entryForProduct(
-            p,
-            decimal(last.data['amount']),
-            last.data['portion_name'] as String? ?? '',
-            portionId: last.data['portion_id'] as String?,
-          )
+    final data = quick
+        ? quickEntryForProduct(p, last)
         : await selectPortion(
             context,
             p,
