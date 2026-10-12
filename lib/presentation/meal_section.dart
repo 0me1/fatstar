@@ -15,10 +15,14 @@ class MealSection extends StatefulWidget {
   State<MealSection> createState() => _MealSectionState();
 }
 
-class _MealSectionState extends State<MealSection> with SingleTickerProviderStateMixin {
+class _MealSectionState extends State<MealSection>
+    with SingleTickerProviderStateMixin {
   late bool expanded = widget.hasEntries;
-  late final controller = AnimationController(vsync: this,
-    value: expanded ? 1 : 0, duration: const Duration(milliseconds: 280));
+  late final controller = AnimationController(
+    vsync: this,
+    value: expanded ? 1 : 0,
+    duration: const Duration(milliseconds: 280),
+  );
 
   void changeExpansion(bool value) {
     if (expanded == value) return;
@@ -26,20 +30,38 @@ class _MealSectionState extends State<MealSection> with SingleTickerProviderStat
     controller.duration = motionDuration(context);
     controller.animateTo(value ? 1 : 0, curve: Curves.easeInOutCubic);
   }
+
   @override
   void didUpdateWidget(covariant MealSection oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!oldWidget.hasEntries && widget.hasEntries) changeExpansion(true);
     if (oldWidget.hasEntries && !widget.hasEntries) changeExpansion(false);
   }
+
   @override
-  void dispose() { controller.dispose(); super.dispose(); }
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
-  Widget build(BuildContext context) => Column(children: [
-    Semantics(expanded: expanded,
-      child: widget.header(expanded, () => setState(() => changeExpansion(!expanded)))),
-    SizeTransition(sizeFactor: controller, axisAlignment: -1,
-      child: IgnorePointer(ignoring: !expanded,
-        child: ExcludeSemantics(excluding: !expanded, child: widget.child))),
-  ]);
+  Widget build(BuildContext context) => Column(
+    children: [
+      Semantics(
+        expanded: expanded,
+        child: widget.header(
+          expanded,
+          () => setState(() => changeExpansion(!expanded)),
+        ),
+      ),
+      SizeTransition(
+        sizeFactor: controller,
+        axisAlignment: -1,
+        child: IgnorePointer(
+          ignoring: !expanded,
+          child: ExcludeSemantics(excluding: !expanded, child: widget.child),
+        ),
+      ),
+    ],
+  );
 }
