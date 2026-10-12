@@ -64,4 +64,16 @@ void main() {
     expect(find.text('Hide'), findsOneWidget);
     expect(tester.getSize(find.byType(ClipRect).last).height, 80);
   });
+  testWidgets('removing a meal during collapse safely disposes its animation', (tester) async {
+    await tester.pumpWidget(MaterialApp(home: Scaffold(body: MealSection(
+      hasEntries: true,
+      header: (expanded, toggle) => TextButton(onPressed: toggle, child: const Text('Collapse')),
+      child: const SizedBox(height: 80)))));
+    await tester.tap(find.text('Collapse'));
+    await tester.pump(const Duration(milliseconds: 30));
+    await tester.pumpWidget(const SizedBox());
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(tester.takeException(), isNull);
+  });
+
 }
