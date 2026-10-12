@@ -305,7 +305,11 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
   var activity = (prior?['activity'] as num?)?.toDouble() ?? 1.2;
   var macros = prior?['macro_mode'] as String? ?? 'Проценты';
   if (!['Проценты', 'Граммы'].contains(macros)) macros = 'Граммы';
-  var highProtein = prior?['macro_template'] == 'protein';
+  var highProtein =
+      prior?['macro_template'] == 'protein' ||
+      (prior?['macro_template'] == null &&
+          prior?['macro_mode'] == 'Проценты' &&
+          prior?['protein'] == 30);
   final fields = <String, TextEditingController>{};
   for (final key in [
     'weight',

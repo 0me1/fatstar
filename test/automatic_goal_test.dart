@@ -42,7 +42,7 @@ void main() {
             weeklyKg: .3,
             highProtein: true,
           );
-          expect(c.nutrition.kcal, closeTo(c.energy.kcal, .0005));
+          expect(milli(c.nutrition.kcal), milli(c.energy.kcal));
           expect(c.nutrition.protein!, lessThanOrEqualTo(71 * 2.2));
           expect(
             c.nutrition.protein! * 4 +
