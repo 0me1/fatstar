@@ -366,10 +366,9 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       }
     }
     // A bounded indexed overlap shortlist supports substrings and transpositions.
-    final grams = query.tokens
-        .expand(SearchNormalizer.grams)
+    final grams = alternatives
+        .expand((q) => q.tokens.expand(SearchNormalizer.grams).toSet().take(32))
         .toSet()
-        .take(64)
         .toList();
     if (grams.isNotEmpty) {
       final rows = await customSelect(

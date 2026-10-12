@@ -38,6 +38,7 @@ void main() {
           final remote = food(2, 'Гречка').copy(version: 7);
           await db.applyPage([remote], 12);
           expect(await engine.search('греча'), hasLength(1));
+          expect((await engine.search('uhtrxrf')).single.product.id, remote.id);
           expect(await db.cursor(), 12);
           if (!fts) expect(await db.usesFts(), false);
         } finally {

@@ -332,7 +332,12 @@ List<SearchHit> rankFoodCandidates(
     if (layout.normalized != query.normalized) {
       result = collect(layout, false, 5, layout.normalized);
     }
-    if (result.isEmpty) result = collect(query, true, 6, null);
+    if (result.isEmpty) {
+      result = collect(query, true, 6, null);
+    }
+    if (result.isEmpty && layout.normalized != query.normalized) {
+      result = collect(layout, true, 6, layout.normalized);
+    }
   }
   result.sort((a, b) {
     final tier = a.textTier.compareTo(b.textTier);

@@ -256,7 +256,9 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
   List<Widget> results() {
     if (search.text.trim().isNotEmpty || filter != 'all' || hidden) {
       return [
-        if (hits.isNotEmpty && hits.first.correction != null)
+        if (hits.isNotEmpty &&
+            hits.first.correction != null &&
+            hits.first.textTier == 5)
           ListTile(
             title: Text('Показаны результаты: ${hits.first.correction}'),
           ),

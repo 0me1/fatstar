@@ -163,7 +163,11 @@ void main() {
               kind: 'product',
               localOnly: true,
               data: {
-                'name': i == 500 ? 'Молоко 2,5%' : 'Продукт номер $i',
+                'name': i == 500
+                    ? 'Молоко 2,5%'
+                    : i == 501
+                    ? 'Гречка'
+                    : 'Продукт номер $i',
                 'brand': 'CI',
                 'unit': 'gram',
                 'active': true,
@@ -186,6 +190,10 @@ void main() {
           'ANDROID_SEARCH_BENCH products=1000 fts=${await db.usesFts()} query=$query ms=${watch.elapsedMilliseconds}',
         );
       }
+      expect(
+        (await engine.search('uhtrxrf')).single.product.data['name'],
+        'Гречка',
+      );
       await tester.pumpWidget(
         ProviderScope(
           overrides: [diaryProvider.overrideWith((ref) => c)],
