@@ -28,46 +28,70 @@ Future<T?> editForm<T>(
   BuildContext context,
   String title,
   List<Widget> Function(StateSetter) content,
-  T Function() result,
-) => showModalBottomSheet<T>(
+  T Function() result, {
+  List<TextEditingController> ownedControllers = const [],
+}) => showModalBottomSheet<T>(
   context: context,
   showDragHandle: true,
   sheetAnimationStyle: sheetMotion(context),
   isScrollControlled: true,
   useSafeArea: true,
-  builder: (context) => StatefulBuilder(
-    builder: (context, update) => Padding(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        20,
-        20,
-        MediaQuery.viewInsetsOf(context).bottom + 20,
-      ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(title, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 16),
-            ...content(update),
-            const SizedBox(height: 16),
-            FilledButton(
-              onPressed: () {
-                try {
-                  Navigator.pop(context, result());
-                } catch (e) {
-                  message(context, e);
-                }
-              },
-              child: const Text('Сохранить'),
-            ),
-          ],
+  builder: (context) => _FormLifetime(
+    controllers: ownedControllers,
+    child: StatefulBuilder(
+      builder: (context, update) => Padding(
+        padding: EdgeInsets.fromLTRB(
+          20,
+          20,
+          20,
+          MediaQuery.viewInsetsOf(context).bottom + 20,
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(title, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 16),
+              ...content(update),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: () {
+                  try {
+                    Navigator.pop(context, result());
+                  } catch (e) {
+                    message(context, e);
+                  }
+                },
+                child: const Text('Сохранить'),
+              ),
+            ],
+          ),
         ),
       ),
     ),
   ),
 );
+
+class _FormLifetime extends StatefulWidget {
+  const _FormLifetime({required this.controllers, required this.child});
+  final List<TextEditingController> controllers;
+  final Widget child;
+  @override
+  State<_FormLifetime> createState() => _FormLifetimeState();
+}
+
+class _FormLifetimeState extends State<_FormLifetime> {
+  @override
+  Widget build(BuildContext context) => widget.child;
+  @override
+  void dispose() {
+    for (final controller in widget.controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+}
 
 Widget input(
   String label,

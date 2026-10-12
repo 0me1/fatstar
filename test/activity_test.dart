@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:sqlite3/sqlite3.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:uuid/uuid.dart';
 import 'package:calorie_diary/domain/activity.dart';
@@ -66,6 +68,41 @@ void main() {
       }
     },
   );
+  test('v3 upgrade retains records and queued changes', () async {
+    final dir = Directory.systemTemp.createTempSync('activity-migration-');
+    final file = File('${dir.path}/db.sqlite');
+    final old = DiaryDatabase(file);
+    await old.save(
+      Record(
+        id: const Uuid().v4(),
+        kind: 'weight',
+        data: {'day': '2026-10-12', 'kg': 70},
+      ),
+    );
+    await old.close();
+    final raw = sqlite3.open(file.path);
+    raw.execute('DROP VIEW records');
+    raw.execute('DROP TABLE activity_entries');
+    raw.execute('DROP TABLE activity_types');
+    final pairs = DiaryDatabase.tables.entries.where(
+      (p) => !p.key.startsWith('activity'),
+    );
+    raw.execute(
+      "CREATE VIEW records AS ${pairs.map((p) => "SELECT '${p.key}' AS kind,id,data,version,deleted,local_only FROM ${p.value}").join(' UNION ALL ')}",
+    );
+    raw.execute('PRAGMA user_version=3');
+    raw.dispose();
+    final next = DiaryDatabase(file);
+    try {
+      expect(await next.records(kind: 'weight'), hasLength(1));
+      expect(await next.operations(), hasLength(1));
+      expect(await next.records(kind: 'activity'), isEmpty);
+      expect(activityWeight(await next.records(), DateTime(2026, 10, 12)), 70);
+    } finally {
+      await next.close();
+      dir.deleteSync(recursive: true);
+    }
+  });
   test('activity validation rejects malformed minutes and dates', () {
     final r = Record(
       id: const Uuid().v4(),

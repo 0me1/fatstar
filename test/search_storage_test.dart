@@ -47,7 +47,7 @@ void main() {
       },
     );
   }
-  test('v2 → v3 rebuilds index and preserves products and diary', () async {
+  test('v2 → v4 rebuilds index and preserves products and diary', () async {
     final dir = Directory.systemTemp.createTempSync('search-migration-');
     final file = File('${dir.path}/db.sqlite');
     var db = DiaryDatabase(file);
@@ -72,6 +72,8 @@ void main() {
     ]) {
       raw.execute('DROP TABLE IF EXISTS $table');
     }
+    raw.execute('DROP TABLE activity_entries');
+    raw.execute('DROP TABLE activity_types');
     raw.execute('PRAGMA user_version=2');
     raw.dispose();
     db = DiaryDatabase(file);

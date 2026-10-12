@@ -88,6 +88,7 @@ Future<void> editActivity(
           'recorded_at': DateTime.now().toUtc().toIso8601String(),
         };
       },
+      ownedControllers: [minutes, weight],
     );
     if (data != null) {
       await c.save('activity', data, previous: previous);
@@ -95,9 +96,6 @@ Future<void> editActivity(
     }
   } catch (e) {
     if (root.mounted) message(root, e);
-  } finally {
-    minutes.dispose();
-    weight.dispose();
   }
 }
 
@@ -149,6 +147,7 @@ class _ActivitySearchState extends ConsumerState<ActivitySearchScreen> {
           }
           return result;
         },
+        ownedControllers: [name, rate],
       );
       if (data != null) {
         final saved = await c.save('activity_type', data);
@@ -157,9 +156,6 @@ class _ActivitySearchState extends ConsumerState<ActivitySearchScreen> {
       }
     } catch (e) {
       if (mounted) message(context, e);
-    } finally {
-      name.dispose();
-      rate.dispose();
     }
   }
 
