@@ -700,10 +700,16 @@ class DiaryScreen extends ConsumerWidget {
   }
 }
 
-Future<void> deleteDiaryEntry(BuildContext context, DiaryController c, Record entry) async {
+Future<void> deleteDiaryEntry(
+  BuildContext context,
+  DiaryController c,
+  Record entry,
+) async {
   await c.remove(entry);
   unawaited(HapticFeedback.mediumImpact().catchError((Object _) {}));
-  if (context.mounted) { undo(context, c, entry); }
+  if (context.mounted) {
+    undo(context, c, entry);
+  }
 }
 
 void undo(BuildContext context, DiaryController c, Record original) =>

@@ -148,11 +148,20 @@ void main() {
     tester,
   ) async {
     final haptics = <Object?>[];
-    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
-      if (call.method == 'HapticFeedback.vibrate') haptics.add(call.arguments);
-      return null;
-    });
-    addTearDown(() => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, null));
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async {
+        if (call.method == 'HapticFeedback.vibrate')
+          haptics.add(call.arguments);
+        return null;
+      },
+    );
+    addTearDown(
+      () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        null,
+      ),
+    );
     final c = SwipeController()
       ..db = DiaryDatabase.memory()
       ..userId = '00000000-0000-4000-8000-000000000001'
@@ -193,7 +202,10 @@ void main() {
     });
     await tester.pumpAndSettle();
     expect(c.entries, isEmpty);
-    expect(haptics.where((a)=>a=='HapticFeedbackType.mediumImpact'),hasLength(1));
+    expect(
+      haptics.where((a) => a == 'HapticFeedbackType.mediumImpact'),
+      hasLength(1),
+    );
     expect(dayKey(c.day), day);
     expect(find.text('Отменить'), findsOneWidget);
     await tester.tap(find.text('Отменить'));
@@ -208,14 +220,26 @@ void main() {
     expect(c.entries.single.data['name'], 'Swipe food');
     await tester.ensureVisible(find.byType(Dismissible).first);
     await tester.pumpAndSettle();
-    await tester.tap(find.descendant(of:find.byType(Dismissible).first,matching:find.byType(PopupMenuButton<String>)));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(Dismissible).first,
+        matching: find.byType(PopupMenuButton<String>),
+      ),
+    );
     await tester.pumpAndSettle();
     await tester.tap(find.text('Удалить'));
     await tester.pumpAndSettle();
-    await tester.runAsync(() async {for(var i=0;i<50 && c.entries.isNotEmpty;i++){await Future<void>.delayed(const Duration(milliseconds:10));}});
+    await tester.runAsync(() async {
+      for (var i = 0; i < 50 && c.entries.isNotEmpty; i++) {
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }
+    });
     await tester.pumpAndSettle();
-    expect(c.entries,isEmpty);
-    expect(haptics.where((a)=>a=='HapticFeedbackType.mediumImpact'),hasLength(2));
+    expect(c.entries, isEmpty);
+    expect(
+      haptics.where((a) => a == 'HapticFeedbackType.mediumImpact'),
+      hasLength(2),
+    );
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });

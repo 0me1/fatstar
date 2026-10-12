@@ -206,9 +206,11 @@ class DiaryController extends ChangeNotifier {
           'meal': meal.name,
           'recorded_at': DateTime.now().toUtc().toIso8601String(),
         };
-        added.add(await current.save(
-          Record(id: const Uuid().v4(), kind: 'entry', data: entry),
-        ));
+        added.add(
+          await current.save(
+            Record(id: const Uuid().v4(), kind: 'entry', data: entry),
+          ),
+        );
         if (data['product_id'] != null) {
           final existing = (await current.records(kind: 'portion'))
               .where((r) => r.data['product_id'] == data['product_id'])
