@@ -53,15 +53,35 @@ class SettingsScreen extends ConsumerWidget {
                     },
                   ),
                 ),
-                ListTile(title: const Text('Акцентный цвет'),
-                  subtitle: Text('#${c.accent.toRadixString(16).substring(2).toUpperCase()}'),
-                  trailing: Container(width: 32, height: 32, decoration: BoxDecoration(color: Color(c.accent), shape: BoxShape.circle,
-                    border: Border.all(color: Theme.of(context).colorScheme.onSurface))),
+                ListTile(
+                  title: const Text('Акцентный цвет'),
+                  subtitle: Text(
+                    '#${c.accent.toRadixString(16).substring(2).toUpperCase()}',
+                  ),
+                  trailing: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: Color(c.accent),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
                   onTap: () async {
                     final selected = await pickAccent(context, c.accent);
-                    if (selected != null) { try { await c.saveSettings({'accent': selected}); }
-                      catch (e) { if (context.mounted) { message(context, e); } } }
-                  }),
+                    if (selected != null) {
+                      try {
+                        await c.saveSettings({'accent': selected});
+                      } catch (e) {
+                        if (context.mounted) {
+                          message(context, e);
+                        }
+                      }
+                    }
+                  },
+                ),
                 ListTile(
                   title: const Text('Шрифт'),
                   subtitle: Text(diaryFonts[c.font]!),

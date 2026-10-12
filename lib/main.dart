@@ -112,12 +112,18 @@ class _CalorieDiaryAppState extends ConsumerState<CalorieDiaryApp>
   }
 }
 
-ThemeData diaryTheme(Brightness brightness, {String font = 'Rubik', int accent = 0xFF56DCC6}) {
+ThemeData diaryTheme(
+  Brightness brightness, {
+  String font = 'Rubik',
+  int accent = 0xFF56DCC6,
+}) {
   final dark = brightness == Brightness.dark;
   final selected = Color(accent);
   Color foreground(Color background) {
     final luminance = background.computeLuminance();
-    return (luminance + 0.05) / 0.05 >= 1.05 / (luminance + 0.05) ? Colors.black : Colors.white;
+    return (luminance + 0.05) / 0.05 >= 1.05 / (luminance + 0.05)
+        ? Colors.black
+        : Colors.white;
   }
   final selectedReadable = (selected.computeLuminance() + 0.05) / (const Color(0xFF242928).computeLuminance() + 0.05) >= 4.5;
   final generated = ColorScheme.fromSeed(seedColor: selected, brightness: brightness);
@@ -127,7 +133,9 @@ ThemeData diaryTheme(Brightness brightness, {String font = 'Rubik', int accent =
         brightness: brightness,
       ).copyWith(
         primary: dark && selectedReadable ? selected : generated.primary,
-        onPrimary: foreground(dark && selectedReadable ? selected : generated.primary),
+        onPrimary: foreground(
+          dark && selectedReadable ? selected : generated.primary,
+        ),
         surface: dark ? const Color(0xFF242928) : Colors.white,
         onSurface: dark ? const Color(0xFFF3F7F7) : const Color(0xFF172225),
       );

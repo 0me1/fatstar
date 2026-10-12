@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'motion.dart';
 
-Future<int?> pickAccent(BuildContext context, int initial) => showModalBottomSheet<int>(
-  context: context, useSafeArea: true, isScrollControlled: true, showDragHandle: true,
-  sheetAnimationStyle: sheetMotion(context), builder: (_) => AccentPicker(initial: Color(initial)));
+Future<int?> pickAccent(BuildContext context, int initial) =>
+    showModalBottomSheet<int>(
+      context: context,
+      useSafeArea: true,
+      isScrollControlled: true,
+      showDragHandle: true,
+      sheetAnimationStyle: sheetMotion(context),
+      builder: (_) => AccentPicker(initial: Color(initial)),
+    );
 
 class AccentPicker extends StatefulWidget {
   const AccentPicker({super.key, required this.initial});
@@ -11,14 +17,24 @@ class AccentPicker extends StatefulWidget {
   @override
   State<AccentPicker> createState() => _AccentPickerState();
 }
+
 class _AccentPickerState extends State<AccentPicker> {
   late HSVColor hsv = HSVColor.fromColor(widget.initial);
   late final hex = TextEditingController(text: code(widget.initial));
   String? error;
-  String code(Color color) => color.toARGB32().toRadixString(16).substring(2).toUpperCase();
-  void update(HSVColor value) => setState(() { hsv = value; hex.text = code(hsv.toColor()); error = null; });
+  String code(Color color) =>
+      color.toARGB32().toRadixString(16).substring(2).toUpperCase();
+  void update(HSVColor value) => setState(() {
+    hsv = value;
+    hex.text = code(hsv.toColor());
+    error = null;
+  });
   @override
-  void dispose() { hex.dispose(); super.dispose(); }
+  void dispose() {
+    hex.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => Padding(
     padding: EdgeInsets.fromLTRB(20, 0, 20, MediaQuery.viewInsetsOf(context).bottom + 20),
