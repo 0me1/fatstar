@@ -194,7 +194,7 @@ Map<String, FoodPreference> foodPreferences(
     }
     final amount = r.data['amount'];
     if (amount is num) {
-      final key = '${r.data['unit']}/$amount';
+      final key = '${r.data['unit']}/${amount.toDouble()}';
       p.portions[key] = (p.portions[key] ?? 0) + 1;
     }
   }

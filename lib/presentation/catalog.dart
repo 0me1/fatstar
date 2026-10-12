@@ -574,8 +574,9 @@ Future<void> editProduct(
   final brand = TextEditingController(
     text: product?.data['brand'] as String? ?? '',
   );
+  final rawAliases=product?.data['aliases'];
   final aliases = TextEditingController(
-    text: (product?.data['aliases'] as List? ?? []).join('\n'),
+    text: (rawAliases is List ? rawAliases.whereType<String>().take(32) : const <String>[]).join('\n'),
   );
   final n = product == null
       ? const Nutrition(0, 0, 0, 0)
