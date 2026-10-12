@@ -260,6 +260,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
           ListTile(
             title: Text('Показаны результаты: ${hits.first.correction}'),
           ),
+        if(hits.isNotEmpty && hits.first.textTier==6) ListTile(title:Text('Возможно, вы искали: ${hits.first.product.data['name']}'),onTap:(){search.text=hits.first.product.data['name'] as String;changed();}),
         ...hits.take(visibleCount).map(row),
         if (hits.length > visibleCount)
           TextButton(
@@ -410,7 +411,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
-                'При выборе карточки: ${number(parsed.amount!)} ${parsed.unit == 'gram' ? 'г' : 'мл'}; проверьте порцию перед добавлением.',
+                'Распознано ${number(parsed.amount!)} ${parsed.unit == 'gram' ? 'г' : 'мл'}. Предлагается в панели порции только для продуктов с этой базовой единицей.',
               ),
             ),
           SingleChildScrollView(

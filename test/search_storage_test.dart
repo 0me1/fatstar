@@ -147,4 +147,15 @@ void main() {
     },
     timeout: const Timeout(Duration(minutes: 2)),
   );
+  test('lexicon revision rebuilds only derived index, keeping pending operations', () async {
+    final dir=Directory.systemTemp.createTempSync('search-lexicon-');final file=File('${dir.path}/db.sqlite');
+    var db=DiaryDatabase(file);final p=await db.save(food(1,'Паста'));
+    await db.customStatement('DELETE FROM food_search_tokens');
+    await db.customStatement('DELETE FROM food_search_grams');
+    if(await db.usesFts()) {await db.customStatement('DELETE FROM food_search_fts');}
+    await db.customStatement("UPDATE metadata SET value='0' WHERE key='food_search_lexicon_version'");
+    await db.close();db=DiaryDatabase(file);
+    try {expect((await FoodSearchRepository(db).search('макароны')).single.product.id,p.id);expect(await db.operations(),hasLength(1));}finally{await db.close();dir.deleteSync(recursive:true);}
+  });
+
 }
