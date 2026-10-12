@@ -15,6 +15,7 @@ import 'package:calorie_diary/domain/records.dart';
 import 'package:calorie_diary/presentation/controller.dart';
 import 'package:calorie_diary/presentation/activities.dart';
 import 'package:calorie_diary/presentation/app_version.dart';
+import 'package:calorie_diary/presentation/goals.dart';
 import 'package:calorie_diary/presentation/screens.dart';
 
 void main() {
@@ -293,4 +294,69 @@ void main() {
     await tester.pumpWidget(const SizedBox());
     await tester.pumpAndSettle();
   });
+  testWidgets(
+    'Android: automatic goals save balanced macros and capped protein',
+    (tester) async {
+      final c = DiaryController()
+        ..db = DiaryDatabase(
+          File('${Directory.systemTemp.path}/${const Uuid().v4()}.sqlite'),
+        )
+        ..loading = false;
+      await c.save('goal', {
+        'effective_from': dayKey(
+          DateTime.now().subtract(const Duration(days: 1)),
+        ),
+        'nutrition': const Nutrition(2619, 128, 84, 319).toJson(),
+        'mode': 'auto',
+        'formula': 'mifflin',
+        'sex': 'male',
+        'goal': 'muscle',
+        'activity': 1.9,
+        'weight': 71.0,
+        'desired_weight': 73.0,
+        'height': 179.0,
+        'age': 19,
+        'weekly_kg': 0.0,
+        'kcal': 2619.0,
+        'protein': 128.0,
+        'fat': 84.0,
+        'carbs': 319.0,
+        'macro_mode': 'Граммы',
+      });
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: app.diaryTheme(Brightness.dark),
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () => editGoal(context, c),
+                child: const Text('Open goals'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open goals'));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('auto-goal-preview')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Белки: 156,2 г'), findsOneWidget);
+      await tester.ensureVisible(find.text('Сохранить'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Сохранить'));
+      for (var i = 0; i < 50 && c.of('goal').length < 2; i++) {
+        await tester.pump(const Duration(milliseconds: 100));
+      }
+      await tester.pumpAndSettle();
+      final n = entryNutrition(c.goal!);
+      expect(n.protein!, lessThanOrEqualTo(71 * 2.2));
+      expect(n.protein! * 4 + n.fat! * 9 + n.carbs! * 4, closeTo(n.kcal, 1e-8));
+      expect(c.goal!.data['macro_mode'], 'Автоматически');
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+      c.dispose();
+    },
+  );
 }
