@@ -378,8 +378,12 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
               Text('Углеводы: ${number(n.carbs)} г'),
               const SizedBox(height: 8),
               Text(
-                'Белок не выше 2,2 г/кг: ${number(weight * 2.2)} г. Жиры — около 30% калорий, углеводы — оставшаяся энергия.',
+                'Белок: ${highProtein ? '2,0' : '1,6'} г/кг расчетного веса. Лимит — 2,2 г/кг (${number(weight * 2.2)} г). Жиры — около 30% калорий, углеводы — оставшаяся энергия.',
               ),
+              if (n.protein! + .001 < weight * (highProtein ? 2.0 : 1.6))
+                const Text(
+                  'При этой норме калорий белок уменьшен, чтобы БЖУ поместились в энергетический бюджет.',
+                ),
               const SizedBox(height: 8),
               Text(
                 '4 × белки + 9 × жиры + 4 × углеводы = ${number(n.kcal, 0)} ккал. Граммы на экране округлены; сохраняется точный расчет.',
@@ -599,7 +603,7 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
           kcal = automaticNutrition.kcal;
           explanation =
               '${formulaNames[formula.index]}: BMR ${number(target.basal, 0)} × $activity = TDEE ${number(target.tdee, 0)}. Поправка ${number(target.adjustment, 0)} ккал. ${target.limited ? 'Применено ограничение.' : ''} '
-              'БЖУ рассчитаны вместе с калориями по 4/4/9; белок ограничен 2,2 г/кг расчетного веса. Жиры около 30%, углеводы — остаток.';
+              'БЖУ рассчитаны вместе с калориями по 4/4/9; белок ${highProtein ? '2,0' : '1,6'} г/кг расчетного веса (лимит 2,2 г/кг, с учетом доступной энергии). Жиры около 30%, углеводы — остаток.';
         } else {
           kcal = parseNumber(fields['kcal']!.text);
           explanation = 'Ручная норма: ${number(kcal, 0)} ккал.';

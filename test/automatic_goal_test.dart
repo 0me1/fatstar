@@ -54,6 +54,22 @@ void main() {
       }
     }
   });
+  test('protein follows body weight, independent of normal calorie target', () {
+    for (final kcal in [2000.0, 2390.781, 3000.0, 4000.0]) {
+      expect(automaticMacros(kcal: kcal, weight: 71).protein, 113.6);
+      expect(
+        automaticMacros(kcal: kcal, weight: 71, highProtein: true).protein,
+        142,
+      );
+    }
+    final low = automaticMacros(kcal: 500, weight: 500, highProtein: true);
+    expect(low.carbs, 0);
+    expect(low.protein!, lessThan(500 * 2));
+    expect(
+      low.protein! * 4 + low.fat! * 9 + low.carbs! * 4,
+      closeTo(500, 1e-8),
+    );
+  });
   test('invalid automatic targets are rejected', () {
     for (final value in [0.0, -1.0, double.nan, double.infinity, 10001.0]) {
       expect(
@@ -63,8 +79,8 @@ void main() {
     }
     expect(() => automaticMacros(kcal: 2000, weight: 19), throwsArgumentError);
     final capped = automaticMacros(kcal: 2695, weight: 71, highProtein: true);
-    expect(capped.protein, 156.2);
+    expect(capped.protein, 142);
     final balanced = automaticMacros(kcal: 2000, weight: 71);
-    expect(balanced.protein, 125);
+    expect(balanced.protein, 113.6);
   });
 }

@@ -234,16 +234,18 @@ Nutrition automaticMacros({
     throw ArgumentError('Проверьте норму калорий и расчетный вес');
   }
   final energy = milli(kcal);
-  final protein =
-      (math.min(energy / 1000 * (highProtein ? .30 : .25) / 4, weight * 2.2) *
-              1000)
-          .floor();
   var fat = (energy * .30 / 9).round();
   // With milligram storage, choose the nearest fat value whose energy remainder
   // is divisible by four. This preserves exact 4/4/9 balance after JSON rounding.
   var shift = (energy - fat) % 4;
   if (shift > 2) shift -= 4;
   fat += shift;
+  final requestedProtein =
+      (math.min(weight * (highProtein ? 2.0 : 1.6), weight * 2.2) * 1000)
+          .floor();
+  // When an unusually low energy target cannot fit the requested grams, avoid
+  // negative carbohydrates and preserve the calorie budget.
+  final protein = math.min(requestedProtein, (energy - 9 * fat) ~/ 4);
   final carbs = (energy - 4 * protein - 9 * fat) ~/ 4;
   return Nutrition(energy / 1000, protein / 1000, fat / 1000, carbs / 1000);
 }

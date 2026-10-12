@@ -62,6 +62,7 @@ void main() {
       await open(tester, c);
       expect(find.byKey(const ValueKey('auto-goal-preview')), findsOneWidget);
       expect(field('Белки, г'), findsNothing);
+      expect(find.text('Белки: 113,6 г'), findsOneWidget);
       expect(c.goal!.data['nutrition']['protein'], 128);
       final activity = find.byWidgetPredicate(
         (w) => w is DropdownButtonFormField<double>,
@@ -75,10 +76,10 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.widgetWithText(ChoiceChip, 'Больше белка'));
       await tester.pump();
-      expect(find.text('Белки: 156,2 г'), findsOneWidget);
+      expect(find.text('Белки: 142,0 г'), findsOneWidget);
       await tester.enterText(field('Исходный / расчетный вес, кг'), '70');
       await tester.pump();
-      expect(find.text('Белки: 154,0 г'), findsOneWidget);
+      expect(find.text('Белки: 140,0 г'), findsOneWidget);
       await tester.ensureVisible(find.text('Сохранить'));
       await tester.tap(find.text('Сохранить'));
       await tester.pumpAndSettle();
@@ -87,7 +88,7 @@ void main() {
       expect(current.data['mode'], 'auto');
       expect(current.data['macro_mode'], 'Граммы');
       final n = entryNutrition(current);
-      expect(n.protein, 154);
+      expect(n.protein, 140);
       expect(n.protein! * 4 + n.fat! * 9 + n.carbs! * 4, closeTo(n.kcal, 1e-8));
       expect(
         (await c.db!.find('goal', old.id))!.data['nutrition']['protein'],

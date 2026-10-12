@@ -342,7 +342,7 @@ void main() {
         find.byKey(const ValueKey('auto-goal-preview')),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Белки: 156,2 г'), findsOneWidget);
+      expect(find.text('Белки: 113,6 г'), findsOneWidget);
       await tester.ensureVisible(find.text('Сохранить'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Сохранить'));
@@ -351,6 +351,7 @@ void main() {
       }
       await tester.pumpAndSettle();
       final n = entryNutrition(c.goal!);
+      expect(n.protein, 113.6);
       expect(n.protein!, lessThanOrEqualTo(71 * 2.2));
       expect(n.protein! * 4 + n.fat! * 9 + n.carbs! * 4, closeTo(n.kcal, 1e-8));
       expect(c.goal!.data['mode'], 'auto');
