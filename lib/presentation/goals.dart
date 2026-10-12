@@ -109,7 +109,9 @@ class GoalsScreen extends ConsumerWidget {
                 row(
                   context,
                   'Настройки БЖУ',
-                  g?.data['macro_mode'] as String? ?? 'Автоматические',
+                  g?.data['mode'] == 'auto'
+                      ? 'Автоматические'
+                      : g?.data['macro_mode'] as String? ?? 'Автоматические',
                   () => editGoal(context, c),
                 ),
                 row(
@@ -637,7 +639,7 @@ Future<void> editGoal(BuildContext context, DiaryController c) async {
           'protein': p,
           'fat': f,
           'carbs': carbs,
-          'macro_mode': mode == 'auto' ? 'Автоматически' : macros,
+          'macro_mode': mode == 'auto' ? 'Граммы' : macros,
           if (mode == 'auto')
             'macro_template': highProtein ? 'protein' : 'balanced',
           'explanation': explanation,

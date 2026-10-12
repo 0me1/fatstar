@@ -84,7 +84,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(c.of('goal'), hasLength(2));
       final current = c.goal!;
-      expect(current.data['macro_mode'], 'Автоматически');
+      expect(current.data['mode'], 'auto');
+      expect(current.data['macro_mode'], 'Граммы');
       final n = entryNutrition(current);
       expect(n.protein, 154);
       expect(n.protein! * 4 + n.fat! * 9 + n.carbs! * 4, closeTo(n.kcal, 1e-8));

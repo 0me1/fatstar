@@ -353,7 +353,8 @@ void main() {
       final n = entryNutrition(c.goal!);
       expect(n.protein!, lessThanOrEqualTo(71 * 2.2));
       expect(n.protein! * 4 + n.fat! * 9 + n.carbs! * 4, closeTo(n.kcal, 1e-8));
-      expect(c.goal!.data['macro_mode'], 'Автоматически');
+      expect(c.goal!.data['mode'], 'auto');
+      expect(c.goal!.data['macro_mode'], 'Граммы');
       await tester.pumpWidget(const SizedBox());
       await tester.pumpAndSettle();
       c.dispose();
