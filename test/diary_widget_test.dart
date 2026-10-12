@@ -244,4 +244,21 @@ void main() {
     expect(tester.takeException(), isNull);
     await tester.pumpWidget(const SizedBox());
   });
+  testWidgets('failed local deletion does not confirm haptically', (tester) async {
+    final haptics=<Object?>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform,(call) async {
+      if(call.method=='HapticFeedback.vibrate') { haptics.add(call.arguments); }
+      return null;
+    });
+    addTearDown(()=>tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform,null));
+    final c=DiaryController()..db=DiaryDatabase.memory()..loading=false;
+    final entry=await c.save('entry',{'name':'До правки','day':dayKey(c.day),'meal':'breakfast','amount':1,'unit':'quick','nutrition':{'kcal':100,'protein':null,'fat':null,'carbs':null}});
+    await c.save('entry',{...entry.data,'name':'После правки'},previous:entry);
+    late BuildContext context;
+    await tester.pumpWidget(MaterialApp(home:Builder(builder:(ctx){context=ctx;return const SizedBox();})));
+    await tester.runAsync(() async { await expectLater(deleteDiaryEntry(context,c,entry),throwsStateError); });
+    expect(haptics,isEmpty);expect(c.entries.single.data['name'],'После правки');
+    await tester.pumpWidget(const SizedBox());await c.db!.close();c.db=null;c.dispose();
+  });
+
 }

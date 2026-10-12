@@ -281,7 +281,7 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
         items: hits.where((h) => (h.preference?.count ?? 0) > 0).toList()
           ..sort(
             (a, b) =>
-                (b.preference?.count ?? 0).compareTo(a.preference?.count ?? 0),
+                compareFoodFrequency(a.preference,b.preference),
           ),
       ),
       (

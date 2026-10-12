@@ -291,13 +291,21 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
       if (await usesFts()) {
         final expression = q.tokens
             .map((t) => '"${t.replaceAll('"', '""')}"*')
-            .join(' OR ');
+            .join(' AND ');
         final rows = await customSelect(
           'SELECT product_id FROM food_search_fts WHERE food_search_fts MATCH ? ORDER BY rank LIMIT ?',
           variables: [Variable(expression), Variable(limit)],
         ).get();
         ids.addAll(rows.map((r) => r.read<String>('product_id')));
       }
+      final clauses=<String>[];
+      final args=<Variable>[];
+      for(final token in q.tokens) {
+        clauses.add('SELECT product_id FROM food_search_tokens WHERE token>=? AND token<?');
+        args.addAll([Variable(token),Variable('$token\uffff')]);
+      }
+      final exactWords=await customSelect('${clauses.join(' INTERSECT ')} LIMIT ?',variables:[...args,Variable(limit)]).get();
+      ids.addAll(exactWords.map((r)=>r.read<String>('product_id')));
       for (final token in [
         ...q.tokens,
         ...q.tokens
