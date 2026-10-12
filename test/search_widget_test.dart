@@ -29,8 +29,8 @@ void main() {
       final query=tester.widget<TextField>(find.byType(TextField)).controller!.text;
       final offset=tester.widget<ListView>(find.byType(ListView)).controller!.offset;
       await tester.tap(find.text('Творог 5%'));await tester.pumpAndSettle();
-      expect(find.text('Порция'),findsOneWidget);
-      Navigator.of(tester.element(find.text('Порция'))).pop();await ready(tester);
+      expect(find.text('Единица / порция'),findsOneWidget);
+      Navigator.of(tester.element(find.text('Единица / порция'))).pop();await ready(tester);
       expect(tester.widget<TextField>(find.byType(TextField)).controller!.text,query);
       expect(tester.widget<ListView>(find.byType(ListView)).controller!.offset,offset);
       await tester.tap(find.byTooltip('Добавить 100 г'));await ready(tester);

@@ -188,7 +188,7 @@ int editDistance(String a,String b,int maximum) {
     final row = List<int>.filled(b.length+1,0); row[0]=i;
     for (var j=1;j<=b.length;j++) {
       row[j]=math.min(math.min(row[j-1]+1,previous[j]+1),previous[j-1]+(a[i-1]==b[j-1]?0:1));
-      if (i>1 && j>1 && a[i-1]==b[j-2] && a[i-2]==b[j-1]) row[j]=math.min(row[j],before[j-2]+1);
+      if (i>1 && j>1 && a[i-1]==b[j-2] && a[i-2]==b[j-1]) { row[j]=math.min(row[j],before[j-2]+1); }
     }
     before = previous;
     previous = row;
