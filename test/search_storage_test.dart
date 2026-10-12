@@ -177,16 +177,30 @@ void main() {
       }
     },
   );
-  for(final fts in [true,false]) {
-    test('hidden cards never exhaust the candidate limit: fts=$fts',() async {
-      final db=DiaryDatabase.memory(enableFts:fts);
+  for (final fts in [true, false]) {
+    test('hidden cards never exhaust the candidate limit: fts=$fts', () async {
+      final db = DiaryDatabase.memory(enableFts: fts);
       try {
-        final hidden=food(1,'Молоко');await db.save(hidden.copy(data:{...hidden.data,'active':false}));
-        final active=await db.save(food(2,'Молоко'));
-        expect((await db.searchCandidates(SearchQuery('молоко'),limit:1)).single.id,active.id);
-        expect((await db.searchCandidates(SearchQuery('малако'),limit:1)).single.id,active.id);
-      } finally {await db.close();}
+        final hidden = food(1, 'Молоко');
+        await db.save(hidden.copy(data: {...hidden.data, 'active': false}));
+        final active = await db.save(food(2, 'Молоко'));
+        expect(
+          (await db.searchCandidates(
+            SearchQuery('молоко'),
+            limit: 1,
+          )).single.id,
+          active.id,
+        );
+        expect(
+          (await db.searchCandidates(
+            SearchQuery('малако'),
+            limit: 1,
+          )).single.id,
+          active.id,
+        );
+      } finally {
+        await db.close();
+      }
     });
   }
-
 }

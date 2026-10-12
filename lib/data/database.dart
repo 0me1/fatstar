@@ -301,7 +301,11 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     final ids = <String>{};
     final exact = await customSelect(
       'SELECT product_id FROM food_search_documents WHERE name=? AND (?=1 OR hidden=0) LIMIT ?',
-      variables: [Variable(query.normalized), Variable(hidden ? 1 : 0), Variable(limit)],
+      variables: [
+        Variable(query.normalized),
+        Variable(hidden ? 1 : 0),
+        Variable(limit),
+      ],
     ).get();
     ids.addAll(exact.map((r) => r.read<String>('product_id')));
     final alternatives = [
@@ -318,7 +322,11 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
             .join(' AND ');
         final rows = await customSelect(
           'SELECT food_search_fts.product_id FROM food_search_fts JOIN food_search_documents d ON d.product_id=food_search_fts.product_id WHERE food_search_fts MATCH ? AND (?=1 OR d.hidden=0) ORDER BY rank LIMIT ?',
-          variables: [Variable(expression), Variable(hidden ? 1 : 0), Variable(limit)],
+          variables: [
+            Variable(expression),
+            Variable(hidden ? 1 : 0),
+            Variable(limit),
+          ],
         ).get();
         ids.addAll(rows.map((r) => r.read<String>('product_id')));
       }
@@ -328,7 +336,11 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         clauses.add(
           'SELECT t.product_id FROM food_search_tokens t JOIN food_search_documents d ON d.product_id=t.product_id WHERE t.token>=? AND t.token<? AND (?=1 OR d.hidden=0)',
         );
-        args.addAll([Variable(token), Variable('$token\uffff'), Variable(hidden ? 1 : 0)]);
+        args.addAll([
+          Variable(token),
+          Variable('$token\uffff'),
+          Variable(hidden ? 1 : 0),
+        ]);
       }
       final exactWords = await customSelect(
         '${clauses.join(' INTERSECT ')} LIMIT ?',
@@ -362,7 +374,11 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     if (grams.isNotEmpty) {
       final rows = await customSelect(
         'SELECT g.product_id,COUNT(*) AS hits FROM food_search_grams g JOIN food_search_documents d ON d.product_id=g.product_id WHERE g.gram IN (${List.filled(grams.length, '?').join(',')}) AND (?=1 OR d.hidden=0) GROUP BY g.product_id ORDER BY hits DESC,g.product_id LIMIT ?',
-        variables: [...grams.map(Variable.new), Variable(hidden ? 1 : 0), Variable(limit)],
+        variables: [
+          ...grams.map(Variable.new),
+          Variable(hidden ? 1 : 0),
+          Variable(limit),
+        ],
       ).get();
       ids.addAll(rows.map((r) => r.read<String>('product_id')));
     }

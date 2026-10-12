@@ -18,7 +18,7 @@ Flutter 3.35.7 / Dart 3.9, Riverpod, Drift/SQLite, Supabase Auth/PostgreSQL, Mat
 - `.github/workflows/ci.yml`: анализ, unit/server/Android проверки.
 - `.github/workflows/release.yml`: подписанный release APK и проверка установки.
 
-Подробности: [архитектура](docs/ARCHITECTURE_RU.md), [UI по референсам](docs/UI_SPEC_RU.md), [план приемки](docs/IMPLEMENTATION_PLAN_RU.md), [формулы](docs/FORMULAS_RU.md).
+Подробности: [архитектура](docs/ARCHITECTURE_RU.md), [UI по референсам](docs/UI_SPEC_RU.md), [план приемки](docs/IMPLEMENTATION_PLAN_RU.md), [формулы](docs/FORMULAS_RU.md), [адаптивный поиск](docs/ADAPTIVE_SEARCH_RU.md).
 
 ## Настройка нового Supabase
 
@@ -37,7 +37,7 @@ values ('UUID-ПЕРВОГО-ПОЛЬЗОВАТЕЛЯ'), ('UUID-ВТОРОГО-�
 
 ## Разработка на машине с Flutter SDK
 
-В текущей облачной среде лимит **2 vCPU / 8 ГБ RAM / 8 ГБ диска**. Android SDK, эмулятор и сборки здесь не запускаются. Используйте существующий checkout, worktree не требуется. Все тяжелые проверки выполняются GitHub Actions.
+В текущей облачной среде лимит **2 vCPU / 8 ГБ RAM / 8 ГБ диска**. Android SDK, эмулятор и сборки здесь не запускаются. Используйте существующий checkout, worktree не требуется. Все тяжелые проверки выполняются GitHub Actions. Для локального форматирования доступен отдельный Dart 3.9.2 в `/tmp/calorie-dart-toolchain/dart-sdk/bin/dart` (без Flutter/Android SDK); шаг установки сохранен в настройках среды.
 
 На отдельной машине разработчика:
 
@@ -50,7 +50,7 @@ flutter test
 flutter run --dart-define=SUPABASE_URL=https://YOUR_PROJECT.supabase.co --dart-define=SUPABASE_ANON_KEY=YOUR_PUBLIC_KEY
 ```
 
-Drift использует custom SQL и версионированный schemaVersion; генератор Dart не требуется. Текущая схема v2 создается транзакционно; предусмотрен переход v1→v2 и тесты сохранности данных/rollback. SQLite-файлы нельзя удалять при исправлении ошибок или выходе из аккаунта.
+Drift использует custom SQL и версионированный schemaVersion; генератор Dart не требуется. Текущая схема v3 создается транзакционно; предусмотрены переходы v1/v2→v3 с построением поискового индекса и тестами сохранности данных/rollback. SQLite-файлы нельзя удалять при исправлении ошибок или выходе из аккаунта.
 
 ## Проверки в GitHub Actions
 
