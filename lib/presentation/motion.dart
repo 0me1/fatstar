@@ -359,7 +359,7 @@ class _DiaryMotionState extends State<DiaryMotion>
             final progress = reduced
                 ? 1.0
                 : Curves.easeInOutCubic.transform(slide.value);
-            final width = constraints.maxWidth;
+
             return ClipRect(
               child: Transform.translate(
                 offset: Offset(
