@@ -172,13 +172,25 @@ Nutrition entryNutrition(Record entry) => Nutrition.fromJson(
 
 Json quickEntryForProduct(Record product, Record? last) {
   final p = product.data;
-  final valid = last != null && !last.deleted &&
-      last.data['product_id'] == product.id && last.data['unit'] == p['unit'] &&
-      (last.data['portion_id'] == null || (p['portions'] as List? ?? []).any(
-        (raw) => raw['id'] == last.data['portion_id']));
-  return entryForProduct(product, valid ? decimal(last.data['amount']) : 100,
-      valid ? (last.data['portion_name'] as String? ?? '') : p['unit'] == 'gram' ? 'г' : 'мл',
-      portionId: valid ? last.data['portion_id'] as String? : null);
+  final valid =
+      last != null &&
+      !last.deleted &&
+      last.data['product_id'] == product.id &&
+      last.data['unit'] == p['unit'] &&
+      (last.data['portion_id'] == null ||
+          (p['portions'] as List? ?? []).any(
+            (raw) => raw['id'] == last.data['portion_id'],
+          ));
+  return entryForProduct(
+    product,
+    valid ? decimal(last.data['amount']) : 100,
+    valid
+        ? (last.data['portion_name'] as String? ?? '')
+        : p['unit'] == 'gram'
+        ? 'г'
+        : 'мл',
+    portionId: valid ? last.data['portion_id'] as String? : null,
+  );
 }
 
 Json entryForProduct(
