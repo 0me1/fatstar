@@ -18,8 +18,11 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     'portion': 'portion_preferences',
     'settings': 'user_settings',
   };
-  DiaryDatabase(File file) : enableFts = true, super(NativeDatabase.createInBackground(file));
-  DiaryDatabase.memory({this.enableFts = true}) : super(NativeDatabase.memory());
+  DiaryDatabase(File file)
+    : enableFts = true,
+      super(NativeDatabase.createInBackground(file));
+  DiaryDatabase.memory({this.enableFts = true})
+    : super(NativeDatabase.memory());
   final bool enableFts;
   int searchRevision = 0;
   @override
@@ -131,31 +134,55 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
   Future<void> _write(Record record) async {
     await customStatement(
       'INSERT OR REPLACE INTO ${_table(record.kind)}(id,data,version,deleted,local_only) VALUES(?,?,?,?,?)',
-      [record.id, jsonEncode(record.data), record.version, record.deleted ? 1 : 0, record.localOnly ? 1 : 0],
+      [
+        record.id,
+        jsonEncode(record.data),
+        record.version,
+        record.deleted ? 1 : 0,
+        record.localOnly ? 1 : 0,
+      ],
     );
     if (record.kind == 'product') { await _indexProduct(record); }
     searchRevision++;
   }
 
   Future<void> _createSearchIndex() async {
-    await customStatement('CREATE TABLE food_search_documents (product_id TEXT PRIMARY KEY, name TEXT NOT NULL, brand TEXT NOT NULL, aliases TEXT NOT NULL, hidden INTEGER NOT NULL)');
-    await customStatement('CREATE TABLE food_search_tokens (token TEXT NOT NULL, product_id TEXT NOT NULL, PRIMARY KEY(token,product_id)) WITHOUT ROWID');
-    await customStatement('CREATE INDEX food_tokens_product ON food_search_tokens(product_id)');
-    await customStatement('CREATE TABLE food_search_grams (gram TEXT NOT NULL, product_id TEXT NOT NULL, PRIMARY KEY(gram,product_id)) WITHOUT ROWID');
-    await customStatement('CREATE INDEX food_grams_product ON food_search_grams(product_id)');
+    await customStatement(
+      'CREATE TABLE food_search_documents (product_id TEXT PRIMARY KEY, name TEXT NOT NULL, brand TEXT NOT NULL, aliases TEXT NOT NULL, hidden INTEGER NOT NULL)',
+    );
+    await customStatement(
+      'CREATE TABLE food_search_tokens (token TEXT NOT NULL, product_id TEXT NOT NULL, PRIMARY KEY(token,product_id)) WITHOUT ROWID',
+    );
+    await customStatement(
+      'CREATE INDEX food_tokens_product ON food_search_tokens(product_id)',
+    );
+    await customStatement(
+      'CREATE TABLE food_search_grams (gram TEXT NOT NULL, product_id TEXT NOT NULL, PRIMARY KEY(gram,product_id)) WITHOUT ROWID',
+    );
+    await customStatement(
+      'CREATE INDEX food_grams_product ON food_search_grams(product_id)',
+    );
     if (enableFts) {
       try {
-        await customStatement("CREATE VIRTUAL TABLE food_search_fts USING fts5(product_id UNINDEXED,name,brand,aliases,tokenize='unicode61')");
+        await customStatement(
+          "CREATE VIRTUAL TABLE food_search_fts USING fts5(product_id UNINDEXED,name,brand,aliases,tokenize='unicode61')",
+        );
       } catch (_) {
         // The indexed token and bigram tables remain available without FTS5.
       }
     }
   }
 
-  Future<bool> usesFts() async => (await customSelect("SELECT 1 FROM sqlite_master WHERE name='food_search_fts'").get()).isNotEmpty;
+  Future<bool> usesFts() async => (await customSelect(
+    "SELECT 1 FROM sqlite_master WHERE name='food_search_fts'",
+  ).get()).isNotEmpty;
 
   Future<void> _removeSearchProduct(String id) async {
-    for (final table in ['food_search_documents','food_search_tokens','food_search_grams']) {
+    for (final table in [
+      'food_search_documents',
+      'food_search_tokens',
+      'food_search_grams',
+    ]) {
       await customStatement('DELETE FROM $table WHERE product_id=?', [id]);
     }
     if (await usesFts()) { await customStatement('DELETE FROM food_search_fts WHERE product_id=?', [id]); }
@@ -167,15 +194,37 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     final name = SearchNormalizer.normalize(product.data['name'] as String? ?? '');
     final brand = SearchNormalizer.normalize(product.data['brand'] as String? ?? '');
     final aliases = SearchNormalizer.aliases(product);
-    await customStatement('INSERT INTO food_search_documents VALUES(?,?,?,?,?)', [product.id,name,brand,aliases,product.data['active'] == false ? 1 : 0]);
+    await customStatement(
+      'INSERT INTO food_search_documents VALUES(?,?,?,?,?)',
+      [
+        product.id,
+        name,
+        brand,
+        aliases,
+        product.data['active'] == false ? 1 : 0,
+      ],
+    );
     final words = SearchNormalizer.tokens('$name $brand $aliases').toSet();
-    final tokens = {...words,...words.where((w)=>w.length>=4).map((w)=>'~${SearchNormalizer.phonetic(w)}')};
+    final tokens = {
+      ...words,
+      ...words
+          .where((w) => w.length >= 4)
+          .map((w) => '~${SearchNormalizer.phonetic(w)}'),
+    };
     final grams = tokens.expand(SearchNormalizer.grams).toSet();
-    for (final pair in [('food_search_tokens',tokens),('food_search_grams',grams)]) {
+    for (final pair in [
+      ('food_search_tokens', tokens),
+      ('food_search_grams', grams),
+    ]) {
       final values = pair.$2.toList();
-      for (var i=0;i<values.length;i+=64) {
+      for (var i = 0; i < values.length; i += 64) {
         final chunk = values.skip(i).take(64).toList();
-        await customStatement('INSERT OR IGNORE INTO ${pair.$1} VALUES ${List.filled(chunk.length,'(?,?)').join(',')}', [for (final v in chunk) ...[v,product.id]]);
+        await customStatement(
+          'INSERT OR IGNORE INTO ${pair.$1} VALUES ${List.filled(chunk.length, '(?,?)').join(',')}',
+          [
+            for (final v in chunk) ...[v, product.id],
+          ],
+        );
       }
     }
     if (await usesFts()) { await customStatement('INSERT INTO food_search_fts(product_id,name,brand,aliases) VALUES(?,?,?,?)',[product.id,name,brand,aliases]); }
@@ -192,30 +241,64 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
     return result;
   }
 
-  Future<List<Record>> searchCandidates(SearchQuery query, {bool hidden = false, int limit = 600}) async {
+  Future<List<Record>> searchCandidates(
+    SearchQuery query, {
+    bool hidden = false,
+    int limit = 600,
+  }) async {
     if (query.tokens.isEmpty) {
-      final rows = await customSelect("SELECT 'product' AS kind,p.* FROM products p JOIN food_search_documents d ON d.product_id=p.id WHERE p.deleted=0 AND (?=1 OR d.hidden=0) ORDER BY d.name,p.id LIMIT ?",variables:[Variable(hidden?1:0),Variable(limit)]).get();
+      final rows = await customSelect(
+        "SELECT 'product' AS kind,p.* FROM products p JOIN food_search_documents d ON d.product_id=p.id WHERE p.deleted=0 AND (?=1 OR d.hidden=0) ORDER BY d.name,p.id LIMIT ?",
+        variables: [Variable(hidden ? 1 : 0), Variable(limit)],
+      ).get();
       return rows.map(_record).toList();
     }
     final ids = <String>{};
-    final alternatives = [query,SearchQuery(SearchNormalizer.layout(query.raw))];
+    final alternatives = [
+      query,
+      SearchQuery(SearchNormalizer.layout(query.raw)),
+    ];
     for (final q in alternatives) {
       if (q.tokens.isEmpty) { continue; }
       if (await usesFts()) {
-        final expression = q.tokens.map((t) => '"${t.replaceAll('"','""')}"*').join(' OR ');
-        final rows = await customSelect('SELECT product_id FROM food_search_fts WHERE food_search_fts MATCH ? ORDER BY rank LIMIT ?',variables:[Variable(expression),Variable(limit)]).get();
-        ids.addAll(rows.map((r)=>r.read<String>('product_id')));
+        final expression = q.tokens
+            .map((t) => '"${t.replaceAll('"', '""')}"*')
+            .join(' OR ');
+        final rows = await customSelect(
+          'SELECT product_id FROM food_search_fts WHERE food_search_fts MATCH ? ORDER BY rank LIMIT ?',
+          variables: [Variable(expression), Variable(limit)],
+        ).get();
+        ids.addAll(rows.map((r) => r.read<String>('product_id')));
       }
-      for (final token in [...q.tokens,...q.tokens.where((w)=>w.length>=4).map((w)=>'~${SearchNormalizer.phonetic(w)}')]) {
-        final rows = await customSelect('SELECT DISTINCT product_id FROM food_search_tokens WHERE token>=? AND token<? LIMIT ?',variables:[Variable(token),Variable('$token\uffff'),Variable(limit)]).get();
-        ids.addAll(rows.map((r)=>r.read<String>('product_id')));
+      for (final token in [
+        ...q.tokens,
+        ...q.tokens
+            .where((w) => w.length >= 4)
+            .map((w) => '~${SearchNormalizer.phonetic(w)}'),
+      ]) {
+        final rows = await customSelect(
+          'SELECT DISTINCT product_id FROM food_search_tokens WHERE token>=? AND token<? LIMIT ?',
+          variables: [
+            Variable(token),
+            Variable('$token\uffff'),
+            Variable(limit),
+          ],
+        ).get();
+        ids.addAll(rows.map((r) => r.read<String>('product_id')));
       }
     }
     // A bounded indexed overlap shortlist supports substrings and transpositions.
-    final grams = query.tokens.expand(SearchNormalizer.grams).toSet().take(64).toList();
+    final grams = query.tokens
+        .expand(SearchNormalizer.grams)
+        .toSet()
+        .take(64)
+        .toList();
     if (grams.isNotEmpty) {
-      final rows = await customSelect('SELECT product_id,COUNT(*) AS hits FROM food_search_grams WHERE gram IN (${List.filled(grams.length,'?').join(',')}) GROUP BY product_id ORDER BY hits DESC,product_id LIMIT ?',variables:[...grams.map(Variable.new),Variable(limit)]).get();
-      ids.addAll(rows.map((r)=>r.read<String>('product_id')));
+      final rows = await customSelect(
+        'SELECT product_id,COUNT(*) AS hits FROM food_search_grams WHERE gram IN (${List.filled(grams.length, '?').join(',')}) GROUP BY product_id ORDER BY hits DESC,product_id LIMIT ?',
+        variables: [...grams.map(Variable.new), Variable(limit)],
+      ).get();
+      ids.addAll(rows.map((r) => r.read<String>('product_id')));
     }
     if (ids.isEmpty) return [];
     return searchProductsByIds(ids.take(limit*3),hidden:hidden);
@@ -286,7 +369,8 @@ class DiaryDatabase extends GeneratedDatabase implements DiaryRepository {
         if (remote != null) {
           await _write(remote);
         } else {
-          if (operation['kind'] == 'product') await _removeSearchProduct(operation['record_id'] as String);
+          if (operation['kind'] == 'product')
+            await _removeSearchProduct(operation['record_id'] as String);
           searchRevision++;
           await customStatement(
             'DELETE FROM ${_table(operation['kind'] as String)} WHERE id=?',
