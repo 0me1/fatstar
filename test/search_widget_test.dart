@@ -13,7 +13,7 @@ Future<void> ready(WidgetTester tester) async {
   for(var i=0;i<40;i++) {
     await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds:50)));
     await tester.pump(const Duration(milliseconds:25));
-    if(find.byType(LinearProgressIndicator).evaluate().isEmpty) break;
+    if(find.byType(LinearProgressIndicator).evaluate().isEmpty) { break; }
   }
   expect(find.byType(LinearProgressIndicator),findsNothing,reason:'SQLite and isolate search must finish');
   await tester.pumpAndSettle();
