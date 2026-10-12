@@ -12,12 +12,20 @@ import 'controller.dart';
 import 'forms.dart';
 import 'motion.dart';
 import 'color_picker.dart';
+import 'app_version.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final c = ref.watch(diaryProvider);
+    final version = ref
+        .watch(appVersionProvider)
+        .when(
+          data: (value) => value.label,
+          loading: () => 'Calorie Diary',
+          error: (_, _) => 'Calorie Diary · версия недоступна',
+        );
     return Scaffold(
       appBar: AppBar(title: const Text('Настройки')),
       body: ListView(
@@ -246,8 +254,8 @@ class SettingsScreen extends ConsumerWidget {
             },
           ),
           const SizedBox(height: 24),
-          const Text(
-            'Calorie Diary 1.0.0\nВаши данные хранятся локально; синхронизация выполняется с вашим проектом Supabase.',
+          Text(
+            '$version\nВаши данные хранятся локально; синхронизация выполняется с вашим проектом Supabase.',
           ),
         ],
       ),

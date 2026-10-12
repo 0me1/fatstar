@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:calorie_diary/main.dart';
 import 'package:calorie_diary/data/database.dart';
 import 'package:calorie_diary/domain/nutrition.dart';
+import 'package:calorie_diary/domain/records.dart';
 import 'package:calorie_diary/presentation/catalog.dart';
 import 'package:calorie_diary/presentation/controller.dart';
 import 'food_search_test.dart' show food;
@@ -28,6 +29,46 @@ Future<void> ready(WidgetTester tester) async {
 }
 
 void main() {
+  testWidgets('all products form one deduplicated list with filter chips', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(600, 1600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final c = DiaryController()
+      ..db = DiaryDatabase.memory()
+      ..loading = false;
+    final first = await c.db!.save(food(1, 'Первый продукт'));
+    final second = await c.db!.save(food(2, 'Второй продукт'));
+    await c.db!.save(food(3, 'Остальной каталог'));
+    await c.addEntries([entryForProduct(first, 100, 'г')], Meal.breakfast);
+    await c.favorite(first);
+    await c.favorite(second);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [diaryProvider.overrideWith((ref) => c)],
+        child: const MaterialApp(home: CatalogScreen(meal: Meal.breakfast)),
+      ),
+    );
+    await ready(tester);
+    expect(find.text('Для этого приема пищи'), findsNothing);
+    expect(find.text('Каталог продуктов'), findsNothing);
+    expect(find.text('Первый продукт'), findsOneWidget);
+    expect(find.text('Второй продукт'), findsOneWidget);
+    expect(find.text('Остальной каталог'), findsOneWidget);
+    expect(find.text('Недавние'), findsOneWidget);
+    expect(
+      tester.getTopLeft(find.text('Первый продукт')).dy,
+      lessThan(tester.getTopLeft(find.text('Второй продукт')).dy),
+    );
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Избранное'));
+    await ready(tester);
+    expect(find.text('Первый продукт'), findsOneWidget);
+    expect(find.text('Второй продукт'), findsOneWidget);
+    expect(find.text('Остальной каталог'), findsNothing);
+    await tester.pumpWidget(const SizedBox());
+  });
   for (final brightness in Brightness.values) {
     testWidgets(
       'offline search ${brightness.name}: keyboard, newest query, add/undo and no duplicate on back',
@@ -67,7 +108,7 @@ void main() {
           tester.widget<TextField>(find.byType(TextField)).autofocus,
           true,
         );
-        expect(find.text('Каталог продуктов'), findsOneWidget);
+        expect(find.text('Каталог продуктов'), findsNothing);
         await tester.enterText(find.byType(TextField), 'мол');
         await tester.pump(const Duration(milliseconds: 40));
         await tester.enterText(find.byType(TextField), 'тварог');

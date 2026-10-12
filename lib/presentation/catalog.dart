@@ -310,34 +310,21 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
         items: hits.where((h) => h.preference?.favorite == true).toList(),
       ),
     ];
-    if (groups.every((g) => g.items.isEmpty)) {
-      return [
-        const ListTile(title: Text('Каталог продуктов')),
-        ...hits.take(visibleCount).map(row),
-        if (hits.length > visibleCount)
-          TextButton(
-            onPressed: () => setState(() => visibleCount += 40),
-            child: const Text('Показать еще'),
-          ),
-      ];
-    }
+    final seen = <String>{};
+    final ordered = <SearchHit>[
+      for (final group in groups)
+        for (final hit in group.items.take(3))
+          if (seen.add(hit.product.id)) hit,
+      for (final hit in hits)
+        if (seen.add(hit.product.id)) hit,
+    ];
     return [
-      for (final group in groups.where((g) => g.items.isNotEmpty)) ...[
-        ListTile(
-          title: Text(
-            group.name,
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          trailing: TextButton(
-            onPressed: () {
-              setState(() => filter = group.filter);
-              unawaited(refresh());
-            },
-            child: const Text('Все'),
-          ),
+      ...ordered.take(visibleCount).map(row),
+      if (ordered.length > visibleCount)
+        TextButton(
+          onPressed: () => setState(() => visibleCount += 40),
+          child: const Text('Показать еще'),
         ),
-        ...group.items.take(3).map((h) => row(h, group: group.filter)),
-      ],
     ];
   }
 

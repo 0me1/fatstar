@@ -57,6 +57,38 @@ void main() {
       }
     }
   });
+  testWidgets(
+    'accent HEX label stays below hue slider with large Comfortaa text',
+    (tester) async {
+      tester.view.physicalSize = const Size(360, 800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: diaryTheme(Brightness.dark, font: 'Comfortaa'),
+          home: MediaQuery(
+            data: const MediaQueryData(
+              size: Size(360, 800),
+              textScaler: TextScaler.linear(1.5),
+            ),
+            child: const Scaffold(
+              body: AccentPicker(initial: Color(0xFF56DCC6)),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byType(TextField));
+      await tester.pumpAndSettle();
+      final hueBottom = tester
+          .getBottomLeft(find.byKey(const ValueKey('accent-hue')))
+          .dy;
+      final hexTop = tester.getTopLeft(find.text('HEX (#RRGGBB)')).dy;
+      expect(hexTop, greaterThan(hueBottom + 8));
+      expect(tester.takeException(), isNull);
+    },
+  );
   testWidgets('HEX picker validates and applies an arbitrary opaque color', (
     tester,
   ) async {

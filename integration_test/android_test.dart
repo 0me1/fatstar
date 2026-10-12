@@ -14,6 +14,7 @@ import 'package:calorie_diary/domain/nutrition.dart';
 import 'package:calorie_diary/domain/records.dart';
 import 'package:calorie_diary/presentation/controller.dart';
 import 'package:calorie_diary/presentation/activities.dart';
+import 'package:calorie_diary/presentation/app_version.dart';
 import 'package:calorie_diary/presentation/screens.dart';
 
 void main() {
@@ -145,6 +146,13 @@ void main() {
       await b.dispose();
     },
   );
+  testWidgets('Android: installed version is available from package manager', (
+    tester,
+  ) async {
+    final version = await readAppVersion();
+    expect(version.version, isNotEmpty);
+    expect(int.parse(version.build), greaterThanOrEqualTo(12));
+  });
   testWidgets(
     'Android: local indexed search and immediate quick add without remote',
     (tester) async {
