@@ -22,8 +22,16 @@ Future<void> productEditScenario(WidgetTester tester, DiaryController c) async {
     'active': true,
     'nutrition': const Nutrition(520, 7.5, 34, 47).toJson(),
     'portions': [
-      {'id': 'small', 'name': 'Штука', 'amount': 40},
-      {'id': 'large', 'name': 'Плитка', 'amount': 100},
+      {
+        'id': '00000000-0000-4000-8000-000000000001',
+        'name': 'Штука',
+        'amount': 40,
+      },
+      {
+        'id': '00000000-0000-4000-8000-000000000002',
+        'name': 'Плитка',
+        'amount': 100,
+      },
     ],
   });
   await c.addEntries([entryForProduct(p, 40, 'Штука')], Meal.breakfast);
@@ -74,7 +82,7 @@ Future<void> productEditScenario(WidgetTester tester, DiaryController c) async {
   final portions = saved.data['portions'] as List;
   expect(portions, hasLength(2));
   expect(portions.first, {
-    'id': 'large',
+    'id': '00000000-0000-4000-8000-000000000002',
     'name': 'Большая плитка',
     'amount': 120.0,
   });
