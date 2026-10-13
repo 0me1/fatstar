@@ -601,7 +601,14 @@ Future<void> editProduct(
       amount: TextEditingController(text: number(p.amount)),
     ));
   }
-  final retired = <TextEditingController>[];
+  // Controllers belong to the route, including rows removed during editing.
+  final controllers = <TextEditingController>[
+    name,
+    brand,
+    aliases,
+    ...values,
+    for (final p in portions) ...[p.name, p.amount],
+  ];
   try {
     final data = await editForm<Json>(
       context,
@@ -609,12 +616,15 @@ Future<void> editProduct(
       (set) => [
         input('Название', name),
         input('Бренд (необязательно)', brand),
-        TextField(
-          controller: aliases,
-          minLines: 1,
-          maxLines: 4,
-          decoration: const InputDecoration(
-            labelText: 'Альтернативные названия (по одному в строке)',
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: TextField(
+            controller: aliases,
+            minLines: 1,
+            maxLines: 4,
+            decoration: const InputDecoration(
+              labelText: 'Альтернативные названия (по одному в строке)',
+            ),
           ),
         ),
         DropdownButtonFormField<String>(
@@ -637,6 +647,7 @@ Future<void> editProduct(
         const SizedBox(height: 12),
         for (var i = 0; i < portions.length; i++)
           Row(
+            key: ValueKey(portions[i].id),
             children: [
               Expanded(child: input('Название', portions[i].name)),
               const SizedBox(width: 8),
@@ -647,20 +658,21 @@ Future<void> editProduct(
                 tooltip: 'Удалить порцию',
                 icon: const Icon(Icons.delete_outline),
                 onPressed: () => set(() {
-                  final p = portions.removeAt(i);
-                  retired.addAll([p.name, p.amount]);
+                  portions.removeAt(i);
                 }),
               ),
             ],
           ),
         TextButton.icon(
-          onPressed: () => set(
-            () => portions.add((
+          onPressed: () => set(() {
+            final portion = (
               id: const Uuid().v4(),
               name: TextEditingController(),
               amount: TextEditingController(),
-            )),
-          ),
+            );
+            controllers.addAll([portion.name, portion.amount]);
+            portions.add(portion);
+          }),
           icon: const Icon(Icons.add),
           label: const Text('Добавить порцию'),
         ),
@@ -703,6 +715,7 @@ Future<void> editProduct(
         );
         return result;
       },
+      ownedControllers: controllers,
     );
     if (data == null || !context.mounted) {
       return;
@@ -752,20 +765,6 @@ Future<void> editProduct(
     if (context.mounted) {
       message(context, e);
     }
-  } finally {
-    name.dispose();
-    brand.dispose();
-    aliases.dispose();
-    for (final v in values) {
-      v.dispose();
-    }
-    for (final p in portions) {
-      p.name.dispose();
-      p.amount.dispose();
-    }
-    for (final v in retired) {
-      v.dispose();
-    }
   }
 }
 
@@ -782,7 +781,7 @@ Future<void> productDetails(
     showDragHandle: true,
     sheetAnimationStyle: sheetMotion(context),
     useSafeArea: true,
-    builder: (context) => ListView(
+    builder: (sheetContext) => ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(20),
       children: [
@@ -791,14 +790,14 @@ Future<void> productDetails(
         ),
         Text(
           p.data['name'] as String,
-          style: Theme.of(context).textTheme.titleLarge,
+          style: Theme.of(sheetContext).textTheme.titleLarge,
         ),
         Text('${p.data['brand'] ?? ''} · версия ${p.version}'),
         ListTile(
           leading: const Icon(Icons.edit_outlined),
           title: const Text('Изменить КБЖУ и порции'),
           onTap: () {
-            Navigator.pop(context);
+            Navigator.pop(sheetContext);
             editProduct(context, c, product: p);
           },
         ),
@@ -807,7 +806,7 @@ Future<void> productDetails(
           title: const Text('Переключить избранное'),
           onTap: () async {
             await c.favorite(p);
-            if (context.mounted) Navigator.pop(context);
+            if (sheetContext.mounted) Navigator.pop(sheetContext);
           },
         ),
         ListTile(
@@ -823,9 +822,9 @@ Future<void> productDetails(
                 ...p.data,
                 'active': p.data['active'] == false,
               }, previous: p);
-              if (context.mounted) Navigator.pop(context);
+              if (sheetContext.mounted) Navigator.pop(sheetContext);
             } catch (e) {
-              if (context.mounted) {
+              if (sheetContext.mounted) {
                 message(context, e);
               }
             }
@@ -835,7 +834,7 @@ Future<void> productDetails(
           leading: const Icon(Icons.history),
           title: const Text('История изменений'),
           onTap: () {
-            Navigator.pop(context);
+            Navigator.pop(sheetContext);
             productHistory(context, c, p);
           },
         ),
@@ -866,7 +865,7 @@ Future<void> productDetails(
               if (confirmed == true) {
                 // Publishing uses a fresh shared identity; imported snapshots stay intact.
                 await c.save('product', p.data);
-                if (context.mounted) Navigator.pop(context);
+                if (sheetContext.mounted) Navigator.pop(sheetContext);
               }
             },
           ),

@@ -1,4 +1,5 @@
 import 'dart:io';
+import '../test/product_edit_test.dart' show productEditScenario;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -359,6 +360,17 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       await tester.pumpAndSettle();
       c.dispose();
+    },
+  );
+  testWidgets(
+    'Android: catalog edit saves nutrition and changes/deletes portions',
+    (tester) async {
+      final c = DiaryController()
+        ..db = DiaryDatabase(
+          File('${Directory.systemTemp.path}/${const Uuid().v4()}.sqlite'),
+        )
+        ..loading = false;
+      await productEditScenario(tester, c);
     },
   );
 }
