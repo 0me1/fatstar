@@ -13,6 +13,16 @@ Finder productField(String label) => find.byWidgetPredicate(
   (w) => w is TextField && w.decoration?.labelText == label,
 );
 
+Future<void> revealProductControl(WidgetTester tester, Finder control) async {
+  // Let keyboard insets and focused-field auto-scrolling finish before locating
+  // the next control on a physical Android viewport.
+  FocusManager.instance.primaryFocus?.unfocus();
+  await tester.pumpAndSettle();
+  await Scrollable.ensureVisible(tester.element(control), alignment: 0.5);
+  await tester.pumpAndSettle();
+  expect(control.hitTestable(), findsOneWidget);
+}
+
 // The real catalog -> detail sheet -> editor path reproduces the lost-context bug.
 Future<void> productEditScenario(WidgetTester tester, DiaryController c) async {
   final p = await c.save('product', {
@@ -54,9 +64,9 @@ Future<void> productEditScenario(WidgetTester tester, DiaryController c) async {
     productField('Название').first,
     'Шоколад исправленный',
   );
-  await tester.ensureVisible(productField('Калории'));
+  await revealProductControl(tester, productField('Калории'));
   await tester.enterText(productField('Калории'), '530');
-  await tester.ensureVisible(find.byTooltip('Удалить порцию').first);
+  await revealProductControl(tester, find.byTooltip('Удалить порцию').first);
   await tester.tap(find.byTooltip('Удалить порцию').first);
   await tester.pumpAndSettle();
   // Deleting the first row must leave the second row bound to its own controllers.
@@ -66,13 +76,13 @@ Future<void> productEditScenario(WidgetTester tester, DiaryController c) async {
   );
   await tester.enterText(productField('Название').last, 'Большая плитка');
   await tester.enterText(productField('Размер'), '120');
-  await tester.ensureVisible(find.text('Добавить порцию'));
+  await revealProductControl(tester, find.text('Добавить порцию'));
   await tester.tap(find.text('Добавить порцию'));
   await tester.pumpAndSettle();
-  await tester.ensureVisible(productField('Размер').last);
+  await revealProductControl(tester, productField('Размер').last);
   await tester.enterText(productField('Название').last, 'Половинка');
   await tester.enterText(productField('Размер').last, '60');
-  await tester.ensureVisible(find.text('Сохранить'));
+  await revealProductControl(tester, find.text('Сохранить'));
   await tester.tap(find.text('Сохранить'));
   await ready(tester);
   final saved = (await c.db!.find('product', p.id))!;
@@ -102,11 +112,11 @@ Future<void> productEditScenario(WidgetTester tester, DiaryController c) async {
   await tester.tap(find.text('Изменить КБЖУ и порции'));
   await tester.pumpAndSettle();
   for (var i = 0; i < 2; i++) {
-    await tester.ensureVisible(find.byTooltip('Удалить порцию').first);
+    await revealProductControl(tester, find.byTooltip('Удалить порцию').first);
     await tester.tap(find.byTooltip('Удалить порцию').first);
     await tester.pumpAndSettle();
   }
-  await tester.ensureVisible(find.text('Сохранить'));
+  await revealProductControl(tester, find.text('Сохранить'));
   await tester.tap(find.text('Сохранить'));
   await ready(tester);
   expect((await c.db!.find('product', p.id))!.data['portions'], isEmpty);
