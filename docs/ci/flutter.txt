@@ -1,0 +1,407 @@
+Resolving dependencies...
+Downloading packages...
+  app_links 6.4.1 (7.2.2 available)
+  app_links_linux 1.0.3 (1.0.4 available)
+  app_links_platform_interface 2.0.2 (2.0.4 available)
+  app_links_web 1.0.4 (1.0.5 available)
+  characters 1.4.0 (1.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  connectivity_plus 6.1.5 (7.3.2 available)
+  cross_file 0.3.5+2 (0.4.0 available)
+  crypto 3.0.6 (3.0.7 available)
+  dbus 0.7.15 (0.8.0 available)
+  drift 2.28.1 (2.35.2 available)
+  file_picker 10.3.2 (13.1.0 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  flutter_riverpod 2.6.1 (3.4.3 available)
+  flutter_secure_storage 9.2.4 (11.2.0 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  functions_client 2.4.4 (2.7.1 available)
+  gotrue 2.14.0 (2.27.3 available)
+  intl 0.20.2 (0.20.3 available)
+  js 0.6.7 (0.7.2 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.17 (0.12.20 available)
+  material_color_utilities 0.11.1 (0.13.1 available)
+  meta 1.16.0 (1.19.0 available)
+  nm 0.5.0 (0.6.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider 2.1.5 (2.1.6 available)
+  path_provider_foundation 2.5.1 (2.6.0 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  postgrest 2.4.2 (2.9.1 available)
+  realtime_client 2.5.2 (2.13.2 available)
+  riverpod 2.6.1 (3.4.3 available)
+  share_plus 11.1.0 (13.3.1 available)
+  share_plus_platform_interface 6.1.0 (7.2.0 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  shared_preferences_android 2.4.23 (2.4.28 available)
+  shared_preferences_foundation 2.5.6 (2.5.7 available)
+  sqlite3 2.9.4 (3.7.1 available)
+  sqlite3_flutter_libs 0.5.39 (0.6.0+eol available)
+  stack_trace 1.12.1 (1.12.2 available)
+  storage_client 2.4.1 (2.8.1 available)
+  supabase 2.9.0 (2.16.5 available)
+  supabase_flutter 2.10.0 (2.18.3 available)
+  test_api 0.7.6 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.29 (6.3.33 available)
+  url_launcher_ios 6.3.6 (6.4.2 available)
+  url_launcher_linux 3.2.2 (3.2.3 available)
+  url_launcher_macos 3.2.5 (3.2.6 available)
+  url_launcher_web 2.4.1 (2.4.3 available)
+  url_launcher_windows 3.1.5 (3.1.6 available)
+  uuid 4.5.1 (4.6.0 available)
+  vector_math 2.2.0 (2.4.3 available)
+  win32 5.15.0 (6.4.0 available)
+  xml 6.6.1 (7.1.0 available)
+  yet_another_json_isolate 2.1.0 (2.1.1 available)
+Got dependencies!
+64 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing fatstar...                                            
+No issues found! (ran in 11.0s)
+Resolving dependencies...
+Downloading packages...
+  app_links 6.4.1 (7.2.2 available)
+  app_links_linux 1.0.3 (1.0.4 available)
+  app_links_platform_interface 2.0.2 (2.0.4 available)
+  app_links_web 1.0.4 (1.0.5 available)
+  characters 1.4.0 (1.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  connectivity_plus 6.1.5 (7.3.2 available)
+  cross_file 0.3.5+2 (0.4.0 available)
+  crypto 3.0.6 (3.0.7 available)
+  dbus 0.7.15 (0.8.0 available)
+  drift 2.28.1 (2.35.2 available)
+  file_picker 10.3.2 (13.1.0 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  flutter_plugin_android_lifecycle 2.0.34 (2.0.35 available)
+  flutter_riverpod 2.6.1 (3.4.3 available)
+  flutter_secure_storage 9.2.4 (11.2.0 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  functions_client 2.4.4 (2.7.1 available)
+  gotrue 2.14.0 (2.27.3 available)
+  intl 0.20.2 (0.20.3 available)
+  js 0.6.7 (0.7.2 available)
+  lints 5.1.1 (6.1.0 available)
+  matcher 0.12.17 (0.12.20 available)
+  material_color_utilities 0.11.1 (0.13.1 available)
+  meta 1.16.0 (1.19.0 available)
+  nm 0.5.0 (0.6.0 available)
+  package_config 2.2.0 (3.0.0 available)
+  path_provider 2.1.5 (2.1.6 available)
+  path_provider_foundation 2.5.1 (2.6.0 available)
+  path_provider_linux 2.2.1 (2.2.2 available)
+  path_provider_platform_interface 2.1.2 (2.1.3 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  postgrest 2.4.2 (2.9.1 available)
+  realtime_client 2.5.2 (2.13.2 available)
+  riverpod 2.6.1 (3.4.3 available)
+  share_plus 11.1.0 (13.3.1 available)
+  share_plus_platform_interface 6.1.0 (7.2.0 available)
+  shared_preferences 2.5.5 (2.5.6 available)
+  shared_preferences_android 2.4.23 (2.4.28 available)
+  shared_preferences_foundation 2.5.6 (2.5.7 available)
+  sqlite3 2.9.4 (3.7.1 available)
+  sqlite3_flutter_libs 0.5.39 (0.6.0+eol available)
+  stack_trace 1.12.1 (1.12.2 available)
+  storage_client 2.4.1 (2.8.1 available)
+  supabase 2.9.0 (2.16.5 available)
+  supabase_flutter 2.10.0 (2.18.3 available)
+  test_api 0.7.6 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.29 (6.3.33 available)
+  url_launcher_ios 6.3.6 (6.4.2 available)
+  url_launcher_linux 3.2.2 (3.2.3 available)
+  url_launcher_macos 3.2.5 (3.2.6 available)
+  url_launcher_web 2.4.1 (2.4.3 available)
+  url_launcher_windows 3.1.5 (3.1.6 available)
+  uuid 4.5.1 (4.6.0 available)
+  vector_math 2.2.0 (2.4.3 available)
+  win32 5.15.0 (6.4.0 available)
+  xml 6.6.1 (7.1.0 available)
+  yet_another_json_isolate 2.1.0 (2.1.1 available)
+Got dependencies!
+64 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/runner/work/fatstar/fatstar/test/app_version_test.dart
+00:00 +0: /home/runner/work/fatstar/fatstar/test/app_version_test.dart: settings version reads installed package metadata
+00:00 +1: /home/runner/work/fatstar/fatstar/test/app_version_test.dart: missing metadata never shows a hardcoded old version
+00:04 +2: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: (setUpAll)
+00:04 +2: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +3: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +4: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +5: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +6: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +7: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +8: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +9: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +10: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +11: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +12: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +13: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +14: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +15: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +16: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +17: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +18: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +19: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +20: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +21: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +22: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +23: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +24: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +25: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +26: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +27: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:04 +28: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary dark: empty meals, no invented activity, calendar navigation
+00:05 +29: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Diary light: empty meals, no invented activity, calendar navigation
+00:05 +30: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: Unknown macros show known subtotal rather than confirmed zero
+00:05 +31: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+
+Warning: A call to tap() with finder "Found 1 widget with text "Завтрак": [
+  Text("Завтрак", debugLabel: ((englishLike titleMedium 2021).merge((((whiteMountainView titleMedium).apply).apply).merge(unknown))).copyWith, inherit: false, color: Color(alpha: 1.0000, red: 0.9529, green: 0.9686, blue: 0.9686, colorSpace: ColorSpace.sRGB), family: Rubik, size: 18.0, weight: 700, letterSpacing: 0.1, baseline: alphabetic, height: 1.5x, leadingDistribution: even, decoration: Color(alpha: 1.0000, red: 0.9529, green: 0.9686, blue: 0.9686, colorSpace: ColorSpace.sRGB) TextDecoration.none, dependencies: [DefaultSelectionStyle, DefaultTextStyle, MediaQuery, _ScrollableScope]),
+]" derived an Offset (Offset(169.5, 27.5)) that would not hit test on the specified widget.
+Maybe the widget is actually off-screen, or another widget is obscuring it, or the widget cannot receive pointer events.
+The finder corresponds to this RenderBox: RenderParagraph#a1215 relayoutBoundary=up23
+The hit test result at that offset is: HitTestResult(HitTestEntry<HitTestTarget>#12f7a(TextSpan(inherit: true, color: Color(alpha: 1.0000, red: 0.9529, green: 0.9686, blue: 0.9686, colorSpace: ColorSpace.sRGB), family: Rubik, size: 28.0, weight: 900, "Сегодня")), RenderParagraph#0a8f4@Offset(153.5, 13.5), _RenderAppBarTitleBox#4e698@Offset(153.5, 13.5), RenderSemanticsAnnotations#cf67e@Offset(153.5, 13.5), RenderCustomMultiChildLayoutBox#1db0c@Offset(169.5, 27.5), RenderCustomSingleChildLayoutBox#508ff@Offset(169.5, 27.5), RenderClipRect#456c4@Offset(169.5, 27.5), RenderPadding#8c6df@Offset(169.5, 27.5), RenderPositionedBox#28768@Offset(169.5, 27.5), RenderSemanticsAnnotations#49b61@Offset(169.5, 27.5), _RenderInkFeatures#0e480@Offset(169.5, 27.5), RenderPhysicalModel#0129b@Offset(169.5, 27.5), RenderAnnotatedRegion<SystemUiOverlayStyle>#4def0@Offset(169.5, 27.5), RenderSemanticsAnnotations#5118d@Offset(169.5, 27.5), RenderConstrainedBox#f8299@Offset(169.5, 27.5), RenderCustomMultiChildLayoutBox#0dc30@Offset(169.5, 27.5), _RenderInkFeatures#92c71@Offset(169.5, 27.5), RenderPhysicalModel#1d2dd@Offset(169.5, 27.5), RenderSemanticsAnnotations#d42b0@Offset(169.5, 27.5), RenderRepaintBoundary#1e741@Offset(169.5, 27.5), RenderIgnorePointer#22844@Offset(169.5, 27.5), _RenderSnapshotWidget#8eedf@Offset(169.5, 27.5), _RenderSnapshotWidget#f8ed3@Offset(169.5, 27.5), _RenderSnapshotWidget#aa96b@Offset(169.5, 27.5), _RenderSnapshotWidget#3d182@Offset(169.5, 27.5), RenderRepaintBoundary#3a606@Offset(169.5, 27.5), RenderSemanticsAnnotations#0b425@Offset(169.5, 27.5), RenderOffstage#a53be@Offset(169.5, 27.5), RenderSemanticsAnnotations#c2db5@Offset(169.5, 27.5), _RenderTheater#ea6e5@Offset(169.5, 27.5), RenderAbsorbPointer#352b0@Offset(169.5, 27.5), RenderPointerListener#ab8e9@Offset(169.5, 27.5), RenderSemanticsAnnotations#0b444@Offset(169.5, 27.5), RenderCustomPaint#92caf@Offset(169.5, 27.5), RenderSemanticsAnnotations#ce01f@Offset(169.5, 27.5), RenderSemanticsAnnotations#cefb6@Offset(169.5, 27.5), RenderTapRegionSurface#ea575@Offset(169.5, 27.5), RenderSemanticsAnnotations#a2d59@Offset(169.5, 27.5), RenderSemanticsAnnotations#e7b9e@Offset(169.5, 27.5), RenderSemanticsAnnotations#d7374@Offset(169.5, 27.5), HitTestEntry<HitTestTarget>#3f1d2(_ReusableRenderView#83696), HitTestEntry<HitTestTarget>#6e125(<AutomatedTestWidgetsFlutterBinding>))
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2077:25)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1861:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1041:7)
+#3      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/diary_widget_test.dart:235:18)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+To silence this warning, pass "warnIfMissed: false" to "tap()".
+To make this warning fatal, set WidgetController.hitTestWarningShouldBeFatal to true.
+
+
+Warning: A call to tap() with finder "Found 1 widget with type "PopupMenuButton<String>" descending from widget with type "Dismissible" (ignoring all but first): [
+  PopupMenuButton<String>(dependencies: [IconTheme, InheritedCupertinoTheme, _InheritedTheme, _LocalizationsScope-[GlobalKey#33e15]], state: PopupMenuButtonState<String>#571bb),
+]" derived an Offset (Offset(736.0, 121.0)) that would not hit test on the specified widget.
+Maybe the widget is actually off-screen, or another widget is obscuring it, or the widget cannot receive pointer events.
+The finder corresponds to this RenderBox: RenderSemanticsAnnotations#5a8ef relayoutBoundary=up36
+The hit test result at that offset is: HitTestResult(HitTestEntry<HitTestTarget>#6e271(TextSpan(inherit: false, color: Color(alpha: 1.0000, red: 0.1451, green: 0.1569, blue: 0.1529, colorSpace: ColorSpace.sRGB), family: MaterialIcons, size: 34.0, height: 1.0x, leadingDistribution: even, "")), RenderParagraph#19581@Offset(11.0, 4.5), RenderPositionedBox#4915d@Offset(11.0, 4.5), RenderConstrainedBox#e1091@Offset(11.0, 4.5), RenderExcludeSemantics#33c49@Offset(11.0, 4.5), RenderSemanticsAnnotations#4f1e3@Offset(11.0, 4.5), RenderAnimatedOpacity#16d7a@Offset(11.0, 4.5), RenderStack#b1047@Offset(11.0, 4.5), RenderSemanticsAnnotations#b83f2@Offset(11.0, 4.5), RenderPositionedBox#21326@Offset(12.0, 5.5), RenderPadding#d034d@Offset(20.0, 13.5), RenderPointerListener#2c2d1@Offset(20.0, 13.5), RenderSemanticsAnnotations#db847@Offset(20.0, 13.5), RenderMouseRegion#af844@Offset(20.0, 13.5), RenderSemanticsAnnotations#bae90@Offset(20.0, 13.5), RenderSemanticsAnnotations#ea265@Offset(20.0, 13.5), RenderPointerListener#c1d17@Offset(20.0, 13.5), _RenderExclusiveMouseRegion#43df2@Offset(20.0, 13.5), _RenderLayoutSurrogateProxyBox#592ab@Offset(20.0, 13.5), _RenderInkFeatures#b632f@Offset(20.0, 13.5), RenderCustomPaint#d2c40@Offset(20.0, 13.5), RenderPhysicalShape#78abb@Offset(20.0, 13.5), RenderConstrainedBox#0db7c@Offset(20.0, 13.5), _RenderInputPadding#6368d@Offset(20.0, 13.5), RenderSemanticsAnnotations#a1ec4@Offset(20.0, 13.5), RenderStack#298e0@Offset(20.0, 13.5), RenderClipOval#0e13e@Offset(20.0, 13.5), RenderConstrainedBox#89e4f@Offset(20.0, 13.5), RenderPointerListener#5027d@Offset(20.0, 13.5), _RenderListTile#ff45a@Offset(704.0, 35.0), RenderPadding#b356a@Offset(720.0, 35.0), RenderPadding#16c8d@Offset(720.0, 35.0), RenderSemanticsAnnotations#85d26@Offset(720.0, 35.0), RenderPointerListener#8f915@Offset(720.0, 35.0), RenderSemanticsAnnotations#58d7a@Offset(720.0, 35.0), RenderMouseRegion#377e2@Offset(720.0, 35.0), RenderSemanticsAnnotations#a6d82@Offset(720.0, 35.0), RenderSemanticsAnnotations#832d1@Offset(720.0, 35.0), RenderFlex#59c9c@Offset(720.0, 35.0), RenderFlex#b9c14@Offset(720.0, 131.0), RenderSemanticsAnnotations#0b73a@Offset(720.0, 131.0), _RenderInkFeatures#4f23f@Offset(720.0, 131.0), RenderCustomPaint#e5461@Offset(720.0, 131.0), RenderPhysicalShape#84616@Offset(720.0, 131.0), RenderPadding#98873@Offset(720.0, 137.0), RenderSemanticsAnnotations#26753@Offset(720.0, 137.0), RenderRepaintBoundary#3cb52@Offset(720.0, 137.0), RenderIndexedSemantics#3c727@Offset(720.0, 137.0), RenderSliverList@(mainAxis: 65.0, crossAxis: 720.0), RenderSliverPadding@(mainAxis: 65.0, crossAxis: 736.0), RenderViewport#b5180@Offset(736.0, 65.0), RenderIgnorePointer#498a8@Offset(736.0, 65.0), RenderSemanticsAnnotations#018e7@Offset(736.0, 65.0), RenderPointerListener#baf5e@Offset(736.0, 65.0), RenderSemanticsGestureHandler#58482@Offset(736.0, 65.0), RenderPointerListener#792f6@Offset(736.0, 65.0), _RenderScrollSemantics#9318b@Offset(736.0, 65.0), RenderClipRect#3a192@Offset(736.0, 65.0), RenderExcludeSemantics#c13a4@Offset(736.0, 65.0), RenderIgnorePointer#cb558@Offset(736.0, 65.0), RenderStack#1a330@Offset(736.0, 65.0), RenderClipRect#24e6e@Offset(736.0, 65.0), _RenderLayoutBuilder#d04c8@Offset(736.0, 65.0), RenderPointerListener#b51ba@Offset(736.0, 65.0), RenderSemanticsGestureHandler#731b0@Offset(736.0, 65.0), RenderCustomMultiChildLayoutBox#0dc30@Offset(736.0, 121.0), _RenderInkFeatures#92c71@Offset(736.0, 121.0), RenderPhysicalModel#1d2dd@Offset(736.0, 121.0), RenderSemanticsAnnotations#d42b0@Offset(736.0, 121.0), RenderRepaintBoundary#1e741@Offset(736.0, 121.0), RenderIgnorePointer#22844@Offset(736.0, 121.0), _RenderSnapshotWidget#8eedf@Offset(736.0, 121.0), _RenderSnapshotWidget#f8ed3@Offset(736.0, 121.0), _RenderSnapshotWidget#aa96b@Offset(736.0, 121.0), _RenderSnapshotWidget#3d182@Offset(736.0, 121.0), RenderRepaintBoundary#3a606@Offset(736.0, 121.0), RenderSemanticsAnnotations#0b425@Offset(736.0, 121.0), RenderOffstage#a53be@Offset(736.0, 121.0), RenderSemanticsAnnotations#c2db5@Offset(736.0, 121.0), _RenderTheater#ea6e5@Offset(736.0, 121.0), RenderAbsorbPointer#352b0@Offset(736.0, 121.0), RenderPointerListener#ab8e9@Offset(736.0, 121.0), RenderSemanticsAnnotations#0b444@Offset(736.0, 121.0), RenderCustomPaint#92caf@Offset(736.0, 121.0), RenderSemanticsAnnotations#ce01f@Offset(736.0, 121.0), RenderSemanticsAnnotations#cefb6@Offset(736.0, 121.0), RenderTapRegionSurface#ea575@Offset(736.0, 121.0), RenderSemanticsAnnotations#a2d59@Offset(736.0, 121.0), RenderSemanticsAnnotations#e7b9e@Offset(736.0, 121.0), RenderSemanticsAnnotations#d7374@Offset(736.0, 121.0), HitTestEntry<HitTestTarget>#555ca(_ReusableRenderView#83696), HitTestEntry<HitTestTarget>#4bd38(<AutomatedTestWidgetsFlutterBinding>))
+#0      WidgetController._getElementPoint (package:flutter_test/src/controller.dart:2077:25)
+#1      WidgetController.getCenter (package:flutter_test/src/controller.dart:1861:12)
+#2      WidgetController.tap (package:flutter_test/src/controller.dart:1041:7)
+#3      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/diary_widget_test.dart:239:18)
+<asynchronous suspension>
+#4      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#5      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+#6      StackZoneSpecification._registerCallback.<anonymous closure> (package:stack_trace/src/stack_zone_specification.dart:114:42)
+<asynchronous suspension>
+To silence this warning, pass "warnIfMissed: false" to "tap()".
+To make this warning fatal, set WidgetController.hitTestWarningShouldBeFatal to true.
+
+00:07 +32: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:07 +33: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:09 +34: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:09 +35: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:09 +36: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:09 +37: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:09 +38: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:09 +39: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+00:10 +40: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown running a test:
+pumpAndSettle timed out
+
+When the exception was thrown, this was the stack:
+#0      WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:717:11)
+<asynchronous suspension>
+#1      TestAsyncUtils.guard.<anonymous closure> (package:flutter_test/src/test_async_utils.dart:130:27)
+<asynchronous suspension>
+#2      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/diary_widget_test.dart:245:5)
+<asynchronous suspension>
+#3      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#4      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1059:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  left swipe deletes only the food row and undo restores it
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:10 +40 -1: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: left swipe deletes only the food row and undo restores it [E]
+  Test failed. See exception logs above.
+  The test description was: left swipe deletes only the food row and undo restores it
+  
+00:10 +40 -1: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: failed local deletion does not confirm haptically
+00:10 +41 -1: /home/runner/work/fatstar/fatstar/test/diary_widget_test.dart: (tearDownAll)
+00:10 +41 -1: loading /home/runner/work/fatstar/fatstar/test/nutrition_test.dart
+00:11 +41 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Mifflin male
+00:11 +42 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Mifflin female
+00:11 +43 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Harris 1984 male
+00:11 +44 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Harris 1984 female
+00:11 +45 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Katch lean mass
+00:11 +46 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients Katch requires body fat
+00:11 +47 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients children cannot receive automatic recommendations
+00:11 +48 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: BMR scientific coefficients nonfinite weight rejected
+00:11 +49 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros maintenance uses multiplier
+00:11 +50 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros loss cannot exceed 20 percent
+00:11 +51 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros gain cannot exceed 15 percent
+00:11 +52 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros muscle target includes surplus
+00:11 +53 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros unknown activity rejected
+00:11 +54 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros macro energy adds up
+00:11 +55 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: TDEE and macros percent sum checked
+00:11 +56 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values two eggs 110 grams
+00:11 +57 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values milk 300 ml
+00:11 +58 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values mass volume conversion forbidden
+00:11 +59 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values zero quantity rejected
+00:11 +60 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values only calories preserve null macros
+00:11 +61 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values label calories independent from macros
+00:11 +62 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values milli precision
+00:11 +63 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values Unicode Russian search
+00:11 +64 -1: /home/runner/work/fatstar/fatstar/test/nutrition_test.dart: portions and incomplete values calendar day uses local components
+00:11 +65 -1: /home/runner/work/fatstar/fatstar/test/activity_test.dart: MET duration, weight, custom rate and invalid values
+00:11 +66 -1: /home/runner/work/fatstar/fatstar/test/activity_test.dart: moderate estimates scale with weight and duration without a calorie floor
+00:11 +67 -1: /home/runner/work/fatstar/fatstar/test/activity_test.dart: activities preserve snapshots, dates, deletion, outbox and backup
+WARNING (drift): It looks like you've created the database class DiaryDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new DiaryDatabase.memory (package:calorie_diary/data/database.dart:28:7)
+#4      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/activity_test.dart:40:67)
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:242:19)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:240:7)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:282:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:11 +68 -1: /home/runner/work/fatstar/fatstar/test/activity_test.dart: v3 upgrade retains records and queued changes
+00:11 +69 -1: /home/runner/work/fatstar/fatstar/test/activity_test.dart: activity validation rejects malformed minutes and dates
+00:12 +70 -1: loading /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart
+00:12 +70 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: local write and outbox are atomic
+00:12 +71 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: stale local edit rejected
+00:13 +72 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: soft delete and restore keep identity
+00:13 +73 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: separate account databases isolate diaries
+WARNING (drift): It looks like you've created the database class DiaryDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new DiaryDatabase.memory (package:calorie_diary/data/database.dart:28:7)
+#4      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/storage_sync_test.dart:87:33)
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:242:19)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:240:7)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:282:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:13 +74 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: backup round trip and repeat import
+WARNING (drift): It looks like you've created the database class DiaryDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new DiaryDatabase.memory (package:calorie_diary/data/database.dart:28:7)
+#4      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/storage_sync_test.dart:98:33)
+<asynchronous suspension>
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:242:9)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:240:7)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:282:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:13 +75 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: invalid backup does not alter records
+00:13 +76 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: backup conflicts preserve existing data
+00:13 +77 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: duplicate backup UUID is rejected
+00:13 +78 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: offline queue is preserved then synchronized
+00:13 +79 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: lost response retries exactly once on server
+00:13 +80 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: two users conflict rather than overwrite newer product
+00:13 +81 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: incoming snapshot does not erase pending edit
+00:13 +82 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: page replay is idempotent
+00:13 +83 -1: /home/runner/work/fatstar/fatstar/test/storage_sync_test.dart: invalid save has no outbox side effect
+00:13 +84 -1: /home/runner/work/fatstar/fatstar/test/migration_test.dart: v1 → v4 preserves values, versions, local products, pending operations and cursor
+00:13 +85 -1: /home/runner/work/fatstar/fatstar/test/migration_test.dart: failed migration rolls back without destroying legacy data
+00:13 +86 -1: loading /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart
+00:14 +86 -1: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:15 +87 -1: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:15 +88 -1: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:15 +89 -1: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:15 +90 -1: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:15 +91 -1: /home/runner/work/fatstar/fatstar/test/activity_widget_test.dart: search activity, live minutes calculation and local save
+00:16 +92 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search index FTS5: writes, aliases, delete, restore, pull
+00:16 +93 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search index token fallback: writes, aliases, delete, restore, pull
+00:16 +94 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: v2 → v4 rebuilds index and preserves products and diary
+00:16 +95 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: personal caches invalidate on edits/delete; account databases stay separate
+WARNING (drift): It looks like you've created the database class DiaryDatabase multiple times. When these two databases use the same QueryExecutor, race conditions will occur and might corrupt the database. 
+Try to follow the advice at https://drift.simonbinder.eu/faq/#using-the-database or, if you know what you're doing, set driftRuntimeOptions.dontWarnAboutMultipleDatabases = true
+Here is the stacktrace from when the database was opened a second time:
+#0      GeneratedDatabase._handleInstantiated (package:drift/src/runtime/api/db_base.dart:96:30)
+#1      GeneratedDatabase._whenConstructed (package:drift/src/runtime/api/db_base.dart:73:12)
+#2      new GeneratedDatabase (package:drift/src/runtime/api/db_base.dart:64:5)
+#3      new DiaryDatabase.memory (package:calorie_diary/data/database.dart:28:7)
+#4      main.<anonymous closure> (file:///home/runner/work/fatstar/fatstar/test/search_storage_test.dart:92:59)
+#5      Declarer.test.<anonymous closure>.<anonymous closure> (package:test_api/src/backend/declarer.dart:242:19)
+<asynchronous suspension>
+#6      Declarer.test.<anonymous closure> (package:test_api/src/backend/declarer.dart:240:7)
+<asynchronous suspension>
+#7      Invoker._waitForOutstandingCallbacks.<anonymous closure> (package:test_api/src/backend/invoker.dart:282:9)
+<asynchronous suspension>
+This warning will only appear on debug builds.
+00:17 +96 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+00:17 +97 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+00:17 +98 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+00:17 +99 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+00:17 +100 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+00:18 +101 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: search benchmark indexed catalog 2000 products, cold/warm
+SEARCH_BENCH products=2000 fts=true query=мол cold_ms=4 warm_ms=1 hits=1
+SEARCH_BENCH products=2000 fts=true query=малако cold_ms=1 warm_ms=1 hits=1
+SEARCH_BENCH products=2000 fts=true query=vjkjrj cold_ms=1 warm_ms=1 hits=1
+SEARCH_BENCH products=2000 fts=true query=номер 1999 cold_ms=45 warm_ms=43 hits=1
+00:18 +102 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: lexicon revision rebuilds only derived index, keeping pending operations
+00:18 +103 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: hidden cards never exhaust the candidate limit: fts=true
+00:18 +104 -1: /home/runner/work/fatstar/fatstar/test/search_storage_test.dart: hidden cards never exhaust the candidate limit: fts=false
+00:18 +105 -1: loading /home/runner/work/fatstar/fatstar/test/history_test.dart
+00:19 +105 -1: /home/runner/work/fatstar/fatstar/test/history_test.dart: new formula does not alter past day targets
+00:19 +106 -1: /home/runner/work/fatstar/fatstar/test/history_test.dart: same date revision retains original and selects latest deterministically
+00:19 +107 -1: /home/runner/work/fatstar/fatstar/test/history_test.dart: future and deleted goals not applied
+00:19 +108 -1: /home/runner/work/fatstar/fatstar/test/history_test.dart: product changes never mutate diary snapshot
+00:19 +109 -1: loading /home/runner/work/fatstar/fatstar/test/product_edit_test.dart
+00:20 +109 -1: /home/runner/work/fatstar/fatstar/test/product_edit_test.dart: catalog edits persist nutrition and portions; deletion and cancel are safe
+00:21 +110 -1: /home/runner/work/fatstar/fatstar/test/product_edit_test.dart: catalog edits persist nutrition and portions; deletion and cancel are safe
+00:21 +111 -1: /home/runner/work/fatstar/fatstar/test/product_edit_test.dart: catalog edits persist nutrition and portions; deletion and cancel are safe
+00:21 +112 -1: /home/runner/work/fatstar/fatstar/test/product_edit_test.dart: catalog edits persist nutrition and portions; deletion and cancel are safe
+00:22 +113 -1: /home/runner/work/fatstar/fatstar/test/product_edit_test.dart: catalog edits persist nutrition and portions; deletion and cancel are safe
+00:22 +114 -1: /home/runner/work/fatstar/fatstar/test/product_edit_test.dart: catalog edits persist nutrition and portions; deletion and cancel are safe
+00:22 +115 -1: /home/runner/work/fatstar/fatstar/test/preferences_test.dart: meals stay collapsed on initial load and hydration, then open by choice
+00:23 +116 -1: /home/runner/work/fatstar/fatstar/test/preferences_test.dart: removing a meal during collapse safely disposes its animation
+00:23 +117 -1: loading /home/runner/work/fatstar/fatstar/test/automatic_goal_test.dart
+00:23 +117 -1: /home/runner/work/fatstar/fatstar/test/automatic_goal_test.dart: automatic macros preserve exact JSON 4/4/9 energy and protein cap
+00:23 +118 -1: /home/runner/work/fatstar/fatstar/test/automatic_goal_test.dart: all energy formulas, goals and activities recompute linked macros
+00:23 +119 -1: /home/runner/work/fatstar/fatstar/test/automatic_goal_test.dart: protein follows body weight, independent of normal calorie target
+00:23 +120 -1: /home/runner/work/fatstar/fatstar/test/automatic_goal_test.dart: invalid automatic targets are rejected
+00:24 +121 -1: /home/runner/work/fatstar/fatstar/test/search_widget_test.dart: all products form one deduplicated list with filter chips
+00:25 +122 -1: /home/runner/work/fatstar/fatstar/test/search_widget_test.dart: offline search dark: keyboard, newest query, add/undo and no duplicate on back
+00:27 +123 -1: /home/runner/work/fatstar/fatstar/test/search_widget_test.dart: offline search light: keyboard, newest query, add/undo and no duplicate on back
+00:28 +124 -1: Some tests failed.
