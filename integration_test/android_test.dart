@@ -58,7 +58,12 @@ void main() {
         entryForProduct(current, 200, 'Стакан'),
       ], Meal.breakfast);
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Завтрак'));
+      await Scrollable.ensureVisible(
+        tester.element(find.text('Завтрак')),
+        alignment: 0.5,
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Завтрак').hitTestable(), findsOneWidget);
       await tester.tap(find.text('Завтрак'));
       await tester.pumpAndSettle();
       expect(find.text('Тестовое молоко'), findsOneWidget);
