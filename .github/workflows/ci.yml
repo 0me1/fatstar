@@ -68,7 +68,7 @@ jobs:
         with:
           version: '2.53.6'
       - name: Start isolated Supabase and apply migrations
-        run: supabase start
+        run: bash scripts/start_test_supabase.sh
       - name: Server RLS, concurrency, history and idempotency tests
         run: |
           umask 077
