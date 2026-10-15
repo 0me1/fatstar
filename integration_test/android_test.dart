@@ -58,6 +58,9 @@ void main() {
         entryForProduct(current, 200, 'Стакан'),
       ], Meal.breakfast);
       await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('Завтрак'));
+      await tester.tap(find.text('Завтрак'));
+      await tester.pumpAndSettle();
       expect(find.text('Тестовое молоко'), findsOneWidget);
       expect(c.entries.single.data['amount'], 200);
       expect(entryNutrition(c.entries.single).kcal, 100);
@@ -281,13 +284,13 @@ void main() {
       '60',
     );
     await tester.pump();
-    expect(find.text('184 ккал сожжено'), findsOneWidget);
+    expect(find.text('206 ккал сожжено'), findsOneWidget);
     await tester.tap(find.text('Сохранить'));
     for (var i = 0; i < 50 && c.of('activity').isEmpty; i++) {
       await tester.pump(const Duration(milliseconds: 100));
     }
     await tester.pumpAndSettle();
-    expect(c.of('activity').single.data['kcal'], closeTo(183.75, .001));
+    expect(c.of('activity').single.data['kcal'], closeTo(205.8, .001));
     expect(
       (await db.operations()).where((o) => o['kind'] == 'activity'),
       hasLength(1),

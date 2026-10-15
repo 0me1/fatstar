@@ -24,10 +24,12 @@ class ActivityType {
   }
 }
 
+// Moderate defaults: walking at a normal purposeful pace; strength training
+// averaged across sets and rest intervals. These are estimates, not measurements.
 const builtInActivities = [
-  ActivityType('walking', 'Ходьба, обычная', '🚶', met: 3.5),
+  ActivityType('walking', 'Ходьба, обычная', '🚶', met: 3.8),
   ActivityType('running', 'Бег, обычный', '🏃', met: 8.5),
-  ActivityType('strength', 'Силовая тренировка', '💪', met: 3.5),
+  ActivityType('strength', 'Силовая тренировка', '💪', met: 4.5),
 ];
 
 ActivityType activityType(Record r) => ActivityType(

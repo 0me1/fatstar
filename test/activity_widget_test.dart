@@ -26,17 +26,17 @@ void main() {
     expect(find.text('Бег, обычный'), findsNothing);
     await tester.tap(find.text('Ходьба, обычная'));
     await tester.pumpAndSettle();
-    expect(find.text('92 ккал сожжено'), findsOneWidget);
+    expect(find.text('103 ккал сожжено'), findsOneWidget);
     await tester.enterText(
       find.byKey(const ValueKey('activity-minutes')),
       '60',
     );
     await tester.pump();
-    expect(find.text('184 ккал сожжено'), findsOneWidget);
+    expect(find.text('206 ккал сожжено'), findsOneWidget);
     await tester.tap(find.text('Сохранить'));
     await tester.pumpAndSettle();
     expect(c.of('activity'), hasLength(1));
-    expect(c.of('activity').single.data['kcal'], closeTo(183.75, .001));
+    expect(c.of('activity').single.data['kcal'], closeTo(205.8, .001));
     expect(c.of('activity').single.data['day'], '2026-10-12');
     await tester.pumpWidget(const SizedBox());
     await tester.pumpAndSettle();

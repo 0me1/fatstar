@@ -17,7 +17,7 @@ class MealSection extends StatefulWidget {
 
 class _MealSectionState extends State<MealSection>
     with SingleTickerProviderStateMixin {
-  late bool expanded = widget.hasEntries;
+  bool expanded = false;
   late final controller = AnimationController(
     vsync: this,
     value: expanded ? 1 : 0,
@@ -34,7 +34,6 @@ class _MealSectionState extends State<MealSection>
   @override
   void didUpdateWidget(covariant MealSection oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!oldWidget.hasEntries && widget.hasEntries) changeExpansion(true);
     if (oldWidget.hasEntries && !widget.hasEntries) changeExpansion(false);
   }
 

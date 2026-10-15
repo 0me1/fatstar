@@ -193,6 +193,10 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    // Meals start collapsed, including after an undo restores their first entry.
+    await tester.ensureVisible(find.text('Завтрак'));
+    await tester.tap(find.text('Завтрак'));
+    await tester.pumpAndSettle();
     await tester.ensureVisible(find.byType(Dismissible).first);
     await tester.pumpAndSettle();
     expect(tester.getCenter(find.byType(Dismissible).first).dy, lessThan(600));
@@ -226,6 +230,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(c.entries, hasLength(1));
     expect(c.entries.single.data['name'], 'Swipe food');
+    // Meals start collapsed, including after an undo restores their first entry.
+    await tester.ensureVisible(find.text('Завтрак'));
+    await tester.tap(find.text('Завтрак'));
+    await tester.pumpAndSettle();
     await tester.ensureVisible(find.byType(Dismissible).first);
     await tester.pumpAndSettle();
     await tester.tap(

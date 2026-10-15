@@ -9,9 +9,9 @@ import 'package:calorie_diary/data/backup.dart';
 
 void main() {
   test('MET duration, weight, custom rate and invalid values', () {
-    expect(builtInActivities.first.calories(30, 70), closeTo(91.875, .001));
+    expect(builtInActivities.first.calories(30, 70), closeTo(102.9, .001));
     expect(builtInActivities[1].calories(30, 70), closeTo(275.625, .001));
-    expect(builtInActivities[2].calories(60, 70), closeTo(183.75, .001));
+    expect(builtInActivities[2].calories(60, 70), closeTo(257.25, .001));
     const custom = ActivityType('custom', 'Test', '✨', kcalPerMinute: 5);
     expect(custom.calories(12, null), 60);
     for (final m in [0.0, -1.0, double.nan, 1441.0]) {
@@ -22,6 +22,18 @@ void main() {
       throwsArgumentError,
     );
   });
+  test(
+    'moderate estimates scale with weight and duration without a calorie floor',
+    () {
+      final walking = builtInActivities.first;
+      final strength = builtInActivities[2];
+      expect(walking.calories(60, 71), closeTo(208.74, .001));
+      expect(strength.calories(60, 71), closeTo(260.925, .001));
+      expect(strength.calories(60, 50), closeTo(183.75, .001));
+      expect(strength.calories(30, 71) * 2, strength.calories(60, 71));
+      expect(walking.calories(60, 142), walking.calories(60, 71) * 2);
+    },
+  );
   test(
     'activities preserve snapshots, dates, deletion, outbox and backup',
     () async {

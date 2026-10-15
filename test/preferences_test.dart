@@ -36,34 +36,39 @@ void main() {
       expect(theme.textTheme.titleLarge!.fontWeight, FontWeight.w900);
     }
   });
-  testWidgets('empty meals collapse and open automatically on first entry', (
-    tester,
-  ) async {
-    Widget host(bool entries) => MaterialApp(
-      home: Scaffold(
-        body: MealSection(
-          hasEntries: entries,
-          header: (expanded, toggle) => TextButton(
-            onPressed: toggle,
-            child: Text(expanded ? 'Hide' : 'Show'),
+  testWidgets(
+    'meals stay collapsed on initial load and hydration, then open by choice',
+    (tester) async {
+      Widget host(bool entries) => MaterialApp(
+        home: Scaffold(
+          body: MealSection(
+            hasEntries: entries,
+            header: (expanded, toggle) => TextButton(
+              onPressed: toggle,
+              child: Text(expanded ? 'Hide' : 'Show'),
+            ),
+            child: const SizedBox(height: 80, child: Text('Meal contents')),
           ),
-          child: const SizedBox(height: 80, child: Text('Meal contents')),
         ),
-      ),
-    );
-    await tester.pumpWidget(host(false));
-    expect(find.text('Show'), findsOneWidget);
-    expect(tester.getSize(find.byType(ClipRect).last).height, 0);
-    await tester.tap(find.text('Show'));
-    await tester.pumpAndSettle();
-    expect(tester.getSize(find.byType(ClipRect).last).height, 80);
-    await tester.tap(find.text('Hide'));
-    await tester.pumpAndSettle();
-    await tester.pumpWidget(host(true));
-    await tester.pumpAndSettle();
-    expect(find.text('Hide'), findsOneWidget);
-    expect(tester.getSize(find.byType(ClipRect).last).height, 80);
-  });
+      );
+      await tester.pumpWidget(host(false));
+      expect(find.text('Show'), findsOneWidget);
+      expect(tester.getSize(find.byType(ClipRect).last).height, 0);
+      await tester.tap(find.text('Show'));
+      await tester.pumpAndSettle();
+      expect(tester.getSize(find.byType(ClipRect).last).height, 80);
+      await tester.tap(find.text('Hide'));
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(host(true));
+      await tester.pumpAndSettle();
+      expect(find.text('Show'), findsOneWidget);
+      expect(tester.getSize(find.byType(ClipRect).last).height, 0);
+      await tester.tap(find.text('Show'));
+      await tester.pumpAndSettle();
+      expect(find.text('Hide'), findsOneWidget);
+      expect(tester.getSize(find.byType(ClipRect).last).height, 80);
+    },
+  );
   testWidgets('removing a meal during collapse safely disposes its animation', (
     tester,
   ) async {
@@ -79,6 +84,10 @@ void main() {
         ),
       ),
     );
+    expect(tester.getSize(find.byType(ClipRect).last).height, 0);
+    await tester.tap(find.text('Collapse'));
+    await tester.pumpAndSettle();
+    expect(tester.getSize(find.byType(ClipRect).last).height, 80);
     await tester.tap(find.text('Collapse'));
     await tester.pump(const Duration(milliseconds: 30));
     await tester.pumpWidget(const SizedBox());
